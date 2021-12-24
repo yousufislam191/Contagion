@@ -22,7 +22,7 @@ class _openPageState extends State<openPage> {
   }
 
   _navigateToHome() async {
-    await Future.delayed(Duration(milliseconds: 5000), () {});
+    await Future.delayed(Duration(milliseconds: 3000), () {});
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => loginPage()),
