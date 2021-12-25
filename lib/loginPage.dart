@@ -8,8 +8,6 @@ import 'package:lu_ahatting_application/registration.dart';
 import 'package:regexed_validator/regexed_validator.dart';
 
 class loginPage extends StatefulWidget {
-  // loginPage({Key? key}) : super(key: key);
-
   @override
   State<loginPage> createState() => _loginPageState();
 }
@@ -17,6 +15,8 @@ class loginPage extends StatefulWidget {
 class _loginPageState extends State<loginPage> {
   var emailEditingController = TextEditingController();
   var passEditingController = TextEditingController();
+
+  RegExp emailvalidation = RegExp(r"^[a-z0-9_]+@lus.ac.bd$");
 
   String _email = '', _pass = '';
 
@@ -129,6 +129,7 @@ class _loginPageState extends State<loginPage> {
                     children: [
                       Container(
                         //TEXT
+                        // padding: EdgeInsets.symmetric(horizontal: 30.0),
                         margin: EdgeInsets.only(top: 250),
                         alignment: Alignment(-0.70, 0),
                         child: Column(
@@ -168,6 +169,8 @@ class _loginPageState extends State<loginPage> {
                           child: TextFormField(
                             controller: emailEditingController,
                             cursorColor: Color(0xff49c42b),
+                            autofillHints: [AutofillHints.email],
+                            autocorrect: true,
                             style: TextStyle(
                               fontSize: 22,
                               fontFamily: 'JosefinSans',
@@ -194,7 +197,7 @@ class _loginPageState extends State<loginPage> {
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter your university email';
-                              } else if (!validator.email(value)) {
+                              } else if (!emailvalidation.hasMatch(value)) {
                                 return 'Your entire email does not correct.\nPlease enter your university email';
                               }
                               return null;
@@ -294,6 +297,7 @@ class _loginPageState extends State<loginPage> {
                       Container(
                         // LOGIN BUTTON
                         padding: EdgeInsets.symmetric(horizontal: 50),
+                        height: 40,
                         decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
@@ -319,6 +323,7 @@ class _loginPageState extends State<loginPage> {
                                 MaterialStateProperty.all(Colors.transparent),
                             shadowColor:
                                 MaterialStateProperty.all(Colors.transparent),
+                            // minimumSize: Size(width:50, height),
                           ),
                           onPressed: () {
                             //CHECK INPUT FIELD VALIDATION
