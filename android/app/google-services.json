@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "752933393390",
+    "project_id": "lu-chatting-application",
+    "storage_bucket": "lu-chatting-application.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:752933393390:android:3527aa6bf5457ddb42f4ff",
+        "android_client_info": {
+          "package_name": "com.example.lu_ahatting_application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "752933393390-qr89uajr6ud1n9c4jkv87m0va94a1qpk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYbR_6X-IZ8cOlCRnTtmjwanEr4qTt9pw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "752933393390-qr89uajr6ud1n9c4jkv87m0va94a1qpk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
