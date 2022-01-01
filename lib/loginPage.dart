@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:adobe_xd/blend_mask.dart';
 import 'package:flutter/rendering.dart';
-import 'package:lu_ahatting_application/clickLogin.dart';
+import 'package:lu_ahatting_application/loginVerification.dart';
 import 'package:lu_ahatting_application/forgotPass.dart';
 import 'package:lu_ahatting_application/registration.dart';
 import 'package:regexed_validator/regexed_validator.dart';
@@ -13,12 +14,14 @@ class loginPage extends StatefulWidget {
 }
 
 class _loginPageState extends State<loginPage> {
-  var emailEditingController = TextEditingController();
-  var passEditingController = TextEditingController();
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  final emailEditingController = TextEditingController();
+  final passEditingController = TextEditingController();
 
   RegExp emailvalidation = RegExp(r"^[a-z0-9_]+@lus.ac.bd$");
 
-  String _email = '', _pass = '';
+  var _email, _pass;
 
   bool _secure = true;
 
@@ -203,8 +206,10 @@ class _loginPageState extends State<loginPage> {
                               return null;
                             },
                             onChanged: (value) {
-                              _email =
-                                  value; //STORE INPUT VALUE _email VARIABLE
+                              setState(() {
+                                _email =
+                                    value; //STORE INPUT VALUE _email VARIABLE
+                              });
                             },
                           ),
                         ),
@@ -266,7 +271,10 @@ class _loginPageState extends State<loginPage> {
                               return null;
                             },
                             onChanged: (value) {
-                              _pass = value; //STORE INPUT VALUE _pass VARIABLE
+                              setState(() {
+                                _pass =
+                                    value; //STORE INPUT VALUE _pass VARIABLE
+                              });
                             },
                           ),
                         ),
@@ -296,7 +304,6 @@ class _loginPageState extends State<loginPage> {
                       ),
                       Container(
                         // LOGIN BUTTON
-                        padding: EdgeInsets.symmetric(horizontal: 50),
                         height: 40,
                         decoration: BoxDecoration(
                           boxShadow: [
@@ -325,23 +332,31 @@ class _loginPageState extends State<loginPage> {
                                 MaterialStateProperty.all(Colors.transparent),
                             // minimumSize: Size(width:50, height),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             //CHECK INPUT FIELD VALIDATION
                             if (_formkey.currentState!.validate()) {
-                              print(_email);
-                              print(_pass);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => clickLogin(),
-                                ),
-                              );
+                              try {
+                                final newUser =
+                                    await _auth.signInWithEmailAndPassword(
+                                        email: _email, password: _pass);
+                                if (newUser != null) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => loginVerification(),
+                                    ),
+                                  );
+                                }
+                              } catch (e) {
+                                print(e);
+                                print("user not found");
+                              }
                             } else {
                               print('Unsuccessfull');
                             }
                           },
                           child: Text(
-                            'Login',
+                            '           Login            ',
                             style: TextStyle(
                               fontFamily: 'JosefinSans',
                               fontSize: 24,
