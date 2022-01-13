@@ -22,13 +22,16 @@ class _loginPageState extends State<loginPage> {
   RegExp emailvalidation = RegExp(r"^[a-z0-9_]+@lus.ac.bd$");
 
   var _email, _pass;
-
   bool _secure = true;
+  late double height, width;
 
   final _formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Lu Chatting Application',
@@ -36,8 +39,8 @@ class _loginPageState extends State<loginPage> {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           body: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
+            // height: MediaQuery.of(context).size.height,
+            // width: MediaQuery.of(context).size.width,
             child: Stack(
               children: <Widget>[
                 //DESIGN
@@ -328,8 +331,8 @@ class _loginPageState extends State<loginPage> {
                           style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.transparent),
-                            shadowColor:
-                                MaterialStateProperty.all(Colors.transparent),
+                            // shadowColor:
+                            //     MaterialStateProperty.all(Colors.transparent),
                             // minimumSize: Size(width:50, height),
                           ),
                           onPressed: () async {
