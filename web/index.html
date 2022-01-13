@@ -34,6 +34,25 @@
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
+  
+  <!-- এখান থেকে এড করছি -->
+       <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyCYbR_6X-IZ8cOlCRnTtmjwanEr4qTt9pw",
+      authDomain: "lu-chatting-application.firebaseapp.com",
+      databaseURL: "https://lu-chatting-application.firebaseio.com",
+      projectId: "lu-chatting-application",
+      storageBucket: "lu-chatting-application.appspot.com",
+      messagingSenderId: "...",
+      appId: "1:752933393390:web:3527aa6bf5457ddb42f4ff",
+      measurementId: "G-...",
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <!-- এখানে শেষ করছি -->
   <script>
     var serviceWorkerVersion = null;
     var scriptLoaded = false;
