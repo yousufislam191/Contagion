@@ -131,6 +131,7 @@ class _loginPageState extends State<loginPage> {
                 ),
                 Form(
                   key: _formkey,
+                  // autovalidateMode: true,
                   child: Column(
                     children: [
                       Container(
@@ -328,13 +329,12 @@ class _loginPageState extends State<loginPage> {
                           borderRadius: BorderRadius.circular(50),
                         ),
                         child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            // shadowColor:
-                            //     MaterialStateProperty.all(Colors.transparent),
-                            // minimumSize: Size(width:50, height),
-                          ),
+                          style: ElevatedButton.styleFrom(
+                              // padding: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                              //deactivate color & shadow
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              primary: Colors.transparent,
+                              shadowColor: Colors.transparent),
                           onPressed: () async {
                             //CHECK INPUT FIELD VALIDATION
                             if (_formkey.currentState!.validate()) {
@@ -352,7 +352,25 @@ class _loginPageState extends State<loginPage> {
                                 }
                               } catch (e) {
                                 print(e);
-                                print("user not found");
+                                // print("user not found");
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        AlertDialog(
+                                          title: Center(
+                                              child:
+                                                  Text('User not found!!..')),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
                               }
                             } else {
                               print('Unsuccessfull');
