@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:adobe_xd/blend_mask.dart';
+import 'package:lu_ahatting_application/student/chatHomePage.dart';
 // import 'package:count_down_timer/count_down_timer.dart';
 
 class loginVerification extends StatelessWidget {
@@ -231,7 +232,14 @@ class loginVerification extends StatelessWidget {
                                           Colors.transparent),
                                       // minimumSize: Size(width:50, height),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => chatHomePage(),
+                                        ),
+                                      );
+                                    },
                                     child: Text(
                                       '         Verify          ',
                                       style: TextStyle(
