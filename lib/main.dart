@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:lu_ahatting_application/loginPage.dart';
+import 'package:lu_ahatting_application/student/chatHomePage.dart';
 import 'package:lu_ahatting_application/openPage.dart';
 
 void main() async {
@@ -8,8 +8,6 @@ void main() async {
   await Firebase.initializeApp();
   runApp(MyApp());
 }
-
-class DefaultFirebaseOptions {}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -23,7 +21,7 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/": (context) => openPage(),
-        // "/": (context) => loginPage(),
+        // "/": (context) => chatHomePage(),
       },
     );
   }
