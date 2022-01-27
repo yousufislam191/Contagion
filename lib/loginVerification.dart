@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:adobe_xd/blend_mask.dart';
 import 'package:lu_ahatting_application/student/chatHomePage.dart';
+import 'package:lu_ahatting_application/widgets/elevatedButton.dart';
+import 'package:lu_ahatting_application/widgets/regiTxtField.dart';
+import 'package:lu_ahatting_application/widgets/txtButton.dart';
 // import 'package:count_down_timer/count_down_timer.dart';
 
 class loginVerification extends StatelessWidget {
+  final OTPcontroller = TextEditingController();
+
   // const loginVerification({Key? key}) : super(key: key);
   // String _phone = '';
 
@@ -82,7 +87,7 @@ class loginVerification extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 30.0),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
                   margin: EdgeInsets.only(top: 250),
                   child: Column(
                     children: [
@@ -140,26 +145,33 @@ class loginVerification extends StatelessWidget {
                                     color: Color(0xff000000),
                                   ),
                                 ),
-                                TextField(
-                                  cursorColor: Color(0xff49c42b),
+                                registrationTextField(
+                                  controller: OTPcontroller,
+                                  validator: (value) {},
                                   keyboardType: TextInputType.number,
-                                  textAlign: TextAlign.center,
+                                  // textAlign: TextAlign.center,
                                   maxLength: 4,
-                                  style: TextStyle(
-                                    fontSize: 22,
-                                    fontFamily: 'JosefinSans',
-                                  ),
-                                  decoration: InputDecoration(
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Color(0xff49c42b)),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Color(0xff49c42b)),
-                                    ),
-                                  ),
                                 ),
+                                // TextField(
+                                //   cursorColor: Color(0xff49c42b),
+                                //   keyboardType: TextInputType.number,
+                                //   textAlign: TextAlign.center,
+                                //   maxLength: 4,
+                                //   style: TextStyle(
+                                //     fontSize: 22,
+                                //     fontFamily: 'JosefinSans',
+                                //   ),
+                                //   decoration: InputDecoration(
+                                //     enabledBorder: UnderlineInputBorder(
+                                //       borderSide:
+                                //           BorderSide(color: Color(0xff49c42b)),
+                                //     ),
+                                //     focusedBorder: UnderlineInputBorder(
+                                //       borderSide:
+                                //           BorderSide(color: Color(0xff49c42b)),
+                                //     ),
+                                //   ),
+                                // ),
                                 // CountDownWidget(
                                 //   phone: _phone,
                                 //   padding: EdgeInsets.all(5),
@@ -186,70 +198,27 @@ class loginVerification extends StatelessWidget {
                                 // ),
                                 Align(
                                   //Resend code BUTTON
-                                  child: TextButton(
-                                    style: TextButton.styleFrom(
-                                      primary: Color(0xff49c42b),
-                                    ),
-                                    onPressed: () {},
-                                    child: Text(
-                                      'Resend code?',
-                                      style: TextStyle(
-                                        fontFamily: 'JosefinSans',
-                                      ),
-                                    ),
+                                  child: textButton(
+                                    buttonTxt: 'Resend code?',
+                                    nextPage: () {},
                                   ),
                                   alignment: Alignment(-0.9999999, 0),
                                 ),
-                                Container(
-                                  // LOGIN BUTTON
+                                elevated_button(
+                                  // VERIFY BUTTON
                                   margin: EdgeInsets.only(top: 20),
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black26,
-                                        offset: Offset(0, 4),
-                                        blurRadius: 7,
+                                  button_container_height: 45,
+                                  buttonTxt: 'Verify',
+                                  horizontal_padding: 60,
+                                  vertical_padding: 0,
+                                  onPressed: () async {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => chatHomePage(),
                                       ),
-                                    ],
-                                    gradient: LinearGradient(
-                                      begin: Alignment(0.85, 0.19),
-                                      end: Alignment(-1.58, 0.0),
-                                      colors: [
-                                        const Color(0xff4de927),
-                                        const Color(0xff2ca70d)
-                                      ],
-                                      stops: [0.0, 1.0],
-                                    ),
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: ElevatedButton(
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Colors.transparent),
-                                      shadowColor: MaterialStateProperty.all(
-                                          Colors.transparent),
-                                      // minimumSize: Size(width:50, height),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => chatHomePage(),
-                                        ),
-                                      );
-                                    },
-                                    child: Text(
-                                      '         Verify          ',
-                                      style: TextStyle(
-                                        fontFamily: 'JosefinSans',
-                                        fontSize: 24,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
+                                    );
+                                  },
                                 ),
                               ],
                             ),
