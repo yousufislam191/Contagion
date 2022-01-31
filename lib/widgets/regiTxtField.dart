@@ -5,6 +5,7 @@ class registrationTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
   final String? hintText;
+  final String? labelText;
   final Widget? prefixIcon;
   final Iterable<String>? autofillHints;
   final void Function(String)? onChanged;
@@ -15,6 +16,7 @@ class registrationTextField extends StatelessWidget {
     this.keyboardType,
     required this.validator,
     this.hintText,
+    this.labelText,
     this.prefixIcon,
     this.autofillHints,
     this.onChanged,
@@ -25,7 +27,7 @@ class registrationTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0),
-      margin: EdgeInsets.only(top: 5),
+      margin: EdgeInsets.only(top: 0),
       child: Material(
         child: TextFormField(
           controller: controller,
@@ -52,9 +54,17 @@ class registrationTextField extends StatelessWidget {
             border: UnderlineInputBorder(
               borderSide: BorderSide(color: Color(0xff49c42b)),
             ),
+            contentPadding: EdgeInsets.symmetric(vertical: 8), // inside padding
+            labelText: labelText,
+            labelStyle: TextStyle(
+              color: Colors.grey[800],
+              fontSize: 18,
+              fontFamily: 'JosefinSans',
+              fontStyle: FontStyle.normal,
+            ),
             hintText: hintText,
             hintStyle: TextStyle(
-              color: Colors.grey[800],
+              color: Colors.grey[500],
               fontSize: 18,
               fontFamily: 'JosefinSans',
               fontStyle: FontStyle.normal,

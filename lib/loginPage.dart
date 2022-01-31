@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:adobe_xd/blend_mask.dart';
 import 'package:flutter/rendering.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lu_ahatting_application/services/auth.dart';
 import 'package:lu_ahatting_application/loginVerification.dart';
 import 'package:lu_ahatting_application/forgotPass.dart';
 import 'package:lu_ahatting_application/registration.dart';
@@ -18,13 +22,17 @@ class loginPage extends StatefulWidget {
 
 class _loginPageState extends State<loginPage> {
   FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  // FirebaseDatabase dbRef =
+  //     FirebaseDatabase.instance.reference().child("Students");
 
   final emailEditingController = TextEditingController();
   final passEditingController = TextEditingController();
 
   RegExp emailvalidation = RegExp(r"^[a-z0-9_]+@lus.ac.bd$");
 
-  var _email, _pass;
+  String _email = '', _pass = '';
+  String? errorMessage;
   bool _secure = true;
   late double height, width;
 
@@ -159,7 +167,6 @@ class _loginPageState extends State<loginPage> {
                                   color: Color(0xff49c42b),
                                 ),
                               ),
-                              // Padding(padding: ),
                               Text(
                                 'Please login to continue',
                                 style: TextStyle(
@@ -172,36 +179,43 @@ class _loginPageState extends State<loginPage> {
                             ],
                           ),
                         ),
-                        loginTextField(
-                          // EMAIL FIELD
-                          controller: emailEditingController,
-                          autofillHints: [AutofillHints.email],
-                          labelText: "Enter your university email",
-                          // hintText: "Enter your university email",
-                          prefixIcon: Icon(
-                            Icons.email_rounded,
-                            color: Color(0xff49c42b),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Column(
+                            children: [
+                              loginTextField(
+                                // EMAIL FIELD
+                                controller: emailEditingController,
+                                autofillHints: [AutofillHints.email],
+                                labelText: "Enter your university email",
+                                hintText: "cse_1912020678@lus.ac.bd",
+                                prefixIcon: Icon(
+                                  Icons.email_rounded,
+                                  color: Color(0xff49c42b),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your university email';
+                                  } else if (!emailvalidation.hasMatch(value)) {
+                                    return 'Your entire email does not correct.\nPlease enter your university email';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {
+                                  setState(() {
+                                    _email =
+                                        value; //STORE INPUT VALUE _email VARIABLE
+                                  });
+                                },
+                              ),
+                            ],
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your university email';
-                            } else if (!emailvalidation.hasMatch(value)) {
-                              return 'Your entire email does not correct.\nPlease enter your university email';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) {
-                            setState(() {
-                              _email =
-                                  value; //STORE INPUT VALUE _email VARIABLE
-                            });
-                          },
                         ),
                         loginTextField(
                           // PASSWORD FIELD
                           controller: passEditingController,
                           labelText: "Enter your password",
-                          // hintText: "Enter your password",
+                          hintText: "n^Qu*73)",
                           prefixIcon: Icon(
                             Icons.lock,
                             color: Color(0xff49c42b),
@@ -253,6 +267,19 @@ class _loginPageState extends State<loginPage> {
                                     await _auth.signInWithEmailAndPassword(
                                         email: _email, password: _pass);
                                 if (newUser != null) {
+                                  // final user = await _auth.currentUser!;
+                                  // String userID = user.uid;
+
+                                  // final userDocument = await FirebaseFirestore
+                                  //     .instance
+                                  //     .doc(userID)
+                                  //     .get(); //snapshots()
+                                  // // final userData = userDocument.map((event) => UserModel());
+                                  // final userData = userDocument.data();
+                                  // final identity = userData!['identity'];
+                                  // // await _auth
+                                  // // final userID = await firebaseFirestore.Collection(user);
+                                  // print(identity);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -260,31 +287,39 @@ class _loginPageState extends State<loginPage> {
                                     ),
                                   );
                                 }
-                              } catch (e) {
-                                print(e);
-                                // print("user not found");
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        AlertDialog(
-                                          title: Center(
-                                              child:
-                                                  Text('User not found!!..')),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
+                              } on FirebaseAuthException catch (error) {
+                                switch (error.code) {
+                                  case "invalid-email":
+                                    errorMessage =
+                                        "Your email address appears to be incorrect.";
+                                    break;
+                                  case "wrong-password":
+                                    errorMessage = "Your password is wrong.";
+                                    break;
+                                  case "user-not-found":
+                                    errorMessage =
+                                        "User with this email doesn't exist.";
+                                    break;
+                                  case "user-disabled":
+                                    errorMessage =
+                                        "User with this email has been disabled.";
+                                    break;
+                                  case "too-many-requests":
+                                    errorMessage = "Too many requests";
+                                    break;
+                                  case "operation-not-allowed":
+                                    errorMessage =
+                                        "Signing in with Email and Password is not enabled.";
+                                    break;
+                                  default:
+                                    errorMessage =
+                                        "An undefined Error happened.";
+                                }
+                                Fluttertoast.showToast(msg: errorMessage!);
+                                print(error.code);
                               }
-                            } else {
-                              print('Unsuccessfull');
                             }
+                            ;
                           },
                         ),
                         Row(

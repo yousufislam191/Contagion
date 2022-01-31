@@ -60,7 +60,7 @@ class loginTextField extends StatelessWidget {
             ),
             hintText: hintText,
             hintStyle: TextStyle(
-              color: Colors.grey[800],
+              color: Colors.grey[500],
               fontSize: 18,
               fontFamily: 'JosefinSans',
               fontStyle: FontStyle.normal,
