@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lu_ahatting_application/models/user.dart';
 
@@ -17,7 +15,7 @@ user_data(String name, String id, var departmentType, var identityType) async {
 
   UserModel usermodel = UserModel();
 
-  // usermodel.uid = user?.uid;
+  usermodel.uid = user?.uid;
   usermodel.name = _name;
   usermodel.email = user?.email;
   usermodel.id = _id;
@@ -27,8 +25,8 @@ user_data(String name, String id, var departmentType, var identityType) async {
   //for student
   if (_identityType == 'Student') {
     await firebaseFirestore
-        .collection('Students')
-        .doc(usermodel.id)
+        .collection('Student')
+        .doc(usermodel.uid)
         .set(usermodel.toMap());
     Fluttertoast.showToast(
         msg: "Account created successfully",
@@ -41,7 +39,7 @@ user_data(String name, String id, var departmentType, var identityType) async {
   else if (_identityType == 'Teacher') {
     await firebaseFirestore
         .collection('Teacher')
-        .doc(usermodel.id)
+        .doc(usermodel.uid)
         .set(usermodel.toMap());
     Fluttertoast.showToast(
         msg: "Account created successfully",
@@ -54,7 +52,7 @@ user_data(String name, String id, var departmentType, var identityType) async {
   else if (_identityType == 'Dept. Head') {
     await firebaseFirestore
         .collection('Dept. Head')
-        .doc(usermodel.id)
+        .doc(usermodel.uid)
         .set(usermodel.toMap());
     Fluttertoast.showToast(
         msg: "Account created successfully",

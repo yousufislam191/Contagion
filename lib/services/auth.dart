@@ -26,30 +26,3 @@ class AuthService {
     }
   }
 }
-
-  //login with email & password
-
-//   Future signin_with_Email_And_Password(String _email, String _pass) async {
-//     try {
-//       await _auth.signInWithEmailAndPassword(email: _email, password: _pass);
-//     } catch (e) {
-//       // Fluttertoast.showToast(msg: error!.message);
-//       print(e.toString());
-//       return null;
-//     }
-//   }
-// }
-
-// Future<dynamic?> signin_with_Email_And_Password({
-//     required String _email,
-//     required String _pass,
-//   }) async {
-//     try {
-//       return UserCredential._(
-//       this,await _auth.signInWithEmailAndPassword(email: _email, password: _pass),
-//     );
-//     } catch(e) {
-//       print(e.toString());
-//       return null;
-//     }
-//   }

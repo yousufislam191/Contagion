@@ -1,15 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:adobe_xd/blend_mask.dart';
-import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:lu_ahatting_application/services/auth.dart';
-import 'package:lu_ahatting_application/loginVerification.dart';
+import 'package:lu_ahatting_application/head/headHomePage.dart';
 import 'package:lu_ahatting_application/forgotPass.dart';
 import 'package:lu_ahatting_application/registration.dart';
+import 'package:lu_ahatting_application/student/studentHomePage.dart';
+import 'package:lu_ahatting_application/teacher/teacherHomePage.dart';
 import 'package:lu_ahatting_application/widgets/elevatedButton.dart';
 import 'package:lu_ahatting_application/widgets/loginTxtField.dart';
 import 'package:lu_ahatting_application/widgets/txtButton.dart';
@@ -23,15 +22,13 @@ class loginPage extends StatefulWidget {
 class _loginPageState extends State<loginPage> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  // FirebaseDatabase dbRef =
-  //     FirebaseDatabase.instance.reference().child("Students");
 
   final emailEditingController = TextEditingController();
   final passEditingController = TextEditingController();
 
   RegExp emailvalidation = RegExp(r"^[a-z0-9_]+@lus.ac.bd$");
 
-  String _email = '', _pass = '';
+  String _email = '', _pass = '', _value = '';
   String? errorMessage;
   bool _secure = true;
   late double height, width;
@@ -265,27 +262,68 @@ class _loginPageState extends State<loginPage> {
                               try {
                                 final newUser =
                                     await _auth.signInWithEmailAndPassword(
-                                        email: _email, password: _pass);
-                                if (newUser != null) {
-                                  // final user = await _auth.currentUser!;
-                                  // String userID = user.uid;
+                                        email: _email,
+                                        password:
+                                            _pass); // login with user email & pass
 
-                                  // final userDocument = await FirebaseFirestore
-                                  //     .instance
-                                  //     .doc(userID)
-                                  //     .get(); //snapshots()
-                                  // // final userData = userDocument.map((event) => UserModel());
-                                  // final userData = userDocument.data();
-                                  // final identity = userData!['identity'];
-                                  // // await _auth
-                                  // // final userID = await firebaseFirestore.Collection(user);
-                                  // print(identity);
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => loginVerification(),
-                                    ),
-                                  );
+                                // if login successfull then go to the if condition
+                                if (newUser != null) {
+                                  final user = await _auth
+                                      .currentUser!; // when user login with their email & pass then will find the current user
+                                  final userID =
+                                      user.uid; // get current user 'uid'
+
+                                  List<String> arr = List.filled(
+                                      3, 'null'); // declare a String type List
+                                  arr[0] = 'Student';
+                                  arr[1] = 'Teacher';
+                                  arr[2] = 'Dept. Head';
+                                  for (int i = 0; i < 3; i++) {
+                                    // we use loop for matchin collection with database
+                                    String collectionName =
+                                        arr[i]; // convert List Srting to String
+                                    try {
+                                      // when user login then it will find user identity from database & keep the identity value in '_value' variable
+                                      DocumentSnapshot value =
+                                          await FirebaseFirestore.instance
+                                              .collection(collectionName)
+                                              .doc(userID)
+                                              .get();
+                                      _value = (value[
+                                          'identity']); // keep the identity value
+                                      break;
+                                    } catch (e) {
+                                      print(e);
+                                    }
+                                  }
+                                  if (_value == 'Student') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => studentHomePage(),
+                                      ),
+                                    );
+                                    Fluttertoast.showToast(
+                                        msg: "Successfully login.");
+                                  } else if (_value == 'Teacher') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => teacherHomePage(),
+                                      ),
+                                    );
+                                    Fluttertoast.showToast(
+                                        msg: "Successfully login.");
+                                  } else if (_value == 'Dept. Head') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => headHomePage(),
+                                      ),
+                                    );
+                                    Fluttertoast.showToast(
+                                        msg: "Successfully login.");
+                                  }
                                 }
                               } on FirebaseAuthException catch (error) {
                                 switch (error.code) {

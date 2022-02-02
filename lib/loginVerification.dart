@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:adobe_xd/blend_mask.dart';
-import 'package:lu_ahatting_application/student/chatHomePage.dart';
+import 'package:lu_ahatting_application/student/studentHomePage.dart';
 import 'package:lu_ahatting_application/widgets/elevatedButton.dart';
 import 'package:lu_ahatting_application/widgets/regiTxtField.dart';
 import 'package:lu_ahatting_application/widgets/txtButton.dart';
@@ -215,7 +215,7 @@ class loginVerification extends StatelessWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => chatHomePage(),
+                                        builder: (context) => studentHomePage(),
                                       ),
                                     );
                                   },
