@@ -219,7 +219,7 @@ class _loginPageState extends State<loginPage> {
                           ),
                           suffixIcon: GestureDetector(
                             child: Icon(
-                              _secure ? Icons.visibility : Icons.visibility_off,
+                              _secure ? Icons.visibility_off : Icons.visibility,
                               color: Color(0xff49c42b),
                             ),
                             onTap: () {

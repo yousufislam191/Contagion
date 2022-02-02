@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:adobe_xd/blend_mask.dart';
@@ -211,7 +212,7 @@ class _registrationState extends State<registration> {
                                   onChanged: (value) {
                                     setState(() {
                                       _id =
-                                          value; //STORE INPUT VALUE _email VARIABLE
+                                          value; //STORE INPUT VALUE _id VARIABLE
                                     });
                                   },
                                 ),
@@ -261,7 +262,7 @@ class _registrationState extends State<registration> {
                                   onChanged: (value) {
                                     setState(() {
                                       _pass =
-                                          value; //STORE INPUT VALUE _email VARIABLE
+                                          value; //STORE INPUT VALUE _pass VARIABLE
                                     });
                                   },
                                 ),
@@ -289,13 +290,16 @@ class _registrationState extends State<registration> {
                                   onChanged: (value) {
                                     setState(() {
                                       _conPass =
-                                          value; //STORE INPUT VALUE _pass VARIABLE
+                                          value; //STORE INPUT VALUE _conPass VARIABLE
                                     });
                                   },
                                 ),
                                 dropdown_button(
                                   hint_text: 'Department',
                                   value: deptselectedType,
+                                  validator: (value) => value == null
+                                      ? 'Please select your department'
+                                      : null,
                                   onChanged: (value) {
                                     //print('$value'); //when I clicked then it print that value
                                     setState(() {
@@ -307,6 +311,9 @@ class _registrationState extends State<registration> {
                                 dropdown_button(
                                   hint_text: 'Your Identity',
                                   value: selectedType,
+                                  validator: (value) => value == null
+                                      ? 'Please select your identity'
+                                      : null,
                                   onChanged: (value) {
                                     setState(() {
                                       selectedType = value;
@@ -331,6 +338,21 @@ class _registrationState extends State<registration> {
                                 onPressed: () async {
                                   //CHECK INPUT FIELD VALIDATION
                                   if (_formkey.currentState!.validate()) {
+                                    // if (selectedType == 'Student') {
+                                    //   try {
+                                    //     DocumentSnapshot value =
+                                    //       await FirebaseFirestore.instance
+                                    //           .collection('Student')
+                                    //           .doc(userID)
+                                    //           .get();
+                                    //   String _searchId = (value['id']);
+                                    //   if(_searchId == _id){
+
+                                    //   }
+                                    //   } catch (e) {
+                                    //     print('This id not found');
+                                    //   }
+                                    // };
                                     dynamic result = await _auth
                                         .registerWithEmailAndPassword(
                                             _email,
