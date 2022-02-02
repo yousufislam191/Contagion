@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 
 class dropdown_button extends StatelessWidget {
   final hint_text;
-  final Object? value;
+  final String? value;
   final void Function(Object?)? onChanged;
   final List<String> itemtyType;
+  final String? Function(String?)? validator;
   const dropdown_button(
       {Key? key,
       required this.hint_text,
       required this.value,
       required this.onChanged,
-      required this.itemtyType})
+      required this.itemtyType,
+      required this.validator})
       : super(key: key);
 
   @override
@@ -18,15 +20,23 @@ class dropdown_button extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0),
       margin: EdgeInsets.only(top: 4),
-      child: DropdownButton(
+      child: DropdownButtonFormField(
         icon: Icon(
           Icons.arrow_drop_down,
           color: Color(0xff49c42b),
         ),
-        underline: Container(
+        // underline: Container(
+        //   color: Color(0xff49c42b),
+        //   height: 1,
+        // ),
+        // dropdownColor: Color(0xff49c42b),
+        decoration: InputDecoration(
+            border: UnderlineInputBorder(
+                borderSide: BorderSide(
           color: Color(0xff49c42b),
-          height: 1,
-        ),
+          width: 1.5,
+          style: BorderStyle.solid,
+        ))),
         hint: Text(
           hint_text,
           style: TextStyle(
@@ -39,6 +49,7 @@ class dropdown_button extends StatelessWidget {
         isExpanded: true,
         value: value,
         onChanged: onChanged,
+        validator: validator,
         items: itemtyType.map((value) {
           return DropdownMenuItem(
             value: value,
