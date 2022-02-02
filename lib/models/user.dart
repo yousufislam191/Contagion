@@ -1,5 +1,5 @@
 class UserModel {
-  // String? uid;
+  String? uid;
   String? name;
   String? email;
   String? id;
@@ -7,7 +7,7 @@ class UserModel {
   String? identity;
 
   UserModel(
-      { //this.uid,
+      {this.uid,
       this.name,
       this.email,
       this.id,
