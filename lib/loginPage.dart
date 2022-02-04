@@ -7,6 +7,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lu_ahatting_application/head/headHomePage.dart';
 import 'package:lu_ahatting_application/forgotPass.dart';
 import 'package:lu_ahatting_application/registration.dart';
+import 'package:lu_ahatting_application/services/auth.dart';
+import 'package:lu_ahatting_application/services/database.dart';
 import 'package:lu_ahatting_application/student/studentHomePage.dart';
 import 'package:lu_ahatting_application/teacher/teacherHomePage.dart';
 import 'package:lu_ahatting_application/widgets/elevatedButton.dart';
@@ -15,12 +17,14 @@ import 'package:lu_ahatting_application/widgets/txtButton.dart';
 import 'package:regexed_validator/regexed_validator.dart';
 
 class loginPage extends StatefulWidget {
+  // loginPage({Key? key, this._identityValue}): super(key: key);
   @override
   State<loginPage> createState() => _loginPageState();
 }
 
 class _loginPageState extends State<loginPage> {
   FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthService _loginauth = AuthService();
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   final emailEditingController = TextEditingController();
@@ -32,8 +36,12 @@ class _loginPageState extends State<loginPage> {
   String? errorMessage;
   bool _secure = true;
   late double height, width;
+  // Static _identityValue,
+  // final login_user_data ani= new login_user_data();
 
   final _formkey = GlobalKey<FormState>();
+
+  // const loginPage({Key? key, required this._value}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -259,6 +267,18 @@ class _loginPageState extends State<loginPage> {
                           onPressed: () async {
                             //CHECK INPUT FIELD VALIDATION
                             if (_formkey.currentState!.validate()) {
+                              // dynamic result = await _loginauth
+                              //     .loginWithEmailAndPassword(_email, _pass);
+
+                              // get_identity_value(String getValue) {}
+                              // final second = login_user_data();
+                              // void fn_1() {
+                              //   login_user_data.get_identity_value();
+                              // }
+
+                              // login_user_data data = login_user_data();
+                              // data.get_identity_value();
+
                               try {
                                 final newUser =
                                     await _auth.signInWithEmailAndPassword(
@@ -273,29 +293,68 @@ class _loginPageState extends State<loginPage> {
                                   final userID =
                                       user.uid; // get current user 'uid'
 
-                                  List<String> arr = List.filled(
+                                  List<String> dept = List.filled(
+                                      11, 'null'); // declare a String type List
+                                  dept[0] = 'BBA';
+                                  dept[1] = 'CSE';
+                                  dept[2] = 'English';
+                                  dept[3] = 'EEE';
+                                  dept[4] = 'Civil Engineering';
+                                  dept[5] = 'Architecture';
+                                  dept[6] = 'Law';
+                                  dept[7] = 'Islamic Studies';
+                                  dept[8] = 'Public Health';
+                                  dept[9] = 'Tourism & Hospitality Management';
+                                  dept[10] = 'Bangla';
+
+                                  List<String> identity = List.filled(
                                       3, 'null'); // declare a String type List
-                                  arr[0] = 'Student';
-                                  arr[1] = 'Teacher';
-                                  arr[2] = 'Dept. Head';
-                                  for (int i = 0; i < 3; i++) {
-                                    // we use loop for matchin collection with database
-                                    String collectionName =
-                                        arr[i]; // convert List Srting to String
-                                    try {
-                                      // when user login then it will find user identity from database & keep the identity value in '_value' variable
-                                      DocumentSnapshot value =
-                                          await FirebaseFirestore.instance
-                                              .collection(collectionName)
-                                              .doc(userID)
-                                              .get();
-                                      _value = (value[
-                                          'identity']); // keep the identity value
-                                      break;
-                                    } catch (e) {
-                                      print(e);
+                                  identity[0] = 'Student';
+                                  identity[1] = 'Teacher';
+                                  identity[2] = 'Dept. Head';
+
+                                  for (int i = 0; i < 11; i++) {
+                                    String _dept = dept[i];
+                                    for (int i = 0; i < 3; i++) {
+                                      // we use loop for matchin collection with database
+                                      String _identity = identity[
+                                          i]; // convert List Srting to String
+                                      try {
+                                        // when user login then it will find user identity from database & keep the identity value in '_value' variable
+                                        DocumentSnapshot value =
+                                            await FirebaseFirestore.instance
+                                                .collection(_dept)
+                                                .doc(userID)
+                                                .collection(_identity)
+                                                .doc(userID)
+                                                .get();
+                                        _value = (value[
+                                            'identity']); // keep the identity value
+                                        break;
+                                      } catch (e) {
+                                        print(e);
+                                      }
                                     }
                                   }
+
+                                  // for (int i = 0; i < 3; i++) {
+                                  //   // we use loop for matchin collection with database
+                                  //   String collectionName =
+                                  //       arr[i]; // convert List Srting to String
+                                  //   try {
+                                  //     // when user login then it will find user identity from database & keep the identity value in '_value' variable
+                                  //     DocumentSnapshot value =
+                                  //         await FirebaseFirestore.instance
+                                  //             .collection(collectionName)
+                                  //             .doc(userID)
+                                  //             .get();
+                                  //     _value = (value[
+                                  //         'identity']); // keep the identity value
+                                  //     break;
+                                  //   } catch (e) {
+                                  //     print(e);
+                                  //   }
+                                  // }
                                   if (_value == 'Student') {
                                     Navigator.push(
                                       context,
@@ -348,6 +407,10 @@ class _loginPageState extends State<loginPage> {
                                   case "operation-not-allowed":
                                     errorMessage =
                                         "Signing in with Email and Password is not enabled.";
+                                    break;
+                                  case "network-request-failed":
+                                    errorMessage =
+                                        "You have no internet connection.";
                                     break;
                                   default:
                                     errorMessage =
