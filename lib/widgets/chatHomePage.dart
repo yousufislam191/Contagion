@@ -1,4 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:lu_ahatting_application/navigation/navigationHeader.dart';
+import 'package:lu_ahatting_application/navigation/navigationItem.dart';
+import 'package:lu_ahatting_application/Depertment/bbaPage.dart';
+import 'package:lu_ahatting_application/Depertment/csePage.dart';
+import 'package:lu_ahatting_application/Depertment/architecturePage.dart';
+import 'package:lu_ahatting_application/Depertment/banglaPage.dart';
+import 'package:lu_ahatting_application/Depertment/civilengineeringPage.dart';
+import 'package:lu_ahatting_application/Depertment/eeePage.dart';
+import 'package:lu_ahatting_application/Depertment/englishPage.dart';
+import 'package:lu_ahatting_application/Depertment/islamicstudiesPage.dart';
+import 'package:lu_ahatting_application/Depertment/publichealthPage.dart';
+import 'package:lu_ahatting_application/Depertment/lawPage.dart';
+import 'package:lu_ahatting_application/Depertment/tourismhospitalPage.dart';
 
 class homePage extends StatelessWidget {
   final int length;
@@ -29,6 +42,25 @@ class homePage extends StatelessWidget {
     return DefaultTabController(
       length: length,
       child: Scaffold(
+        drawer:Drawer(
+          child: ListView(
+            children: [
+              NavHeader(),
+              Divider(),
+              NavItem(title: "BBA",icon: Icons.arrow_forward_ios,widget: BBA(),),
+              NavItem(title: "CSE",icon: Icons.arrow_forward_ios,widget: CSE(),),
+              NavItem(title: "English",icon: Icons.arrow_forward_ios,widget: English(),),
+              NavItem(title: "EEE",icon: Icons.arrow_forward_ios,widget: EEE(),),
+              NavItem(title: "Civil Engineering",icon: Icons.arrow_forward_ios,widget: CivilEngineering(),),
+              NavItem(title: "Architecture",icon: Icons.arrow_forward_ios,widget: Architecture(),),
+              NavItem(title: "Law",icon: Icons.arrow_forward_ios,widget: Law(),),
+              NavItem(title: "Islamic Studies",icon: Icons.arrow_forward_ios,widget: IslamicStudies(),),
+              NavItem(title: "Public Health",icon: Icons.arrow_forward_ios,widget: PublicHealth(),),
+              NavItem(title: "Tourism",icon: Icons.arrow_forward_ios,widget: Tourism(),),
+              NavItem(title: "Bangla",icon: Icons.arrow_forward_ios,widget: Bangla(),),
+            ],
+          ),
+        ),
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(180),
           child: AppBar(
@@ -36,13 +68,6 @@ class homePage extends StatelessWidget {
             elevation: 2,
             titleSpacing: 2,
             toolbarHeight: 80,
-            leading: IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.menu,
-                color: Colors.black,
-              ),
-            ),
             title: Row(
               children: [
                 // Drawer(),
