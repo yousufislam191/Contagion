@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:lu_ahatting_application/developers.dart';
 import 'package:lu_ahatting_application/head/headHomePage.dart';
+import 'package:lu_ahatting_application/loader.dart';
 import 'package:lu_ahatting_application/openPage.dart';
 import 'package:lu_ahatting_application/registration.dart';
 
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/": (context) => openPage(),
-        // "/": (context) => registration(),
+        // "/": (context) => developer(),
       },
     );
   }

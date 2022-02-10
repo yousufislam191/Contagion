@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class Editdropdown_button extends StatelessWidget {
   final hint_text;
   final String? value;
@@ -7,11 +8,11 @@ class Editdropdown_button extends StatelessWidget {
   final String? Function(String?)? validator;
   const Editdropdown_button(
       {Key? key,
-        required this.hint_text,
-        required this.value,
-        required this.onChanged,
-        required this.itemtyType,
-        required this.validator})
+      required this.hint_text,
+      required this.value,
+      required this.onChanged,
+      required this.itemtyType,
+      required this.validator})
       : super(key: key);
 
   @override
@@ -27,10 +28,10 @@ class Editdropdown_button extends StatelessWidget {
         decoration: InputDecoration(
             border: UnderlineInputBorder(
                 borderSide: BorderSide(
-                  color: Color(0xff49c42b),
-                  width: 1.5,
-                  style: BorderStyle.solid,
-                ))),
+          color: Color(0xff49c42b),
+          width: 1.5,
+          style: BorderStyle.solid,
+        ))),
         hint: Text(
           hint_text,
           style: TextStyle(

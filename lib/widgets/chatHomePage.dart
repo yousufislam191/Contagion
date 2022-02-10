@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lu_ahatting_application/developers.dart';
 import 'package:lu_ahatting_application/navigation/navigationHeader.dart';
 import 'package:lu_ahatting_application/navigation/navigationItem.dart';
 import 'package:lu_ahatting_application/Depertment/bbaPage.dart';
@@ -42,22 +43,100 @@ class homePage extends StatelessWidget {
     return DefaultTabController(
       length: length,
       child: Scaffold(
-        drawer:Drawer(
+        drawer: Drawer(
           child: ListView(
             children: [
               NavHeader(),
               Divider(),
-              NavItem(title: "BBA",icon: Icons.arrow_forward_ios,widget: BBA(),),
-              NavItem(title: "CSE",icon: Icons.arrow_forward_ios,widget: CSE(),),
-              NavItem(title: "English",icon: Icons.arrow_forward_ios,widget: English(),),
-              NavItem(title: "EEE",icon: Icons.arrow_forward_ios,widget: EEE(),),
-              NavItem(title: "Civil Engineering",icon: Icons.arrow_forward_ios,widget: CivilEngineering(),),
-              NavItem(title: "Architecture",icon: Icons.arrow_forward_ios,widget: Architecture(),),
-              NavItem(title: "Law",icon: Icons.arrow_forward_ios,widget: Law(),),
-              NavItem(title: "Islamic Studies",icon: Icons.arrow_forward_ios,widget: IslamicStudies(),),
-              NavItem(title: "Public Health",icon: Icons.arrow_forward_ios,widget: PublicHealth(),),
-              NavItem(title: "Tourism",icon: Icons.arrow_forward_ios,widget: Tourism(),),
-              NavItem(title: "Bangla",icon: Icons.arrow_forward_ios,widget: Bangla(),),
+              Expanded(
+                  child: Column(
+                children: [
+                  NavItem(
+                    title: "BBA",
+                    icon: Icons.arrow_forward_ios,
+                    widget: BBA(),
+                  ),
+                  NavItem(
+                    title: "CSE",
+                    icon: Icons.arrow_forward_ios,
+                    widget: CSE(),
+                  ),
+                  NavItem(
+                    title: "English",
+                    icon: Icons.arrow_forward_ios,
+                    widget: English(),
+                  ),
+                  NavItem(
+                    title: "EEE",
+                    icon: Icons.arrow_forward_ios,
+                    widget: EEE(),
+                  ),
+                  NavItem(
+                    title: "Civil Engineering",
+                    icon: Icons.arrow_forward_ios,
+                    widget: CivilEngineering(),
+                  ),
+                  NavItem(
+                    title: "Architecture",
+                    icon: Icons.arrow_forward_ios,
+                    widget: Architecture(),
+                  ),
+                  NavItem(
+                    title: "Law",
+                    icon: Icons.arrow_forward_ios,
+                    widget: Law(),
+                  ),
+                  NavItem(
+                    title: "Islamic Studies",
+                    icon: Icons.arrow_forward_ios,
+                    widget: IslamicStudies(),
+                  ),
+                  NavItem(
+                    title: "Public Health",
+                    icon: Icons.arrow_forward_ios,
+                    widget: PublicHealth(),
+                  ),
+                  NavItem(
+                    title: "Tourism",
+                    icon: Icons.arrow_forward_ios,
+                    widget: Tourism(),
+                  ),
+                  NavItem(
+                    title: "Bangla",
+                    icon: Icons.arrow_forward_ios,
+                    widget: Bangla(),
+                  ),
+                ],
+              )),
+              Container(
+                alignment: Alignment.center,
+                color: Colors.black12,
+                height: 50,
+                margin: EdgeInsets.only(top: 20),
+                child: TextButton(
+                  child: Text(
+                    'About Developers',
+                    style: TextStyle(
+                      fontFamily: 'JosefinSans',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  style: ButtonStyle(
+                      // backgroundColor:MaterialStateProperty.all<Color>(Colors.blue),
+                      // padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(vertical: 1, horizontal: 80)),
+                      ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => developer(),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
