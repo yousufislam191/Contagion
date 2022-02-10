@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lu_ahatting_application/models/get_user_model.dart';
 import 'package:lu_ahatting_application/models/user.dart';
+import 'package:flutter/cupertino.dart';
 
 user_data(String name, String id, var departmentType, var identityType) async {
   String _name = name;
@@ -61,4 +63,27 @@ user_data(String name, String id, var departmentType, var identityType) async {
         timeInSecForIosWeb: 1,
         fontSize: 16.0);
   }
+
+  // late GetUserModel currentData;
+
+  // void getUserData() async {
+  //   GetUserModel userModel;
+  //   var value = await firebaseFirestore
+  //       .collection("usersData")
+  //       .doc(usermodel.uid)
+  //       .get();
+  //   if (value.exists) {
+  //     userModel = GetUserModel(
+  //       userEmail: value.get("email"),
+  //       userName: value.get("name"),
+  //       userid: value.get("id"),
+  //     );
+  //     currentData = userModel;
+  //     notifyListeners();
+  //   }
+  // }
+
+  // GetUserModel get currentUserData {
+  //   return currentData;
+  // }
 }
