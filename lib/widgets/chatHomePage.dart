@@ -13,6 +13,8 @@ import 'package:lu_ahatting_application/Depertment/islamicstudiesPage.dart';
 import 'package:lu_ahatting_application/Depertment/publichealthPage.dart';
 import 'package:lu_ahatting_application/Depertment/lawPage.dart';
 import 'package:lu_ahatting_application/Depertment/tourismhospitalPage.dart';
+import 'package:lu_ahatting_application/services/auth.dart';
+import 'package:provider/provider.dart';
 
 class homePage extends StatelessWidget {
   final int length;
@@ -40,13 +42,48 @@ class homePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AuthService userProvider = Provider.of<AuthService>(context);
+    userProvider.getUserData();
+
     return DefaultTabController(
       length: length,
       child: Scaffold(
         drawer: Drawer(
           child: ListView(
             children: [
-              NavHeader(),
+              NavHeader(
+                userProvider: userProvider,
+              ),
+              Divider(),
+              NavItem(
+                title: "BBA",
+                icon: Icons.arrow_forward_ios,
+                widget: BBA(),
+              ),
+              Divider(),
+              NavItem(
+                title: "CSE",
+                icon: Icons.arrow_forward_ios,
+                widget: CSE(),
+              ),
+              Divider(),
+              NavItem(
+                title: "English",
+                icon: Icons.arrow_forward_ios,
+                widget: English(),
+              ),
+              Divider(),
+              NavItem(
+                title: "EEE",
+                icon: Icons.arrow_forward_ios,
+                widget: EEE(),
+              ),
+              Divider(),
+              NavItem(
+                title: "Civil Engineering",
+                icon: Icons.arrow_forward_ios,
+                widget: CivilEngineering(),
+              ),
               Divider(),
               Expanded(
                   child: Column(
@@ -136,6 +173,40 @@ class homePage extends StatelessWidget {
                     );
                   },
                 ),
+              NavItem(
+                title: "Architecture",
+                icon: Icons.arrow_forward_ios,
+                widget: Architecture(),
+              ),
+              Divider(),
+              NavItem(
+                title: "Law",
+                icon: Icons.arrow_forward_ios,
+                widget: Law(),
+              ),
+              Divider(),
+              NavItem(
+                title: "Islamic Studies",
+                icon: Icons.arrow_forward_ios,
+                widget: IslamicStudies(),
+              ),
+              Divider(),
+              NavItem(
+                title: "Public Health",
+                icon: Icons.arrow_forward_ios,
+                widget: PublicHealth(),
+              ),
+              Divider(),
+              NavItem(
+                title: "Tourism",
+                icon: Icons.arrow_forward_ios,
+                widget: Tourism(),
+              ),
+              Divider(),
+              NavItem(
+                title: "Bangla",
+                icon: Icons.arrow_forward_ios,
+                widget: Bangla(),
               ),
             ],
           ),
