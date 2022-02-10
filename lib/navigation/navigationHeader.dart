@@ -3,6 +3,8 @@ import 'package:lu_ahatting_application/services/auth.dart';
 import 'package:lu_ahatting_application/widgets/chatHomePage.dart';
 import 'package:lu_ahatting_application/widgets/editProfile.dart';
 
+class NavHeader extends StatelessWidget {
+  const NavHeader({Key? key}) : super(key: key);
 class NavHeader extends StatefulWidget {
   AuthService userProvider;
   // DrawerSide({this.userProvider});
@@ -29,6 +31,26 @@ class _NavHeaderState extends State<NavHeader> {
                       backgroundColor: Colors.white,
                       child: FlutterLogo(),
                       radius: 45.0,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.center + Alignment(.1, -.2),
+                    child: Text(
+                      "Chat app",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontFamily: 'JosefinSans'),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.center + Alignment(.1, .2),
+                    child: Text(
+                      "1912020155",
+                      style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 17,
+                          fontFamily: 'JosefinSans'),
                     ),
                   ),
                   Align(

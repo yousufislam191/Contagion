@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -32,6 +34,7 @@ class _EditProfileState extends State<EditProfile> {
   void initState() {
     super.initState();
 
+  String _name = '', _id = '', _email = '', _call = '', _txt = '';
     number = UserSimplePreferences.getUsername() ?? '';
     line = UserSimplePreferences.getLine() ?? '';
   }
@@ -76,6 +79,12 @@ class _EditProfileState extends State<EditProfile> {
                 Align(
                   alignment: Alignment.center,
                   child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 55,
+                    child: Text(
+                      "Leading",
+                      style: TextStyle(fontFamily: 'JosefinSans'),
+                    ),
                     radius: 55,
                     child: image != null
                         ? ClipOval(
@@ -94,6 +103,145 @@ class _EditProfileState extends State<EditProfile> {
                     child: IconButton(
                       icon: new Icon(Icons.camera_alt_rounded),
                       color: Colors.black,
+                      onPressed: () {},
+                    )),
+                Align(
+                    alignment: Alignment.topCenter + Alignment(1, .2),
+                    child: IconButton(
+                      icon: new Icon(Icons.edit),
+                      color: Colors.white,
+                      onPressed: () {},
+                    ))
+              ],
+            ),
+          ),
+        ),
+        Form(
+          key: _formkey,
+          child: Column(
+            children: [
+              editTextField(
+                // NAME FIELD
+                controller: nameController,
+                autofillHints: [AutofillHints.name],
+                labelText: "  Name",
+                validator: (value) {},
+                onChanged: (value) {
+                  setState(() {
+                    _name = value; //STORE INPUT VALUE _email VARIABLE
+                  });
+                },
+              ),
+              SizedBox(
+                width: 20,
+                height: 20,
+              ),
+              editTextField(
+                // ID FIELD
+                controller: idController,
+                keyboardType: TextInputType.number,
+                // hintText: "1912020678",
+                labelText: "  Student's or Teacher's ID",
+                validator: (value) {},
+                onChanged: (value) {
+                  setState(() {
+                    _id = value; //STORE INPUT VALUE _id VARIABLE
+                  });
+                },
+              ),
+              SizedBox(
+                width: 20,
+                height: 20,
+              ),
+              editTextField(
+                // EMAIL FIELD
+                controller: callController,
+                autofillHints: [AutofillHints.email],
+                // hintText: "01*********",
+                labelText: "call",
+                prefixIcon: Icon(
+                  Icons.call,
+                  color: Color(0xff49c42b),
+                ),
+                validator: (value) {},
+                onChanged: (value) {
+                  setState(() {
+                    _call = value; //STORE INPUT VALUE _email VARIABLE
+                  });
+                },
+              ),
+              SizedBox(
+                width: 20,
+                height: 20,
+              ),
+              editTextField(
+                // PASSWORD FIELD
+                controller: emailController,
+                // hintText: "",
+                labelText: "email",
+                prefixIcon: Icon(
+                  Icons.email_rounded,
+                  color: Color(0xff49c42b),
+                ),
+                validator: (value) {},
+                onChanged: (value) {
+                  setState(() {
+                    _call = value; //STORE INPUT VALUE _pass VARIABLE
+                  });
+                },
+              ),
+              SizedBox(
+                width: 20,
+                height: 20,
+              ),
+              Editdropdown_button(
+                hint_text: 'Batch',
+                value: deptselectedType,
+                validator: (value) =>
+                    value == null ? 'Please select your department' : null,
+                onChanged: (value) {
+                  //print('$value'); //when I clicked then it print that value
+                  setState(() {
+                    deptselectedType = value;
+                  });
+                },
+                itemtyType: _batch,
+              ),
+              Editdropdown_button(
+                hint_text: 'Section',
+                value: selectedType,
+                validator: (value) =>
+                    value == null ? 'Please select your identity' : null,
+                onChanged: (value) {
+                  setState(() {
+                    selectedType = value;
+                  });
+                },
+                itemtyType: _section,
+              ),
+              SizedBox(
+                width: 20,
+                height: 20,
+              ),
+              editTextField(
+                controller: txtController,
+                labelText: " Status Line",
+                validator: (value) {},
+                onChanged: (value) {
+                  setState(() {
+                    _txt = value; //STORE INPUT VALUE _pass VARIABLE
+                  });
+                },
+              ),
+              RaisedButton(
+                child: Text('Save'),
+                onPressed: () {},
+              ),
+            ],
+          ),
+        ),
+      ]),
+    );
                       onPressed: () {
                         showModalBottomSheet(
                             context: context,
