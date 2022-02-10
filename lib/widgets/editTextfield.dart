@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:lu_ahatting_application/services/auth.dart';
 
 class editTextField extends StatelessWidget {
+  // AuthService userProvider;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
+  // final String? initialValue;
   final String? Function(String?)? validator;
   final String? hintText;
   final String? labelText;
@@ -10,18 +13,26 @@ class editTextField extends StatelessWidget {
   final Iterable<String>? autofillHints;
   final void Function(String)? onChanged;
   final int? maxLength;
-  const editTextField({
-    Key? key,
-    required this.controller,
-    this.keyboardType,
-    required this.validator,
-    this.hintText,
-    this.labelText,
-    this.prefixIcon,
-    this.autofillHints,
-    this.onChanged,
-    this.maxLength,
-  }) : super(key: key);
+  final int? maxLine;
+  final double? width;
+  editTextField(
+      {Key? key,
+      required this.controller,
+      this.keyboardType,
+      required this.validator,
+      this.hintText,
+      this.labelText,
+      this.prefixIcon,
+      this.autofillHints,
+      this.onChanged,
+      this.maxLength,
+      this.maxLine,
+      this.width
+
+      // required this.userProvider,
+      // this.initialValue,
+      })
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +41,10 @@ class editTextField extends StatelessWidget {
       margin: EdgeInsets.only(top: 0),
       child: Material(
         child: TextFormField(
+          // initialValue: initialValue,
+          // expands: true,
+          cursorWidth: 2,
+          maxLines: maxLine,
           controller: controller,
           keyboardType: keyboardType,
           validator: validator,
@@ -47,15 +62,15 @@ class editTextField extends StatelessWidget {
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5.0),
-              borderSide: BorderSide(color: Colors.green,width: 1.5),
+              borderSide: BorderSide(color: Colors.green, width: 1.5),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5.0),
-              borderSide: BorderSide(color: Color(0xff49c42b),width: 1.5),
+              borderSide: BorderSide(color: Color(0xff49c42b), width: 1.5),
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5.0),
-              borderSide: BorderSide(color: Color(0xff49c42b),width: 1.5),
+              borderSide: BorderSide(color: Color(0xff49c42b), width: 1.5),
             ),
             contentPadding: EdgeInsets.symmetric(vertical: 8), // inside padding
             labelText: labelText,
