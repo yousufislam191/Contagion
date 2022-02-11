@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lu_ahatting_application/developers.dart';
+import 'package:lu_ahatting_application/infoPage.dart';
 import 'package:lu_ahatting_application/navigation/navigationHeader.dart';
 import 'package:lu_ahatting_application/navigation/navigationItem.dart';
 import 'package:lu_ahatting_application/Depertment/bbaPage.dart';
@@ -25,6 +27,7 @@ class homePage extends StatelessWidget {
   final Color? searchbarIconColor;
   final List<Widget> tabs;
   final ImageProvider<Object> bodyImage;
+  // String title = title;
 
   const homePage(
       {Key? key,
@@ -54,70 +57,95 @@ class homePage extends StatelessWidget {
                 userProvider: userProvider,
               ),
               Divider(),
-              NavItem(
-                title: "BBA",
-                icon: Icons.arrow_forward_ios,
-                widget: BBA(),
-              ),
-              Divider(),
-              NavItem(
-                title: "CSE",
-                icon: Icons.arrow_forward_ios,
-                widget: CSE(),
-              ),
-              Divider(),
-              NavItem(
-                title: "English",
-                icon: Icons.arrow_forward_ios,
-                widget: English(),
-              ),
-              Divider(),
-              NavItem(
-                title: "EEE",
-                icon: Icons.arrow_forward_ios,
-                widget: EEE(),
-              ),
-              Divider(),
-              NavItem(
-                title: "Civil Engineering",
-                icon: Icons.arrow_forward_ios,
-                widget: CivilEngineering(),
-              ),
-              Divider(),
-              NavItem(
-                title: "Architecture",
-                icon: Icons.arrow_forward_ios,
-                widget: Architecture(),
-              ),
-              Divider(),
-              NavItem(
-                title: "Law",
-                icon: Icons.arrow_forward_ios,
-                widget: Law(),
-              ),
-              Divider(),
-              NavItem(
-                title: "Islamic Studies",
-                icon: Icons.arrow_forward_ios,
-                widget: IslamicStudies(),
-              ),
-              Divider(),
-              NavItem(
-                title: "Public Health",
-                icon: Icons.arrow_forward_ios,
-                widget: PublicHealth(),
-              ),
-              Divider(),
-              NavItem(
-                title: "Tourism",
-                icon: Icons.arrow_forward_ios,
-                widget: Tourism(),
-              ),
-              Divider(),
-              NavItem(
-                title: "Bangla",
-                icon: Icons.arrow_forward_ios,
-                widget: Bangla(),
+              Expanded(
+                  child: Column(
+                children: [
+                  NavItem(
+                    title: "BBA",
+                    icon: Icons.arrow_forward_ios,
+                    // widget: BBA(title),
+                    widget: infoPage(title: "BBA"),
+                  ),
+                  NavItem(
+                    title: "CSE",
+                    icon: Icons.arrow_forward_ios,
+                    widget: infoPage(title: "CSE"),
+                  ),
+                  NavItem(
+                    title: "English",
+                    icon: Icons.arrow_forward_ios,
+                    widget: infoPage(title: "English"),
+                  ),
+                  NavItem(
+                    title: "EEE",
+                    icon: Icons.arrow_forward_ios,
+                    widget: infoPage(title: "EEE"),
+                  ),
+                  NavItem(
+                    title: "Civil Engineering",
+                    icon: Icons.arrow_forward_ios,
+                    widget: infoPage(title: "Civil Engineering"),
+                  ),
+                  NavItem(
+                    title: "Architecture",
+                    icon: Icons.arrow_forward_ios,
+                    widget: infoPage(title: "Architecture"),
+                  ),
+                  NavItem(
+                    title: "Law",
+                    icon: Icons.arrow_forward_ios,
+                    widget: infoPage(title: "Law"),
+                  ),
+                  NavItem(
+                    title: "Islamic Studies",
+                    icon: Icons.arrow_forward_ios,
+                    widget: infoPage(title: "Islamic Studies"),
+                  ),
+                  NavItem(
+                    title: "Public Health",
+                    icon: Icons.arrow_forward_ios,
+                    widget: infoPage(title: "Public Health"),
+                  ),
+                  NavItem(
+                    title: "Tourism & Hospitality Management",
+                    icon: Icons.arrow_forward_ios,
+                    widget: infoPage(title: "Tourism & Hospitality Management"),
+                  ),
+                  NavItem(
+                    title: "Bangla",
+                    icon: Icons.arrow_forward_ios,
+                    widget: infoPage(title: "Bangla"),
+                  ),
+                ],
+              )),
+              Container(
+                alignment: Alignment.center,
+                color: Colors.black12,
+                height: 50,
+                margin: EdgeInsets.only(top: 20),
+                child: TextButton(
+                  child: Text(
+                    'About Developers',
+                    style: TextStyle(
+                      fontFamily: 'JosefinSans',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  style: ButtonStyle(
+                      // backgroundColor:MaterialStateProperty.all<Color>(Colors.blue),
+                      // padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(vertical: 1, horizontal: 80)),
+                      ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => developer(),
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
           ),

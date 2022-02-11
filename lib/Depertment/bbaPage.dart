@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lu_ahatting_application/Depertment/elevatedButton.dart';
 
 class BBA extends StatelessWidget {
-  const BBA({Key? key}) : super(key: key);
+  const BBA(title, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

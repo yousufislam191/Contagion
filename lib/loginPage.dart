@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lu_ahatting_application/head/headHomePage.dart';
 import 'package:lu_ahatting_application/forgotPass.dart';
 import 'package:lu_ahatting_application/loader.dart';
+import 'package:lu_ahatting_application/models/user.dart';
 import 'package:lu_ahatting_application/registration.dart';
 import 'package:lu_ahatting_application/services/auth.dart';
 import 'package:lu_ahatting_application/services/database.dart';
@@ -342,6 +343,7 @@ class _loginPageState extends State<loginPage> {
                                                       .get();
                                               _value = (value[
                                                   'identity']); // keep the identity value
+                                              // UserModel(value);
                                               break;
                                             } catch (e) {
                                               print(e);

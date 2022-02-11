@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lu_ahatting_application/Depertment/elevatedButton.dart';
 
 class Bangla extends StatelessWidget {
-  const Bangla({Key? key}) : super(key: key);
+  const Bangla(title, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
