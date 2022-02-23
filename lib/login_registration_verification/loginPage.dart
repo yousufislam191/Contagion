@@ -5,12 +5,10 @@ import 'package:adobe_xd/pinned.dart';
 import 'package:adobe_xd/blend_mask.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lu_ahatting_application/head/headHomePage.dart';
-import 'package:lu_ahatting_application/forgotPass.dart';
+import 'package:lu_ahatting_application/login_registration_verification/forgotPass.dart';
 import 'package:lu_ahatting_application/loader.dart';
 import 'package:lu_ahatting_application/models/user.dart';
-import 'package:lu_ahatting_application/registration.dart';
-import 'package:lu_ahatting_application/services/auth.dart';
-import 'package:lu_ahatting_application/services/database.dart';
+import 'package:lu_ahatting_application/login_registration_verification/registration.dart';
 import 'package:lu_ahatting_application/student/studentHomePage.dart';
 import 'package:lu_ahatting_application/teacher/teacherHomePage.dart';
 import 'package:lu_ahatting_application/widgets/elevatedButton.dart';
@@ -26,7 +24,6 @@ class loginPage extends StatefulWidget {
 
 class _loginPageState extends State<loginPage> {
   FirebaseAuth _auth = FirebaseAuth.instance;
-  final AuthService _loginauth = AuthService();
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   final emailEditingController = TextEditingController();
@@ -34,13 +31,11 @@ class _loginPageState extends State<loginPage> {
 
   RegExp emailvalidation = RegExp(r"^[a-z0-9_]+@lus.ac.bd$");
 
-  String _email = '', _pass = '', _value = '';
+  String _email = '', _pass = '', _Tvalue = '', _Svalue = '';
   String? errorMessage;
   bool _secure = true;
   late double height, width;
   bool loading = false;
-  // Static _identityValue,
-  // final login_user_data ani= new login_user_data();
 
   final _formkey = GlobalKey<FormState>();
 
@@ -162,7 +157,6 @@ class _loginPageState extends State<loginPage> {
                             children: [
                               Container(
                                 //TEXT
-                                // padding: EdgeInsets.symmetric(horizontal: 30.0),
                                 margin: EdgeInsets.only(top: 250, bottom: 20),
                                 alignment: Alignment(-0.70, 0),
                                 child: Column(
@@ -276,18 +270,6 @@ class _loginPageState extends State<loginPage> {
                                 onPressed: () async {
                                   //CHECK INPUT FIELD VALIDATION
                                   if (_formkey.currentState!.validate()) {
-                                    // dynamic result = await _loginauth
-                                    //     .loginWithEmailAndPassword(_email, _pass);
-
-                                    // get_identity_value(String getValue) {}
-                                    // final second = login_user_data();
-                                    // void fn_1() {
-                                    //   login_user_data.get_identity_value();
-                                    // }
-
-                                    // login_user_data data = login_user_data();
-                                    // data.get_identity_value();
-
                                     setState(() => loading = true);
 
                                     try {
@@ -319,15 +301,15 @@ class _loginPageState extends State<loginPage> {
                                             'Tourism & Hospitality Management';
                                         dept[10] = 'Bangla';
 
-                                        List<String> identity = List.filled(3,
+                                        List<String> identity = List.filled(2,
                                             'null'); // declare a String type List
                                         identity[0] = 'Student';
                                         identity[1] = 'Teacher';
-                                        identity[2] = 'Dept. Head';
+                                        // identity[2] = 'Dept. Head';
 
                                         for (int i = 0; i < 11; i++) {
                                           String _dept = dept[i];
-                                          for (int i = 0; i < 3; i++) {
+                                          for (int i = 0; i < 2; i++) {
                                             // we use loop for matchin collection with database
                                             String _identity = identity[
                                                 i]; // convert List Srting to String
@@ -337,39 +319,89 @@ class _loginPageState extends State<loginPage> {
                                                   await FirebaseFirestore
                                                       .instance
                                                       .collection(_dept)
-                                                      .doc(userID)
+                                                      .doc(_dept)
                                                       .collection(_identity)
                                                       .doc(userID)
                                                       .get();
-                                              _value = (value[
+
+                                              getCurrentUserData(value);
+
+                                              _Svalue = (value[
                                                   'identity']); // keep the identity value
+                                              _Tvalue = (value[
+                                                  'designation']); // keep the identity value
                                               // UserModel(value);
                                               break;
                                             } catch (e) {
                                               print(e);
                                             }
+
+                                            // StreamBuilder(
+                                            //     stream: FirebaseFirestore
+                                            //         .instance
+                                            //         .collection(_dept)
+                                            //         .doc(_dept)
+                                            //         .collection(_identity)
+                                            //         .doc((await _auth.currentUser)!.uid)
+                                            //         .snapshots(),
+                                            //     builder: (BuildContext,
+                                            //         AsyncSnapshot<
+                                            //                 QuerySnapshot<
+                                            //                     Map<String,
+                                            //                         dynamic>>>
+                                            //             snapshot) {
+                                            //       if (snapshot.hasData &&
+                                            //           snapshot.data != null) {
+                                            //         // print("Total documents: ${snapshot.data!.docs.length}");
+                                            //         if (snapshot.data!.docs
+                                            //             .isNotEmpty) {
+                                            //           return ListView.builder(
+                                            //             itemCount: snapshot
+                                            //                 .data!.docs.length,
+                                            //             itemBuilder:
+                                            //                 (BuildContext,
+                                            //                     int index) {
+                                            //               Map<String, dynamic>
+                                            //                   docData = snapshot
+                                            //                       .data!
+                                            //                       .docs[index]
+                                            //                       .data();
+
+                                            //               if (docData.isEmpty) {
+                                            //                 return const Text(
+                                            //                   "Document is Empty",
+                                            //                   textAlign:
+                                            //                       TextAlign
+                                            //                           .center,
+                                            //                 );
+                                            //               }
+
+                                            //               String name = docData[
+                                            //                   getData.name];
+                                            //               String email =
+                                            //                   docData[getData
+                                            //                       .email];
+
+                                            //               return getCurrentUserData();
+                                            //             },
+                                            //           );
+                                            //         } else {
+                                            //           return const Center(
+                                            //             child: Text(
+                                            //                 'Document aren\'t availavle'),
+                                            //           );
+                                            //         }
+                                            //       } else {
+                                            //         return const Center(
+                                            //           child:
+                                            //               Text('Getting Error'),
+                                            //         );
+                                            //       }
+                                            //     });
                                           }
                                         }
 
-                                        // for (int i = 0; i < 3; i++) {
-                                        //   // we use loop for matchin collection with database
-                                        //   String collectionName =
-                                        //       arr[i]; // convert List Srting to String
-                                        //   try {
-                                        //     // when user login then it will find user identity from database & keep the identity value in '_value' variable
-                                        //     DocumentSnapshot value =
-                                        //         await FirebaseFirestore.instance
-                                        //             .collection(collectionName)
-                                        //             .doc(userID)
-                                        //             .get();
-                                        //     _value = (value[
-                                        //         'identity']); // keep the identity value
-                                        //     break;
-                                        //   } catch (e) {
-                                        //     print(e);
-                                        //   }
-                                        // }
-                                        if (_value == 'Student') {
+                                        if (_Svalue == 'Student') {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -379,7 +411,17 @@ class _loginPageState extends State<loginPage> {
                                           );
                                           Fluttertoast.showToast(
                                               msg: "Successfully login.");
-                                        } else if (_value == 'Teacher') {
+                                        } else if (_Tvalue == 'Head') {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  headHomePage(),
+                                            ),
+                                          );
+                                          Fluttertoast.showToast(
+                                              msg: "Successfully login.");
+                                        } else if (_Tvalue == 'Lecturer') {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -389,12 +431,34 @@ class _loginPageState extends State<loginPage> {
                                           );
                                           Fluttertoast.showToast(
                                               msg: "Successfully login.");
-                                        } else if (_value == 'Dept. Head') {
+                                        } else if (_Tvalue == 'Professor') {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  headHomePage(),
+                                                  teacherHomePage(),
+                                            ),
+                                          );
+                                          Fluttertoast.showToast(
+                                              msg: "Successfully login.");
+                                        } else if (_Tvalue ==
+                                            'Assistant Professor') {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  teacherHomePage(),
+                                            ),
+                                          );
+                                          Fluttertoast.showToast(
+                                              msg: "Successfully login.");
+                                        } else if (_Tvalue ==
+                                            'Associate Professor') {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  teacherHomePage(),
                                             ),
                                           );
                                           Fluttertoast.showToast(

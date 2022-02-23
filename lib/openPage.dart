@@ -5,7 +5,7 @@ import 'package:adobe_xd/pinned.dart';
 import 'package:adobe_xd/blend_mask.dart';
 import 'package:adobe_xd/page_link.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lu_ahatting_application/loginPage.dart';
+import 'package:lu_ahatting_application/login_registration_verification/loginPage.dart';
 
 class openPage extends StatefulWidget {
   const openPage({Key? key}) : super(key: key);

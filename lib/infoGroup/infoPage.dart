@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lu_ahatting_application/widgets/chatList.dart';
+import 'package:lu_ahatting_application/infoGroup/studentChatList.dart';
+import 'package:lu_ahatting_application/infoGroup/teacherChatList.dart';
 
 class infoPage extends StatefulWidget {
   final String title;
@@ -13,6 +14,7 @@ class infoPage extends StatefulWidget {
 }
 
 class _infoPageState extends State<infoPage> {
+  String Title = '';
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -30,7 +32,10 @@ class _infoPageState extends State<infoPage> {
           ),
           title: Text(
             '${widget.title}',
-            style: TextStyle(fontFamily: 'JosefinSans'),
+            style: TextStyle(
+                fontFamily: 'JosefinSans',
+                fontSize: 24,
+                fontWeight: FontWeight.bold),
           ),
         ),
         body: Center(
@@ -74,10 +79,15 @@ class _infoPageState extends State<infoPage> {
                         Text("Teachers", style: TextStyle(color: Colors.black))
                       ],
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                      Title = '${widget.title}';
+
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => chatList()),
+                        MaterialPageRoute(
+                            builder: (context) => chatList(
+                                  Title: Title,
+                                )),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -117,29 +127,77 @@ class _infoPageState extends State<infoPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                    onPressed: null,
-                    child: Text('Students'),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.person,
+                          color: Colors.black,
+                        ),
+                        Text("Students", style: TextStyle(color: Colors.black))
+                      ],
+                    ),
+                    // onPressed: null,
+                    onPressed: () async {
+                      Title = '${widget.title}';
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => studentChatList(
+                                  Title: Title,
+                                )),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
+                        side: BorderSide(width: 3, color: Color(0xff49c42b)),
                         fixedSize: const Size(100, 100),
+                        primary: Colors.white,
                         elevation: 7,
                         shadowColor: Colors.black),
                   ),
                   ElevatedButton(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.pause_presentation,
+                          color: Colors.black,
+                        ),
+                        Text("Routine", style: TextStyle(color: Colors.black))
+                      ],
+                    ),
                     onPressed: null,
-                    child: Text('Disabled Button'),
                     style: ElevatedButton.styleFrom(
+                        side: BorderSide(width: 3, color: Color(0xff49c42b)),
                         fixedSize: const Size(100, 100),
+                        primary: Colors.white,
                         elevation: 7,
                         shadowColor: Colors.black),
                   ),
                   ElevatedButton(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.report_problem,
+                          color: Colors.black,
+                        ),
+                        Text("Report Box",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
+                            ))
+                      ],
+                    ),
                     onPressed: null,
-                    child: Text('Disabled Button'),
                     style: ElevatedButton.styleFrom(
+                        side: BorderSide(width: 3, color: Color(0xff49c42b)),
                         fixedSize: const Size(100, 100),
+                        primary: Colors.white,
                         elevation: 7,
                         shadowColor: Colors.black),
-                  ),
+                  )
                 ],
               )
             ],
