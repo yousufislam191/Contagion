@@ -5,12 +5,12 @@ import 'package:lu_ahatting_application/Utils/user_simple_preference.dart';
 import 'package:lu_ahatting_application/head/headHomePage.dart';
 import 'package:lu_ahatting_application/loader.dart';
 import 'package:lu_ahatting_application/openPage.dart';
-import 'package:lu_ahatting_application/registration.dart';
+import 'package:lu_ahatting_application/login_registration_verification/registration.dart';
 import 'package:lu_ahatting_application/services/auth.dart';
+import 'package:lu_ahatting_application/student/studentHomePage.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await UserSimplePreferences.init();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lu_ahatting_application/models/user.dart';
 import 'package:lu_ahatting_application/services/auth.dart';
 import 'package:lu_ahatting_application/widgets/chatHomePage.dart';
 import 'package:lu_ahatting_application/widgets/editProfile.dart';
@@ -13,6 +14,29 @@ class NavHeader extends StatefulWidget {
 }
 
 class _NavHeaderState extends State<NavHeader> {
+  // @override
+  // void initState() {
+  // super.initState();
+//    void currentUserData(String name, String identity, String email, String id, String department) {
+//   String currentUserName = name;
+//   String currentUserIdentity = identity;
+//   String currentUserEmail = email;
+//   String currentUserId = id;
+//   String currentUserDepartment = department;
+//   print(currentUserName);
+// }
+  // }
+
+  // getCurrentUserData userData = getCurrentUserData();
+  // currentUserData userData = currentUserData();
+  // currentUserData? getData;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getCurrentUserData();
+  // }
+
   @override
   Widget build(BuildContext context) {
     var userData = widget.userProvider.currentUserData;
@@ -40,6 +64,7 @@ class _NavHeaderState extends State<NavHeader> {
                           )
                         : Text(
                             "Chat app",
+                            // widget.name,
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -95,6 +120,8 @@ class _NavHeaderState extends State<NavHeader> {
     );
   }
 }
+
+
 // GestureDetector(
 //   child: Icon(Icons.more_vert),
 //   onTap: (){

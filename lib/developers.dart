@@ -25,13 +25,13 @@ class developer extends StatelessWidget {
             centerTitle: true,
           ),
           body: Container(
-            alignment: Alignment.center,
-            child: ListView(
+            // alignment: AlignmentGeometry(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 20.0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       CircleAvatar(
                         radius: 70,
@@ -69,7 +69,6 @@ class developer extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 20.0),
                   height: height * 0.3,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CircleAvatar(
                         radius: 70,
@@ -77,44 +76,6 @@ class developer extends StatelessWidget {
                       SizedBox(height: 15),
                       Text(
                         'Naima Akther',
-                        style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'JosefinSans'),
-                      ),
-                      Text(
-                        '50\u1d57\u02b0 Batch',
-                        style:
-                            TextStyle(fontSize: 16, fontFamily: 'JosefinSans'),
-                      ),
-                      Text(
-                        'Computer Science and Engineering',
-                        style:
-                            TextStyle(fontSize: 16, fontFamily: 'JosefinSans'),
-                      ),
-                      Text(
-                        'Leading University',
-                        style:
-                            TextStyle(fontSize: 16, fontFamily: 'JosefinSans'),
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(thickness: 1.5),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 20.0),
-                  height: height * 0.3,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      CircleAvatar(
-                        radius: 70,
-                        backgroundImage:
-                            AssetImage("assets/developerImages/anik1.jpg"),
-                      ),
-                      SizedBox(height: 15),
-                      Text(
-                        'Anik Roy',
                         style: TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.bold,

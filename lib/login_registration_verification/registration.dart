@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:adobe_xd/blend_mask.dart';
-import 'package:lu_ahatting_application/loginPage.dart';
+import 'package:lu_ahatting_application/login_registration_verification/loginPage.dart';
 import 'package:lu_ahatting_application/services/auth.dart';
 import 'package:lu_ahatting_application/widgets/regiDropdownButton.dart';
 import 'package:lu_ahatting_application/widgets/elevatedButton.dart';
@@ -31,8 +31,17 @@ class _registrationState extends State<registration> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
-  var selectedType, deptselectedType;
-  var _identityType = ['Student', 'Teacher', 'Dept. Head'];
+  var selectedType, deptselectedType, teacherSelectedType;
+  List<String> provience = [];
+  // var _identityType = ['Student', 'Teacher', 'Dept. Head'];
+  var _identityType = ['Student', 'Teacher'];
+  var _teacherIdentityType = [
+    'Professor',
+    'Assistant Professor',
+    'Associate Professor',
+    'Head',
+    'Lecturer'
+  ];
   var _departmentType = [
     'BBA',
     'CSE',
@@ -321,6 +330,7 @@ class _registrationState extends State<registration> {
                                   },
                                   itemtyType: _identityType,
                                 ),
+                                insideDropdown(),
                               ],
                             ),
                           ),
@@ -338,21 +348,6 @@ class _registrationState extends State<registration> {
                                 onPressed: () async {
                                   //CHECK INPUT FIELD VALIDATION
                                   if (_formkey.currentState!.validate()) {
-                                    // if (selectedType == 'Student') {
-                                    //   try {
-                                    //     DocumentSnapshot value =
-                                    //       await FirebaseFirestore.instance
-                                    //           .collection('Student')
-                                    //           .doc(userID)
-                                    //           .get();
-                                    //   String _searchId = (value['id']);
-                                    //   if(_searchId == _id){
-
-                                    //   }
-                                    //   } catch (e) {
-                                    //     print('This id not found');
-                                    //   }
-                                    // };
                                     dynamic result = await _auth
                                         .registerWithEmailAndPassword(
                                             _email,
@@ -360,7 +355,8 @@ class _registrationState extends State<registration> {
                                             _name,
                                             _id,
                                             deptselectedType,
-                                            selectedType);
+                                            selectedType,
+                                            teacherSelectedType);
                                     if (result == null) {
                                       setState(() {
                                         var error =
@@ -414,5 +410,23 @@ class _registrationState extends State<registration> {
         ),
       ),
     );
+  }
+
+  Widget insideDropdown() {
+    return selectedType == 'Teacher'
+        ? dropdown_button(
+            //dependent dropdown for teacher
+            hint_text: 'Teacher Designation',
+            value: teacherSelectedType,
+            validator: (value) =>
+                value == null ? 'Please select your designation' : null,
+            onChanged: (value) {
+              setState(() {
+                teacherSelectedType = value;
+              });
+            },
+            itemtyType: _teacherIdentityType,
+          )
+        : Container();
   }
 }
