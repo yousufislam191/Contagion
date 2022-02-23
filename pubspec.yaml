@@ -43,6 +43,8 @@ dependencies:
   cloud_firestore: ^3.1.5
   image_picker: ^0.8.4+6
   shared_preferences: ^2.0.13
+  firebase_storage: ^10.2.7
+  path_provider: ^2.0.9
 
   # count_down_timer: ^1.0.1
 
@@ -93,8 +95,7 @@ flutter:
   assets:
     - assets/images/
     - animation/
-    - assets/images/images.jpeg
-    - assets/images/LU-campus.jpg
+    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

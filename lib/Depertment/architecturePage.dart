@@ -17,13 +17,13 @@ class Architecture extends StatelessWidget {
             Container(
               height: 300,
               width: 400,
-              color: Colors.green,
-              // decoration: BoxDecoration(
-              //   image: const DecorationImage(
-              //     image: AssetImage("assets/images/Lu-campus.jpg"),
-              //     fit: BoxFit.cover,
-              //   ),
-              // ),
+              // color: Colors.green,
+              decoration: BoxDecoration(
+                image: const DecorationImage(
+                  image: AssetImage("assets/images/images.jpeg"),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
             SizedBox(
               height: 10,
