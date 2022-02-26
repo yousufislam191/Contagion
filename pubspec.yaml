@@ -45,6 +45,7 @@ dependencies:
   image_picker: ^0.8.4+6
   shared_preferences: ^2.0.13
 
+  encrypt: ^5.0.1
   stream_chat_flutter_core: ^3.4.0
   flutter_chat_bubble: ^2.0.0
   faker: ^2.0.0

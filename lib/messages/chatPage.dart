@@ -1,41 +1,100 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lu_ahatting_application/models/user.dart';
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
-// extension StringExtension on String {
-//   String capitalize() {
-//     return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
-//   }
-// }
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
+  }
+}
 
 class chatPage extends StatefulWidget {
-  // static Route routeWithChannel(Channel channel) => MaterialPageRoute(
-  //       builder: (context) => StreamChannel(
-  //         channel: channel,
-  //         child: const chatPage(
-  //           name: '',
-  //         ),
-  //       ),
-  //     );
-
-  // final String name;
-  // final String uid;
-  // const chatPage({Key? key, required this.name, required this.uid})
-  //     : super(key: key);
+  final targetChatName;
+  final targetChatUid;
+  const chatPage({Key? key, this.targetChatName, this.targetChatUid})
+      : super(key: key);
 
   @override
-  _chatPageState createState() => _chatPageState();
+  _chatPageState createState() => _chatPageState(targetChatName, targetChatUid);
 }
 
 class _chatPageState extends State<chatPage> {
   final _formkey = GlobalKey<FormState>();
-  final TextEditingController chatController = TextEditingController();
+  // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  CollectionReference chats = FirebaseFirestore.instance.collection('chats');
+  final targetChatName;
+  final targetChatUid;
+  final currentUserId = FirebaseAuth.instance.currentUser?.uid;
 
-  // currentUserData data = currentUserData(name, identity, email, id, department, uid);
-  // currentUserData data = currentUserData();
-  // data.getCurrentUserData();
+  var chatDocId;
+  final _message = new TextEditingController();
+
+  _chatPageState(this.targetChatName, this.targetChatUid);
+
+  @override
+  void initState() {
+    super.initState();
+    checkUser();
+  }
+
+  void checkUser() async {
+    await chats
+        .where('users', isEqualTo: {targetChatUid: null, currentUserId: null})
+        .limit(1)
+        .get()
+        .then(
+          (QuerySnapshot querySnapshot) async {
+            if (querySnapshot.docs.isNotEmpty) {
+              setState(() {
+                chatDocId = querySnapshot.docs.single.id;
+
+                // chatHomePageChat(
+                //     chatDocId: chatDocId,
+                //     targetChatName: targetChatName,
+                //     targetChatUid: targetChatUid);
+              });
+              // print('chat home page paise');
+              print(chatDocId);
+              print(targetChatName);
+              print(targetChatUid);
+            } else {
+              await chats.add({
+                'users': {currentUserId: null, targetChatUid: null},
+                'senderId': currentUserId,
+                'receiverid': targetChatUid
+              }).then((value) => {chatDocId = value});
+            }
+          },
+        )
+        .catchError((error) {});
+  }
+
+  void sendMessage(String msg) {
+    if (msg == '') return;
+    chats.doc(chatDocId).collection('messages').add({
+      'time': FieldValue.serverTimestamp(),
+      'uid': currentUserId,
+      'msg': msg
+    }).then((value) {
+      _message.clear();
+    });
+  }
+
+  bool isSender(String friend) {
+    return friend == currentUserId;
+  }
+
+  Alignment getAlignment(friend) {
+    if (friend == currentUserId) {
+      return Alignment.topRight;
+    }
+    return Alignment.topLeft;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -233,7 +292,7 @@ class _MessageList extends StatelessWidget {
       //     if (index < messages.length) {
       //       final message = messages[index];
       //       // if (message.user?.id == context.currentUser?.id) {
-      //       if (message.user?.id == context.currentUser?.id) {
+      //       if (message.user?.id == context.currentUser?.uid) {
       //         return _MessageOwnTile(message: message);
       //       }
       //       else {

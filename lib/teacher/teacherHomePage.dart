@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:lu_ahatting_application/navigation/navigationHeader.dart';
 import 'package:lu_ahatting_application/widgets/chatHomePage.dart';
 import 'package:lu_ahatting_application/messages/chatHomePageChat.dart';
 
 class teacherHomePage extends StatefulWidget {
-  const teacherHomePage({Key? key}) : super(key: key);
+  final name;
+  const teacherHomePage({Key? key, this.name}) : super(key: key);
 
   @override
-  _teacherHomePageState createState() => _teacherHomePageState();
+  _teacherHomePageState createState() => _teacherHomePageState(name);
 }
 
 class _teacherHomePageState extends State<teacherHomePage> {
+  final name;
   final searchEditingController = TextEditingController();
+
+  _teacherHomePageState(this.name);
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +27,16 @@ class _teacherHomePageState extends State<teacherHomePage> {
         length: 3,
         backgroundColor: Color(0xFF186FB6),
         backgroundImage: AssetImage("assets/images/profileImg.jpg"),
-        profileText: "Teacher",
+        profileText: name,
         controller: searchEditingController,
         searchbarCursorColor: Color(0xFF186FB6),
         searchbarIconColor: Color(0xFF186FB6),
-        tabs: [Tab(text: 'Chat'), Tab(text: 'Groups'), Tab(text: 'Classroom')],
+        currentUserName: name,
+        tabs: [
+          Tab(text: 'Chat'),
+          Tab(text: 'Groups'),
+          Tab(text: 'Classroom'),
+        ],
         children: [
           chatHomePageChat(),
           Center(

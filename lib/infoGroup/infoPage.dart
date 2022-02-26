@@ -4,9 +4,11 @@ import 'package:lu_ahatting_application/infoGroup/teacherChatList.dart';
 
 class infoPage extends StatefulWidget {
   final String title;
+  final currentUserName;
   const infoPage({
     Key? key,
     required this.title,
+    this.currentUserName,
   }) : super(key: key);
 
   @override
@@ -15,6 +17,7 @@ class infoPage extends StatefulWidget {
 
 class _infoPageState extends State<infoPage> {
   String Title = '';
+  String currentUserName = '';
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -81,12 +84,14 @@ class _infoPageState extends State<infoPage> {
                     ),
                     onPressed: () async {
                       Title = '${widget.title}';
+                      currentUserName = '${widget.currentUserName}';
 
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => chatList(
                                   Title: Title,
+                                  currentUserName: currentUserName,
                                 )),
                       );
                     },
@@ -140,12 +145,14 @@ class _infoPageState extends State<infoPage> {
                     // onPressed: null,
                     onPressed: () async {
                       Title = '${widget.title}';
+                      currentUserName = '${widget.currentUserName}';
 
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => studentChatList(
                                   Title: Title,
+                                  currentUserName: currentUserName,
                                 )),
                       );
                     },
