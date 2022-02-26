@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:lu_ahatting_application/models/user.dart';
 import 'package:lu_ahatting_application/services/auth.dart';
+import 'package:lu_ahatting_application/widgets/ProfileWidget.dart';
 import 'package:lu_ahatting_application/widgets/chatHomePage.dart';
 import 'package:lu_ahatting_application/widgets/editProfile.dart';
+import 'package:lu_ahatting_application/Utils/user_simple_preference.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NavHeader extends StatefulWidget {
   AuthService userProvider;
@@ -39,6 +42,7 @@ class _NavHeaderState extends State<NavHeader> {
 
   @override
   Widget build(BuildContext context) {
+    final user1 = UserSimplePreferences.getUser1();
     var userData = widget.userProvider.currentUserData;
     return Material(
       child: Column(
@@ -51,9 +55,10 @@ class _NavHeaderState extends State<NavHeader> {
                     alignment: Alignment.centerLeft,
                     child: CircleAvatar(
                       backgroundColor: Colors.white,
-                      child: FlutterLogo(),
+                      child: ProfileWidget(imagePath: user1.imagePath),
                       radius: 45.0,
                     ),
+                    // child: ProfileWidget(imagePath: user1.imagePath),
                   ),
                   Align(
                     alignment: Alignment.center + Alignment(.2, -.2),
