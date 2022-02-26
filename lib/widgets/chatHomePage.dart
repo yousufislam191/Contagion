@@ -5,6 +5,7 @@ import 'package:lu_ahatting_application/infoGroup/infoPage.dart';
 import 'package:lu_ahatting_application/navigation/navigationHeader.dart';
 import 'package:lu_ahatting_application/navigation/navigationItem.dart';
 import 'package:lu_ahatting_application/services/auth.dart';
+import 'package:lu_ahatting_application/widgets/Ppage.dart';
 import 'package:provider/provider.dart';
 
 class homePage extends StatelessWidget {
@@ -168,9 +169,18 @@ class homePage extends StatelessWidget {
             title: Row(
               children: [
                 // Drawer(),
-                CircleAvatar(
-                  radius: 30,
-                  backgroundImage: backgroundImage,
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Ppage(),
+                        ));
+                  },
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundImage: backgroundImage,
+                  ),
                 ),
                 SizedBox(width: 15),
                 Text(

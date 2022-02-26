@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:lu_ahatting_application/Utils/user_simple_preference.dart';
+import 'package:lu_ahatting_application/widgets/ProfileWidget.dart';
 // import 'package:lu_ahatting_application/widgets/bottomSheet.dart';
 import 'package:lu_ahatting_application/widgets/editDropdown.dart';
 import 'package:lu_ahatting_application/widgets/editTextfield.dart';
@@ -13,7 +14,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lu_ahatting_application/services/auth.dart';
 import 'package:lu_ahatting_application/widgets/box_deco.dart';
 import 'package:lu_ahatting_application/widgets/button_widget.dart';
-import 'package:provider/provider.dart';
+import 'package:lu_ahatting_application/models/user_model.dart';
+// import 'package:provider/provider.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -24,14 +28,19 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   final _formkey = GlobalKey<FormState>();
+  var batch;
+  var section;
   String line = '';
   String number = '';
   String _call = '', _txt = '';
+  late User1 user1;
 
   @override
   void initState() {
     super.initState();
-
+    batch = UserSimplePreferences.getBatch() ?? '';
+    section = UserSimplePreferences.getSection() ?? '';
+    user1 = UserSimplePreferences.getUser1();
     number = UserSimplePreferences.getUsername() ?? '';
     line = UserSimplePreferences.getLine() ?? '';
   }
@@ -61,6 +70,7 @@ class _EditProfileState extends State<EditProfile> {
     // AuthService userProvider = Provider.of<AuthService>(context);
     // userProvider.getUserData();
     // var userData = userProvider.currentUserData;
+
     return Material(
       child: Column(children: [
         AppBar(
@@ -75,25 +85,13 @@ class _EditProfileState extends State<EditProfile> {
               children: [
                 Align(
                   alignment: Alignment.center,
-                  child: CircleAvatar(
-                    radius: 55,
-                    child: image != null
-                        ? ClipOval(
-                            child: Image.file(
-                              image!,
-                              width: 160,
-                              height: 160,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : FlutterLogo(),
-                  ),
+                  child: ProfileWidget(imagePath: user1.imagePath),
                 ),
                 Align(
                     alignment: Alignment.center + Alignment(.3, .3),
                     child: IconButton(
                       icon: new Icon(Icons.camera_alt_rounded),
-                      color: Colors.black,
+                      color: Colors.white,
                       onPressed: () {
                         showModalBottomSheet(
                             context: context,
@@ -169,10 +167,10 @@ class _EditProfileState extends State<EditProfile> {
               //   },
               // ),
 
-              SizedBox(
-                width: 20,
-                height: 20,
-              ),
+              // SizedBox(
+              //   width: 20,
+              //   height: 20,
+              // ),
               // editTextField(
               //   // PASSWORD FIELD
               //   controller: emailController,
@@ -193,34 +191,44 @@ class _EditProfileState extends State<EditProfile> {
               //   width: 20,
               //   height: 20,
               // ),
-              Editdropdown_button(
-                hint_text: 'Batch',
-                value: deptselectedType,
-                validator: (value) =>
-                    value == null ? 'Please select your department' : null,
-                onChanged: (value) {
-                  //print('$value'); //when I clicked then it print that value
-                  setState(() {
-                    deptselectedType = value;
-                  });
-                },
-                itemtyType: _batch,
+              // Editdropdown_button(
+              //   hint_text: 'Batch',
+              //   value: deptselectedType,
+              //   validator: (value) =>
+              //       value == null ? 'Please select your department' : null,
+              //   onChanged: (value) {
+              //     //print('$value'); //when I clicked then it print that value
+              //     setState(() {
+              //       deptselectedType = value;
+              //     });
+              //   },
+              //   itemtyType: _batch,
+              // ),
+
+              Padding(
+                padding: EdgeInsets.all(12),
+                child: buildbatch(),
               ),
-              Editdropdown_button(
-                hint_text: 'Section',
-                value: selectedType,
-                validator: (value) =>
-                    value == null ? 'Please select your identity' : null,
-                onChanged: (value) {
-                  setState(() {
-                    selectedType = value;
-                  });
-                },
-                itemtyType: _section,
+
+              // Editdropdown_button(
+              //   hint_text: 'Section',
+              //   value: selectedType,
+              //   validator: (value) =>
+              //       value == null ? 'Please select your identity' : null,
+              //   onChanged: (value) {
+              //     setState(() {
+              //       selectedType = value;
+              //     });
+              //   },
+              //   itemtyType: _section,
+              // ),
+              Padding(
+                padding: EdgeInsets.all(8),
+                child: buildSection(),
               ),
               SizedBox(
                 width: 20,
-                height: 20,
+                height: 10,
               ),
               // editTextField(
               //   maxLine: 4,
@@ -234,7 +242,7 @@ class _EditProfileState extends State<EditProfile> {
               //   },
               // ),
               Padding(
-                padding: EdgeInsets.all(12),
+                padding: EdgeInsets.all(8),
                 child: buildline(),
               ),
 
@@ -261,7 +269,7 @@ class _EditProfileState extends State<EditProfile> {
   Widget Bottom_Sheet() {
     return Container(
       height: 100.0,
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery.of(this.context).size.width,
       margin: EdgeInsets.symmetric(
         horizontal: 20,
         vertical: 20,
@@ -305,8 +313,15 @@ class _EditProfileState extends State<EditProfile> {
         source: source,
       );
       if (image == null) return;
-      final imageTemporary = File(image.path);
-      setState(() => this.image = imageTemporary);
+      final directory = await getApplicationDocumentsDirectory();
+      final name = basename(image.path);
+      final imageFile = File('${directory.path}/$name');
+      final newImage = await File(image.path).copy(imageFile.path);
+
+      setState(() => user1 = user1.copy(imagePath: newImage.path));
+
+      // final imageTemporary = File(image.path);
+      // setState(() => this.image = imageTemporary);
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
@@ -360,6 +375,72 @@ class _EditProfileState extends State<EditProfile> {
         ),
       );
 
+  Widget buildbatch() => buildTitle(
+        title: 'Batch',
+        child: DropdownButtonFormField(
+          icon: Icon(
+            Icons.arrow_drop_down,
+            color: Color(0xff49c42b),
+          ),
+          decoration: InputDecoration(
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+            color: Color(0xff49c42b),
+            width: 1.5,
+            style: BorderStyle.solid,
+          ))),
+          isExpanded: true,
+          items: _batch.map((batch) {
+            return DropdownMenuItem(
+              value: batch,
+              child: Text(
+                batch,
+                style: TextStyle(
+                  color: Colors.grey[800],
+                  fontSize: 18,
+                  fontFamily: 'JosefinSans',
+                  fontStyle: FontStyle.normal,
+                ),
+              ),
+            );
+          }).toList(),
+          onChanged: (ba) => setState(() => this.batch = ba),
+        ),
+      );
+
+  Widget buildSection() => buildTitle(
+        title: 'Section',
+        child: DropdownButtonFormField(
+          icon: Icon(
+            Icons.arrow_drop_down,
+            color: Color(0xff49c42b),
+          ),
+          decoration: InputDecoration(
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+            color: Color(0xff49c42b),
+            width: 1.5,
+            style: BorderStyle.solid,
+          ))),
+          isExpanded: true,
+          items: _section.map((section) {
+            return DropdownMenuItem(
+              value: section,
+              child: Text(
+                section,
+                style: TextStyle(
+                  color: Colors.grey[800],
+                  fontSize: 18,
+                  fontFamily: 'JosefinSans',
+                  fontStyle: FontStyle.normal,
+                ),
+              ),
+            );
+          }).toList(),
+          onChanged: (se) => setState(() => this.section = se),
+        ),
+      );
+
   Widget buildTitle({
     required String title,
     required Widget child,
@@ -370,17 +451,21 @@ class _EditProfileState extends State<EditProfile> {
           Text(
             title,
           ),
-          const SizedBox(
-            height: 8,
-          ),
+          // const SizedBox(
+          //   height: 8,
+          // ),
           child,
         ],
       );
+
   Widget buildButton() => ButtonWidget(
       text: 'Save',
       onClicked: () async {
+        await UserSimplePreferences.setUser(user1);
         await UserSimplePreferences.setUsername(number);
         await UserSimplePreferences.setLine(line);
+        await UserSimplePreferences.setBatch(batch);
+        await UserSimplePreferences.setSection(section);
         // await UserSimplePreferences.setBirthday(birthday);
         // await UserSimplePreferences.setPets(pets);
       });
