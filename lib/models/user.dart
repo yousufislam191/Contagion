@@ -24,7 +24,7 @@ class UserModel {
     return {
       'uid': uid,
       'name': name!.toLowerCase(), //data will saved as lowercase
-      'email': email,
+      'email': email!.toLowerCase(),
       'id': id,
       'department': department,
       'identity': identity,
@@ -33,16 +33,16 @@ class UserModel {
   }
 
   // receiving data from server
-  factory UserModel.fromMap(map) {
-    return UserModel(
-      uid: map['uid'],
-      email: map['email'],
-      name: map['name'],
-      id: map['id'],
-      department: map['department'],
-      identity: map['identity'],
-    );
-  }
+  // factory UserModel.fromMap(map) {
+  //   return UserModel(
+  //     uid: map['uid'],
+  //     email: map['email'],
+  //     name: map['name'],
+  //     id: map['id'],
+  //     department: map['department'],
+  //     identity: map['identity'],
+  //   );
+  // }
   UserModel.fromSnapshot(DocumentSnapshot snapshot)
       : uid = snapshot['uid'],
         email = snapshot['email'],
@@ -98,51 +98,52 @@ class getStudentData {
 
 // getCurrentUserData(this.name);
 
-void getCurrentUserData(DocumentSnapshot<Object?> value) {
-  // DocumentSnapshot<Object?>value;
+// void getCurrentUserData(DocumentSnapshot<Object?> value) {
+//   // DocumentSnapshot<Object?>value;
 
-  // getCurrentUserData ({required this.value});
+//   // getCurrentUserData ({required this.value});
 
-  String name = value['name'];
-  String identity = value['identity'];
-  String email = value['email'];
-  String id = value['id'];
-  String department = value['department'];
-  String uid = value['uid'];
+//   String name = value['name'];
+//   String identity = value['identity'];
+//   String email = value['email'];
+//   String id = value['id'];
+//   String department = value['department'];
+//   String uid = value['uid'];
 
-  print(name);
-  print(identity);
-  // currentUserData(name, identity, email, id, department, uid);
-}
-
+//   print(name);
+//   print(identity);
+//   currentUserData(name, identity, email, id, department, uid);
 // }
 
-// void currentUserData(String name, String identity, String email, String id, String department) {
-//   String currentUserName = name;
-//   String currentUserIdentity = identity;
-//   String currentUserEmail = email;
-//   String currentUserId = id;
-//   String currentUserDepartment = department;
-//   print(currentUserName);
+// // }
+
+// // void currentUserData(String name, String identity, String email, String id, String department, String uid) {
+// //   String currentUserName = name;
+// //   String currentUserIdentity = identity;
+// //   String currentUserEmail = email;
+// //   String currentUserId = id;
+// //   String currentUserDepartment = department;
+// //   String uid = uid;
+// //   print(currentUserName);
+// // }
+
+// class currentUserData {
+//   final String name;
+//   final String identity;
+//   final String email;
+//   final String id;
+//   final String department;
+//   final String uid;
+
+//   currentUserData(
+//       this.name, this.identity, this.email, this.id, this.department, this.uid);
+
+//   // print(name);
+
+//   // String _name = name;
+//   // String _id = id;
+//   // String _email = email;
+//   // String _identity = identity;
+//   // String _department = department;
+
 // }
-
-class currentUserData {
-  final String name;
-  final String identity;
-  final String email;
-  final String id;
-  final String department;
-  final String uid;
-
-  currentUserData(
-      this.name, this.identity, this.email, this.id, this.department, this.uid);
-
-  // print(name);
-
-  // String _name = name;
-  // String _id = id;
-  // String _email = email;
-  // String _identity = identity;
-  // String _department = department;
-
-}

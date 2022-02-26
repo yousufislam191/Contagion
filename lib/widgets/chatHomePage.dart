@@ -18,6 +18,7 @@ class homePage extends StatelessWidget {
   final Color? searchbarIconColor;
   final List<Widget> tabs;
   final List<Widget> children;
+  final currentUserName;
   // String title = title;
 
   const homePage(
@@ -30,7 +31,8 @@ class homePage extends StatelessWidget {
       required this.searchbarCursorColor,
       required this.searchbarIconColor,
       required this.tabs,
-      required this.children})
+      required this.children,
+      this.currentUserName})
       : super(key: key);
 
   @override
@@ -45,7 +47,8 @@ class homePage extends StatelessWidget {
           child: ListView(
             children: [
               NavHeader(
-                userProvider: userProvider,
+                currentUserName: currentUserName,
+                // userProvider: userProvider,
               ),
               Divider(),
               Expanded(
@@ -54,57 +57,73 @@ class homePage extends StatelessWidget {
                   NavItem(
                     title: "BBA",
                     icon: Icons.arrow_forward_ios,
-                    widget: infoPage(title: "BBA"),
+                    widget: infoPage(
+                        title: "BBA", currentUserName: currentUserName),
                   ),
                   NavItem(
                     title: "CSE",
                     icon: Icons.arrow_forward_ios,
-                    widget: infoPage(title: "CSE"),
+                    widget: infoPage(
+                        title: "CSE", currentUserName: currentUserName),
                   ),
                   NavItem(
                     title: "English",
                     icon: Icons.arrow_forward_ios,
-                    widget: infoPage(title: "English"),
+                    widget: infoPage(
+                        title: "English", currentUserName: currentUserName),
                   ),
                   NavItem(
                     title: "EEE",
                     icon: Icons.arrow_forward_ios,
-                    widget: infoPage(title: "EEE"),
+                    widget: infoPage(
+                        title: "EEE", currentUserName: currentUserName),
                   ),
                   NavItem(
                     title: "Civil Engineering",
                     icon: Icons.arrow_forward_ios,
-                    widget: infoPage(title: "Civil Engineering"),
+                    widget: infoPage(
+                        title: "Civil Engineering",
+                        currentUserName: currentUserName),
                   ),
                   NavItem(
                     title: "Architecture",
                     icon: Icons.arrow_forward_ios,
-                    widget: infoPage(title: "Architecture"),
+                    widget: infoPage(
+                        title: "Architecture",
+                        currentUserName: currentUserName),
                   ),
                   NavItem(
                     title: "Law",
                     icon: Icons.arrow_forward_ios,
-                    widget: infoPage(title: "Law"),
+                    widget: infoPage(
+                        title: "Law", currentUserName: currentUserName),
                   ),
                   NavItem(
                     title: "Islamic Studies",
                     icon: Icons.arrow_forward_ios,
-                    widget: infoPage(title: "Islamic Studies"),
+                    widget: infoPage(
+                        title: "Islamic Studies",
+                        currentUserName: currentUserName),
                   ),
                   NavItem(
                     title: "Public Health",
                     icon: Icons.arrow_forward_ios,
-                    widget: infoPage(title: "Public Health"),
+                    widget: infoPage(
+                        title: "Public Health",
+                        currentUserName: currentUserName),
                   ),
                   NavItem(
                     title: "Tourism & Hospitality Management",
                     icon: Icons.arrow_forward_ios,
-                    widget: infoPage(title: "Tourism & Hospitality Management"),
+                    widget: infoPage(
+                        title: "Tourism & Hospitality Management",
+                        currentUserName: currentUserName),
                   ),
                   NavItem(
                     title: "Bangla",
                     icon: Icons.arrow_forward_ios,
-                    widget: infoPage(title: "Bangla"),
+                    widget: infoPage(
+                        title: "Bangla", currentUserName: currentUserName),
                   ),
                 ],
               )),

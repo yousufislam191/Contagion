@@ -5,12 +5,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_6.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lu_ahatting_application/messages/chatHomePageChat.dart';
+import 'package:jiffy/jiffy.dart';
+import 'package:lu_ahatting_application/encryption/encrypt_service.dart';
 import 'package:uuid/uuid.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 
 extension StringExtension on String {
   String capitalize() {
@@ -21,26 +24,29 @@ extension StringExtension on String {
 class chatPage3 extends StatefulWidget {
   final targetChatName;
   final targetChatUid;
-  const chatPage3({Key? key, this.targetChatName, this.targetChatUid})
+  final senderName;
+  const chatPage3(
+      {Key? key, this.targetChatName, this.targetChatUid, this.senderName})
       : super(key: key);
 
   @override
   _chatPage3State createState() =>
-      _chatPage3State(targetChatName, targetChatUid);
+      _chatPage3State(targetChatName, targetChatUid, senderName);
 }
 
 class _chatPage3State extends State<chatPage3> {
-  // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   CollectionReference chats = FirebaseFirestore.instance.collection('chats');
   final targetChatName;
   final targetChatUid;
+  final senderName;
   final currentUserId = FirebaseAuth.instance.currentUser?.uid;
 
-  var chatDocId;
+  var chatDocId, encryptedText, decryptedText, plainText;
+  String decryptedPlainText = '';
   final _message = new TextEditingController();
 
-  _chatPage3State(this.targetChatName, this.targetChatUid);
+  _chatPage3State(this.targetChatName, this.targetChatUid, this.senderName);
 
   @override
   void initState() {
@@ -58,13 +64,7 @@ class _chatPage3State extends State<chatPage3> {
             if (querySnapshot.docs.isNotEmpty) {
               setState(() {
                 chatDocId = querySnapshot.docs.single.id;
-
-                // chatHomePageChat(
-                //     chatDocId: chatDocId,
-                //     targetChatName: targetChatName,
-                //     targetChatUid: targetChatUid);
               });
-              // print('chat home page paise');
               print(chatDocId);
               print(targetChatName);
               print(targetChatUid);
@@ -72,8 +72,10 @@ class _chatPage3State extends State<chatPage3> {
               await chats.add({
                 'users': {currentUserId: null, targetChatUid: null},
                 'senderId': currentUserId,
-                'receiverid': targetChatUid
-              }).then((value) => {chatDocId = value});
+                'senderName': senderName,
+                'receiverId': targetChatUid,
+                'receiverName': targetChatName
+              }).then((value) => {chatDocId = value.toString()});
             }
           },
         )
@@ -120,7 +122,7 @@ class _chatPage3State extends State<chatPage3> {
   //   }
   // }
 
-  void sendMessage(String msg) {
+  void sendMessage(var msg) {
     if (msg == '') return;
     chats.doc(chatDocId).collection('messages').add({
       'time': FieldValue.serverTimestamp(),
@@ -268,15 +270,16 @@ class _chatPage3State extends State<chatPage3> {
                             children: snapshot.data!.docs.map(
                               (DocumentSnapshot document) {
                                 data = document.data()!;
-                                // print(document.toString());
-                                // print(data['msg']);
+                                decryptedText = encryptionService.decryptAES(
+                                    data['msg']); //Decrypted Text Here
+                                print('decryptedText: $decryptedText');
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
                                   child: ChatBubble(
                                     clipper: ChatBubbleClipper6(
-                                      nipSize: 0,
-                                      radius: 0,
+                                      nipSize: 1,
+                                      radius: 26,
                                       type: isSender(data['uid'].toString())
                                           ? BubbleType.sendBubble
                                           : BubbleType.receiverBubble,
@@ -298,37 +301,70 @@ class _chatPage3State extends State<chatPage3> {
                                       child: Column(
                                         children: [
                                           Row(
+                                            mainAxisSize: MainAxisSize.min,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             children: [
-                                              Text(data['msg'],
-                                                  style: TextStyle(
+                                              Flexible(
+                                                child: Text(decryptedText,
+                                                    style: TextStyle(
                                                       color: isSender(
                                                               data['uid']
                                                                   .toString())
                                                           ? Colors.white
-                                                          : Colors.black),
-                                                  maxLines: 100,
-                                                  overflow:
-                                                      TextOverflow.ellipsis)
+                                                          : Colors.black,
+                                                      fontFamily: 'JosefinSans',
+                                                      fontSize: 16,
+                                                    ),
+                                                    // textAlign: TextAlignVertical.center,
+                                                    maxLines: 100,
+                                                    overflow:
+                                                        TextOverflow.visible),
+                                              )
                                             ],
                                           ),
                                           Row(
+                                            mainAxisSize: MainAxisSize.min,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.end,
                                             children: [
-                                              Text(
-                                                data['time'] == null
-                                                    ? DateTime.now().toString()
-                                                    : data['time']
-                                                        .toDate()
-                                                        .toString(),
-                                                style: TextStyle(
-                                                    fontSize: 10,
+                                              Flexible(
+                                                // child: Text(
+                                                //   data['time'] == null
+                                                //       ? DateTime.now()
+                                                //           .toString()
+                                                //       : data['time']
+                                                //           .toDate()
+                                                //           .toString(),
+                                                //   style: TextStyle(
+                                                //     fontSize: 14,
+                                                //     color: isSender(data['uid']
+                                                //             .toString())
+                                                //         ? Colors.white
+                                                //         : Colors.black,
+                                                //     fontFamily: 'JosefinSans',
+                                                //     overflow:
+                                                //         TextOverflow.visible,
+                                                //   ),
+                                                // ),
+                                                child: Text(
+                                                  data['time'] == null
+                                                      ? DateTime.now()
+                                                          .toString()
+                                                      : data['time']
+                                                          .toDate()
+                                                          .toString(),
+                                                  style: TextStyle(
+                                                    fontSize: 14,
                                                     color: isSender(data['uid']
                                                             .toString())
                                                         ? Colors.white
-                                                        : Colors.black),
+                                                        : Colors.black,
+                                                    fontFamily: 'JosefinSans',
+                                                    overflow:
+                                                        TextOverflow.visible,
+                                                  ),
+                                                ),
                                               )
                                             ],
                                           )
@@ -409,7 +445,9 @@ class _chatPage3State extends State<chatPage3> {
                                 child: Padding(
                                   padding: EdgeInsets.only(left: 16.0),
                                   child: TextField(
+                                    keyboardType: TextInputType.multiline,
                                     controller: _message,
+                                    maxLines: null,
                                     cursorColor: Color(0xff49c42b),
                                     cursorHeight: 25,
                                     style: TextStyle(fontSize: 16),
@@ -444,8 +482,14 @@ class _chatPage3State extends State<chatPage3> {
                                         width: 40,
                                         height: 40,
                                         child: IconButton(
-                                          onPressed: () =>
-                                              sendMessage(_message.text),
+                                          onPressed: () {
+                                            plainText = _message.text;
+                                            setState(() {
+                                              encryptedText = encryptionService
+                                                  .encryptAES(plainText);
+                                            });
+                                            sendMessage(encryptedText.base64);
+                                          },
                                           icon: Icon(Icons.send_rounded,
                                               size: 26, color: Colors.white),
                                         ),
@@ -467,5 +511,74 @@ class _chatPage3State extends State<chatPage3> {
             return Container();
           }
         });
+  }
+}
+
+class _DateLable extends StatefulWidget {
+  const _DateLable({
+    Key? key,
+    required this.dateTime,
+  }) : super(key: key);
+
+  final DateTime dateTime;
+
+  @override
+  __DateLableState createState() => __DateLableState();
+}
+
+class __DateLableState extends State<_DateLable> {
+  late String dayInfo;
+
+  @override
+  void initState() {
+    final createdAt = Jiffy(widget.dateTime);
+    final now = DateTime.now();
+
+    if (Jiffy(createdAt).isSame(now, Units.DAY)) {
+      dayInfo = 'TODAY';
+    } else if (Jiffy(createdAt)
+        .isSame(now.subtract(const Duration(days: 1)), Units.DAY)) {
+      dayInfo = 'YESTERDAY';
+    } else if (Jiffy(createdAt).isAfter(
+      now.subtract(const Duration(days: 7)),
+      Units.DAY,
+    )) {
+      dayInfo = createdAt.EEEE;
+    } else if (Jiffy(createdAt).isAfter(
+      Jiffy(now).subtract(years: 1),
+      Units.DAY,
+    )) {
+      dayInfo = createdAt.MMMd;
+    } else {
+      dayInfo = createdAt.MMMd;
+    }
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 32.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 12),
+            child: Text(
+              dayInfo,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: Colors.black26,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

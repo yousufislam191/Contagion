@@ -190,6 +190,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.6"
+  encrypt:
+    dependency: "direct main"
+    description:
+      name: encrypt
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.1"
   equatable:
     dependency: transitive
     description:

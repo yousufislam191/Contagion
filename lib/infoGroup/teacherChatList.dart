@@ -6,7 +6,9 @@ import 'package:lu_ahatting_application/models/user.dart';
 
 class chatList extends StatelessWidget {
   final String Title;
-  chatList({Key? key, required this.Title}) : super(key: key);
+  final currentUserName;
+  chatList({Key? key, required this.Title, this.currentUserName})
+      : super(key: key);
 
   final currentUserId = FirebaseAuth.instance.currentUser?.uid;
 
@@ -93,7 +95,8 @@ class chatList extends StatelessWidget {
                                       MaterialPageRoute(
                                         builder: (context) => chatPage3(
                                             targetChatName: name,
-                                            targetChatUid: uid),
+                                            targetChatUid: uid,
+                                            senderName: currentUserName),
                                       ),
                                     );
                                   },

@@ -31,7 +31,8 @@ class _loginPageState extends State<loginPage> {
 
   RegExp emailvalidation = RegExp(r"^[a-z0-9_]+@lus.ac.bd$");
 
-  String _email = '', _pass = '', _Tvalue = '', _Svalue = '';
+  String _email = '', _pass = '', _Svalue = '', _name = '';
+  var _Tvalue;
   String? errorMessage;
   bool _secure = true;
   late double height, width;
@@ -305,7 +306,6 @@ class _loginPageState extends State<loginPage> {
                                             'null'); // declare a String type List
                                         identity[0] = 'Student';
                                         identity[1] = 'Teacher';
-                                        // identity[2] = 'Dept. Head';
 
                                         for (int i = 0; i < 11; i++) {
                                           String _dept = dept[i];
@@ -324,80 +324,21 @@ class _loginPageState extends State<loginPage> {
                                                       .doc(userID)
                                                       .get();
 
-                                              getCurrentUserData(value);
+                                              // getCurrentUserData(value);
 
-                                              _Svalue = (value[
-                                                  'identity']); // keep the identity value
-                                              _Tvalue = (value[
-                                                  'designation']); // keep the identity value
+                                              _Svalue = (value['identity']);
+                                              _Tvalue = (value['designation']);
+                                              _name = (value['name']);
+                                              print('student name: $_name');
+                                              print(
+                                                  'student identity: $_Svalue');
+                                              print(
+                                                  'student designation: $_Tvalue');
                                               // UserModel(value);
                                               break;
                                             } catch (e) {
                                               print(e);
                                             }
-
-                                            // StreamBuilder(
-                                            //     stream: FirebaseFirestore
-                                            //         .instance
-                                            //         .collection(_dept)
-                                            //         .doc(_dept)
-                                            //         .collection(_identity)
-                                            //         .doc((await _auth.currentUser)!.uid)
-                                            //         .snapshots(),
-                                            //     builder: (BuildContext,
-                                            //         AsyncSnapshot<
-                                            //                 QuerySnapshot<
-                                            //                     Map<String,
-                                            //                         dynamic>>>
-                                            //             snapshot) {
-                                            //       if (snapshot.hasData &&
-                                            //           snapshot.data != null) {
-                                            //         // print("Total documents: ${snapshot.data!.docs.length}");
-                                            //         if (snapshot.data!.docs
-                                            //             .isNotEmpty) {
-                                            //           return ListView.builder(
-                                            //             itemCount: snapshot
-                                            //                 .data!.docs.length,
-                                            //             itemBuilder:
-                                            //                 (BuildContext,
-                                            //                     int index) {
-                                            //               Map<String, dynamic>
-                                            //                   docData = snapshot
-                                            //                       .data!
-                                            //                       .docs[index]
-                                            //                       .data();
-
-                                            //               if (docData.isEmpty) {
-                                            //                 return const Text(
-                                            //                   "Document is Empty",
-                                            //                   textAlign:
-                                            //                       TextAlign
-                                            //                           .center,
-                                            //                 );
-                                            //               }
-
-                                            //               String name = docData[
-                                            //                   getData.name];
-                                            //               String email =
-                                            //                   docData[getData
-                                            //                       .email];
-
-                                            //               return getCurrentUserData();
-                                            //             },
-                                            //           );
-                                            //         } else {
-                                            //           return const Center(
-                                            //             child: Text(
-                                            //                 'Document aren\'t availavle'),
-                                            //           );
-                                            //         }
-                                            //       } else {
-                                            //         return const Center(
-                                            //           child:
-                                            //               Text('Getting Error'),
-                                            //         );
-                                            //       }
-                                            //     });
                                           }
                                         }
 
@@ -406,7 +347,7 @@ class _loginPageState extends State<loginPage> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  studentHomePage(),
+                                                  studentHomePage(name: _name),
                                             ),
                                           );
                                           Fluttertoast.showToast(
@@ -416,7 +357,7 @@ class _loginPageState extends State<loginPage> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  headHomePage(),
+                                                  headHomePage(name: _name),
                                             ),
                                           );
                                           Fluttertoast.showToast(
@@ -426,7 +367,7 @@ class _loginPageState extends State<loginPage> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  teacherHomePage(),
+                                                  teacherHomePage(name: _name),
                                             ),
                                           );
                                           Fluttertoast.showToast(
@@ -436,7 +377,7 @@ class _loginPageState extends State<loginPage> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  teacherHomePage(),
+                                                  teacherHomePage(name: _name),
                                             ),
                                           );
                                           Fluttertoast.showToast(
@@ -447,7 +388,7 @@ class _loginPageState extends State<loginPage> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  teacherHomePage(),
+                                                  teacherHomePage(name: _name),
                                             ),
                                           );
                                           Fluttertoast.showToast(
@@ -458,7 +399,7 @@ class _loginPageState extends State<loginPage> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  teacherHomePage(),
+                                                  teacherHomePage(name: _name),
                                             ),
                                           );
                                           Fluttertoast.showToast(
