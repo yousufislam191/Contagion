@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lu_ahatting_application/models/user.dart';
 import 'package:lu_ahatting_application/services/auth.dart';
 import 'package:lu_ahatting_application/widgets/ProfileWidget.dart';
 import 'package:lu_ahatting_application/widgets/chatHomePage.dart';
@@ -16,6 +17,29 @@ class NavHeader extends StatefulWidget {
 }
 
 class _NavHeaderState extends State<NavHeader> {
+  // @override
+  // void initState() {
+  // super.initState();
+//    void currentUserData(String name, String identity, String email, String id, String department) {
+//   String currentUserName = name;
+//   String currentUserIdentity = identity;
+//   String currentUserEmail = email;
+//   String currentUserId = id;
+//   String currentUserDepartment = department;
+//   print(currentUserName);
+// }
+  // }
+
+  // getCurrentUserData userData = getCurrentUserData();
+  // currentUserData userData = currentUserData();
+  // currentUserData? getData;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getCurrentUserData();
+  // }
+
   @override
   Widget build(BuildContext context) {
     final user1 = UserSimplePreferences.getUser1();
@@ -37,31 +61,50 @@ class _NavHeaderState extends State<NavHeader> {
                     // child: ProfileWidget(imagePath: user1.imagePath),
                   ),
                   Align(
-                    alignment: Alignment.center + Alignment(.3, -.2),
+                    alignment: Alignment.center + Alignment(.2, -.2),
                     child: userData != null
                         ? Text(
                             userData.userName,
                             style: TextStyle(color: Colors.white, fontSize: 20),
                           )
-                        : Text("Chat App"),
+                        : Text(
+                            "Chat app",
+                            // widget.name,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontFamily: 'JosefinSans'),
+                          ),
                   ),
                   Align(
-                    alignment: Alignment.center + Alignment(.3, .2),
-                    child: userData != null
-                        ? Text(
-                            userData.userid,
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          )
-                        : Text("1912020139"),
-                  ),
+                      alignment: Alignment.center + Alignment(.2, .2),
+                      child: userData != null
+                          ? Text(
+                              userData.userid,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
+                            )
+                          : Text(
+                              "1912020139",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 17,
+                                  fontFamily: 'JosefinSans'),
+                            )),
                   Align(
-                    alignment: Alignment.centerRight + Alignment(.1, .6),
+                    alignment: Alignment.center + Alignment(.2, .6),
                     child: userData != null
                         ? Text(
                             userData.userEmail,
                             style: TextStyle(color: Colors.white, fontSize: 15),
                           )
-                        : Text("1912020139"),
+                        : Text(
+                            "1912020139",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 17,
+                                fontFamily: 'JosefinSans'),
+                          ),
                   ),
                   Align(
                       alignment: Alignment.topCenter + Alignment(1.1, .2),
@@ -82,6 +125,8 @@ class _NavHeaderState extends State<NavHeader> {
     );
   }
 }
+
+
 // GestureDetector(
 //   child: Icon(Icons.more_vert),
 //   onTap: (){

@@ -6,30 +6,59 @@ import 'package:lu_ahatting_application/models/get_user_model.dart';
 import 'package:lu_ahatting_application/services/database.dart';
 
 class AuthService with ChangeNotifier {
-  // late final String uid;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  // final userCollection = FirebaseFirestore.instance.collection("userData");
-  // final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+  String? errorMessage;
 
   // register with email and password
-  Future registerWithEmailAndPassword(String _email, String _conPass,
-      String _name, String _id, var _departmentType, var _identityType) async {
+  Future registerWithEmailAndPassword(
+      String _email,
+      String _conPass,
+      String _name,
+      String _id,
+      var _departmentType,
+      var _identityType,
+      var _teacherSelectedType) async {
     String name = _name;
     String id = _id;
     var departmentType = _departmentType;
     var identityType = _identityType;
+    var teacherSelectedType = _teacherSelectedType;
     try {
       await _auth
           .createUserWithEmailAndPassword(email: _email, password: _conPass)
           .then((value) {
-        user_data(name, id, departmentType, identityType);
+        user_data(name, id, departmentType, identityType, teacherSelectedType);
       });
     } catch (error) {
       Fluttertoast.showToast(msg: error.toString());
-      // print(error.toString());
       return null;
     }
   }
+
+  //Get uid
+  Future<String> getCurrentUID() async {
+    return (await _auth.currentUser)!.uid;
+  }
+
+  //Get current user
+  // Future getCurrentUser() async {
+  //   return await _auth.currentUser;
+  // }
+
+  // Future<void> getCurrentUserData(
+  //     DocumentSnapshot<Map<String, dynamic>> value) async {
+  //   FirebaseFirestore.instance
+  //       .collection('Users')
+  //       .doc((await _auth.currentUser)!.uid)
+  //       .get()
+  //       .then((value) {
+  //     getCurrentUserData(value);
+
+  //     // setState(() {
+  //     //   _userName = value.data['UserName'].toString();
+  //     // });
+  //   });
+  // }
 
   GetUserModel? currentData;
 
