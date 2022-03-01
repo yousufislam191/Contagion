@@ -10,21 +10,23 @@ import 'package:lu_ahatting_application/widgets/chatHomePage.dart';
 import 'package:lu_ahatting_application/messages/chatHomePageChat.dart';
 
 class studentHomePage extends StatefulWidget {
-  final name;
-  const studentHomePage({Key? key, this.name}) : super(key: key);
+  final currentUserValue;
+  const studentHomePage({Key? key, this.currentUserValue}) : super(key: key);
 
   @override
-  _studentHomePageState createState() => _studentHomePageState(name);
+  _studentHomePageState createState() =>
+      _studentHomePageState(currentUserValue);
 }
 
 class _studentHomePageState extends State<studentHomePage> {
-  final name;
-  _studentHomePageState(this.name);
+  final currentUserValue;
+  _studentHomePageState(this.currentUserValue);
 
   final searchEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    UserModel getCurrentUserData = new UserModel.fromMap(currentUserValue);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Lu Chatting Application',
@@ -33,11 +35,11 @@ class _studentHomePageState extends State<studentHomePage> {
           length: 4,
           backgroundColor: Color(0xff49c42b),
           backgroundImage: AssetImage("assets/images/profileImg.jpg"),
-          profileText: name,
+          profileText: getCurrentUserData.name.toString(),
           controller: searchEditingController,
           searchbarCursorColor: Color(0xff49c42b),
           searchbarIconColor: Color(0xff49c42b),
-          currentUserName: name,
+          currentUserValue: currentUserValue,
           tabs: [
             Tab(
               text: 'Chat',
@@ -50,7 +52,7 @@ class _studentHomePageState extends State<studentHomePage> {
           ],
           // bodyImage: null,
           children: [
-            chatHomePageChat(),
+            chatHomePageChat(currentUserValue: currentUserValue),
             Center(
               child: Text(
                   'Group chat feature is not available at this moment. \n Developers will work with this in future.'),

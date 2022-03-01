@@ -1,14 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:lu_ahatting_application/developers.dart';
 import 'package:lu_ahatting_application/infoGroup/infoPage.dart';
+import 'package:lu_ahatting_application/models/user.dart';
 import 'package:lu_ahatting_application/navigation/navigationHeader.dart';
 import 'package:lu_ahatting_application/navigation/navigationItem.dart';
 import 'package:lu_ahatting_application/services/auth.dart';
 import 'package:lu_ahatting_application/widgets/Ppage.dart';
 import 'package:provider/provider.dart';
 
-class homePage extends StatelessWidget {
+class homePage extends StatefulWidget {
   final int length;
   final Color? backgroundColor;
   final ImageProvider<Object>? backgroundImage;
@@ -18,10 +21,10 @@ class homePage extends StatelessWidget {
   final Color? searchbarIconColor;
   final List<Widget> tabs;
   final List<Widget> children;
-  final currentUserName;
+  final DocumentSnapshot currentUserValue;
   // String title = title;
 
-  const homePage(
+  homePage(
       {Key? key,
       required this.length,
       required this.backgroundColor,
@@ -32,23 +35,114 @@ class homePage extends StatelessWidget {
       required this.searchbarIconColor,
       required this.tabs,
       required this.children,
-      this.currentUserName})
+      required this.currentUserValue})
       : super(key: key);
+
+  @override
+  State<homePage> createState() => _homePageState(currentUserValue);
+}
+
+class _homePageState extends State<homePage> with WidgetsBindingObserver {
+  final currentUserValue;
+  _homePageState(this.currentUserValue);
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+  String subTitle = '';
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+    setStatus("Online");
+  }
+
+  void setStatus(String status) async {
+    // await FirebaseFirestore.instance..collection('users').doc(_auth.currentUser!.uid).update({
+    //   "status": status,
+    // });
+    // await currentUserValue.update({
+    //   "status": status,
+    // });
+    List<String> dept = List.filled(11, 'null');
+    dept[0] = 'BBA';
+    dept[1] = 'CSE';
+    dept[2] = 'English';
+    dept[3] = 'EEE';
+    dept[4] = 'Civil Engineering';
+    dept[5] = 'Architecture';
+    dept[6] = 'Law';
+    dept[7] = 'Islamic Studies';
+    dept[8] = 'Public Health';
+    dept[9] = 'Tourism & Hospitality Management';
+    dept[10] = 'Bangla';
+
+    List<String> identity = List.filled(2, 'null');
+    identity[0] = 'Student';
+    identity[1] = 'Teacher';
+
+    for (int i = 0; i < 11; i++) {
+      String _dept = dept[i];
+      for (int i = 0; i < 2; i++) {
+        String _identity = identity[i];
+
+        try {
+          await FirebaseFirestore.instance
+              .collection(_dept)
+              .doc(_dept)
+              .collection(_identity)
+              .doc(currentUserId)
+              .update({
+            "status": status,
+          });
+        } catch (e) {
+          print(e);
+        }
+      }
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // online
+      setStatus("Online");
+    } else {
+      // offline
+      setStatus("Offline");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     AuthService userProvider = Provider.of<AuthService>(context);
     userProvider.getUserData();
 
+    UserModel getData = new UserModel.fromMap(currentUserValue);
+    String name = getData.name.toString();
+    String id = getData.id.toString();
+    String identity = getData.identity.toString();
+    var designation = getData.designation.toString();
+
+    if (identity == 'Student') {
+      setState(() {
+        subTitle = id;
+      });
+    } else {
+      setState(() {
+        subTitle = designation;
+      });
+    }
+
     return DefaultTabController(
-      length: length,
+      length: widget.length,
       child: Scaffold(
         drawer: Drawer(
           child: ListView(
             children: [
               NavHeader(
-                currentUserName: currentUserName,
-                // userProvider: userProvider,
+                currentUserName: name,
+                subTitle: subTitle,
               ),
               Divider(),
               Expanded(
@@ -58,72 +152,72 @@ class homePage extends StatelessWidget {
                     title: "BBA",
                     icon: Icons.arrow_forward_ios,
                     widget: infoPage(
-                        title: "BBA", currentUserName: currentUserName),
+                        title: "BBA", currentUserValue: currentUserValue),
                   ),
                   NavItem(
                     title: "CSE",
                     icon: Icons.arrow_forward_ios,
                     widget: infoPage(
-                        title: "CSE", currentUserName: currentUserName),
+                        title: "CSE", currentUserValue: currentUserValue),
                   ),
                   NavItem(
                     title: "English",
                     icon: Icons.arrow_forward_ios,
                     widget: infoPage(
-                        title: "English", currentUserName: currentUserName),
+                        title: "English", currentUserValue: currentUserValue),
                   ),
                   NavItem(
                     title: "EEE",
                     icon: Icons.arrow_forward_ios,
                     widget: infoPage(
-                        title: "EEE", currentUserName: currentUserName),
+                        title: "EEE", currentUserValue: currentUserValue),
                   ),
                   NavItem(
                     title: "Civil Engineering",
                     icon: Icons.arrow_forward_ios,
                     widget: infoPage(
                         title: "Civil Engineering",
-                        currentUserName: currentUserName),
+                        currentUserValue: currentUserValue),
                   ),
                   NavItem(
                     title: "Architecture",
                     icon: Icons.arrow_forward_ios,
                     widget: infoPage(
                         title: "Architecture",
-                        currentUserName: currentUserName),
+                        currentUserValue: currentUserValue),
                   ),
                   NavItem(
                     title: "Law",
                     icon: Icons.arrow_forward_ios,
                     widget: infoPage(
-                        title: "Law", currentUserName: currentUserName),
+                        title: "Law", currentUserValue: currentUserValue),
                   ),
                   NavItem(
                     title: "Islamic Studies",
                     icon: Icons.arrow_forward_ios,
                     widget: infoPage(
                         title: "Islamic Studies",
-                        currentUserName: currentUserName),
+                        currentUserValue: currentUserValue),
                   ),
                   NavItem(
                     title: "Public Health",
                     icon: Icons.arrow_forward_ios,
                     widget: infoPage(
                         title: "Public Health",
-                        currentUserName: currentUserName),
+                        currentUserValue: currentUserValue),
                   ),
                   NavItem(
                     title: "Tourism & Hospitality Management",
                     icon: Icons.arrow_forward_ios,
                     widget: infoPage(
                         title: "Tourism & Hospitality Management",
-                        currentUserName: currentUserName),
+                        currentUserValue: currentUserValue),
                   ),
                   NavItem(
                     title: "Bangla",
                     icon: Icons.arrow_forward_ios,
                     widget: infoPage(
-                        title: "Bangla", currentUserName: currentUserName),
+                        title: "Bangla", currentUserValue: currentUserValue),
                   ),
                 ],
               )),
@@ -162,7 +256,7 @@ class homePage extends StatelessWidget {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(120),
           child: AppBar(
-            backgroundColor: backgroundColor,
+            backgroundColor: widget.backgroundColor,
             elevation: 2,
             titleSpacing: 2,
             toolbarHeight: 80,
@@ -179,12 +273,12 @@ class homePage extends StatelessWidget {
                   },
                   child: CircleAvatar(
                     radius: 30,
-                    backgroundImage: backgroundImage,
+                    backgroundImage: widget.backgroundImage,
                   ),
                 ),
                 SizedBox(width: 15),
                 Text(
-                  profileText,
+                  widget.profileText,
                   style: TextStyle(
                     fontFamily: 'JosefinSans',
                     fontSize: 26,
@@ -248,11 +342,12 @@ class homePage extends StatelessWidget {
                   fontFamily: 'JosefinSans',
                   fontWeight: FontWeight.w700,
                 ),
-                tabs: tabs),
+                tabs: widget.tabs),
           ),
         ),
         body: TabBarView(
-            dragStartBehavior: DragStartBehavior.start, children: children),
+            dragStartBehavior: DragStartBehavior.start,
+            children: widget.children),
       ),
     );
   }

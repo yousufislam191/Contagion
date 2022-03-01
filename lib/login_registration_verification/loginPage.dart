@@ -17,12 +17,13 @@ import 'package:lu_ahatting_application/widgets/txtButton.dart';
 import 'package:regexed_validator/regexed_validator.dart';
 
 class loginPage extends StatefulWidget {
-  // loginPage({Key? key, this._identityValue}): super(key: key);
   @override
   State<loginPage> createState() => _loginPageState();
 }
 
 class _loginPageState extends State<loginPage> {
+  var currentUserValue;
+
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
@@ -31,16 +32,13 @@ class _loginPageState extends State<loginPage> {
 
   RegExp emailvalidation = RegExp(r"^[a-z0-9_]+@lus.ac.bd$");
 
-  String _email = '', _pass = '', _Svalue = '', _name = '';
-  var _Tvalue;
+  String _email = '', _pass = '';
   String? errorMessage;
   bool _secure = true;
   late double height, width;
   bool loading = false;
 
   final _formkey = GlobalKey<FormState>();
-
-  // const loginPage({Key? key, required this._value}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -323,87 +321,55 @@ class _loginPageState extends State<loginPage> {
                                                       .collection(_identity)
                                                       .doc(userID)
                                                       .get();
-
-                                              // getCurrentUserData(value);
-
-                                              _Svalue = (value['identity']);
-                                              _Tvalue = (value['designation']);
-                                              _name = (value['name']);
-                                              print('student name: $_name');
-                                              print(
-                                                  'student identity: $_Svalue');
-                                              print(
-                                                  'student designation: $_Tvalue');
-                                              // UserModel(value);
-                                              break;
+                                              UserModel getData =
+                                                  new UserModel.fromMap(value);
+                                              print(getData.name);
+                                              print(getData.id);
+                                              print(getData.email);
+                                              if (getData.identity ==
+                                                  'Student') {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        studentHomePage(
+                                                            currentUserValue:
+                                                                value),
+                                                  ),
+                                                );
+                                                Fluttertoast.showToast(
+                                                    msg: "Successfully login.");
+                                              } else if (getData.designation ==
+                                                  'Head') {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        headHomePage(
+                                                            currentUserValue:
+                                                                value),
+                                                  ),
+                                                );
+                                                Fluttertoast.showToast(
+                                                    msg: "Successfully login.");
+                                              } else if (getData.identity ==
+                                                  'Teacher') {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        teacherHomePage(
+                                                            currentUserValue:
+                                                                value),
+                                                  ),
+                                                );
+                                                Fluttertoast.showToast(
+                                                    msg: "Successfully login.");
+                                              }
                                             } catch (e) {
                                               print(e);
                                             }
                                           }
-                                        }
-
-                                        if (_Svalue == 'Student') {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  studentHomePage(name: _name),
-                                            ),
-                                          );
-                                          Fluttertoast.showToast(
-                                              msg: "Successfully login.");
-                                        } else if (_Tvalue == 'Head') {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  headHomePage(name: _name),
-                                            ),
-                                          );
-                                          Fluttertoast.showToast(
-                                              msg: "Successfully login.");
-                                        } else if (_Tvalue == 'Lecturer') {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  teacherHomePage(name: _name),
-                                            ),
-                                          );
-                                          Fluttertoast.showToast(
-                                              msg: "Successfully login.");
-                                        } else if (_Tvalue == 'Professor') {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  teacherHomePage(name: _name),
-                                            ),
-                                          );
-                                          Fluttertoast.showToast(
-                                              msg: "Successfully login.");
-                                        } else if (_Tvalue ==
-                                            'Assistant Professor') {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  teacherHomePage(name: _name),
-                                            ),
-                                          );
-                                          Fluttertoast.showToast(
-                                              msg: "Successfully login.");
-                                        } else if (_Tvalue ==
-                                            'Associate Professor') {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  teacherHomePage(name: _name),
-                                            ),
-                                          );
-                                          Fluttertoast.showToast(
-                                              msg: "Successfully login.");
                                         }
                                       }
                                       setState(() {

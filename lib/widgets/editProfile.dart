@@ -27,6 +27,7 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  int selectedValue = 0;
   final _formkey = GlobalKey<FormState>();
   var batch;
   var section;
@@ -52,7 +53,21 @@ class _EditProfileState extends State<EditProfile> {
   final txtController = TextEditingController();
 
   var selectedType, deptselectedType;
-  var _batch = ['Batch: 47', 'Batch: 48', 'Batch: 49', 'Batch: 50'];
+  var _batch = [
+    'Batch: 47',
+    'Batch: 48',
+    'Batch: 49',
+    'Batch: 50',
+    'Batch: 51',
+    'Batch: 52',
+    'Batch: 53',
+    'Batch: 54',
+    'Batch: 55',
+    'Batch: 56',
+    'Batch: 57',
+    'Batch: 58',
+    'Batch: 59'
+  ];
   var _section = [
     'Section: A',
     'Section: B',
@@ -61,6 +76,8 @@ class _EditProfileState extends State<EditProfile> {
     'Section: E',
     'Section: F',
     'Section: G',
+    'Section: H',
+    'Section: I',
   ];
 
   File? image;
@@ -113,32 +130,6 @@ class _EditProfileState extends State<EditProfile> {
           key: _formkey,
           child: Column(
             children: [
-              // // editTextField(
-              // //   // NAME FIELD
-              // //   controller: nameController,
-              // //   autofillHints: [AutofillHints.name],
-              // //   labelText: "  Name",
-              // //   // initialValue: '$_name',
-              // //   validator: (initialValue) {},
-              // // ),
-              // box_deco(text: "Naima"),
-              // SizedBox(
-              //   width: 20,
-              //   height: 20,
-              // ),
-              // editTextField(
-              //   // ID FIELD
-              //   controller: idController,
-              //   keyboardType: TextInputType.number,
-              //   // hintText: "1912020678",
-              //   labelText: "  Student's or Teacher's ID",
-              //   validator: (value) {},
-              //   onChanged: (value) {
-              //     setState(() {
-              //       _id = value; //STORE INPUT VALUE _id VARIABLE
-              //     });
-              //   },
-              // ),
               SizedBox(
                 width: 20,
                 height: 20,
@@ -389,7 +380,7 @@ class _EditProfileState extends State<EditProfile> {
             width: 1.5,
             style: BorderStyle.solid,
           ))),
-          isExpanded: true,
+          // isExpanded: true,
           items: _batch.map((batch) {
             return DropdownMenuItem(
               value: batch,

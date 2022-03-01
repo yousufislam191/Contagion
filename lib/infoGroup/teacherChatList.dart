@@ -6,8 +6,8 @@ import 'package:lu_ahatting_application/models/user.dart';
 
 class chatList extends StatelessWidget {
   final String Title;
-  final currentUserName;
-  chatList({Key? key, required this.Title, this.currentUserName})
+  final currentUserValue;
+  chatList({Key? key, required this.Title, this.currentUserValue})
       : super(key: key);
 
   final currentUserId = FirebaseAuth.instance.currentUser?.uid;
@@ -37,23 +37,6 @@ class chatList extends StatelessWidget {
                     fontSize: 24,
                     fontWeight: FontWeight.bold),
               ),
-              // actions: <Widget>[
-              //   IconButton(
-              //     icon: Icon(
-              //       Icons.search,
-              //       color: Colors.white,
-              //     ),
-              //     onPressed: () {
-              //       Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //           builder: (context) =>
-              //               searchScreen(teacher: 'teacher', Title: Title),
-              //         ),
-              //       );
-              //     },
-              //   )
-              // ],
             ),
             body: StreamBuilder(
                 stream: FirebaseFirestore.instance
@@ -80,12 +63,9 @@ class chatList extends StatelessWidget {
                             );
                           }
 
-                          String name = docData[getData.name];
-                          String uid = docData[getData.uid];
-                          String designation = docData[getData.designation];
-                          // print(name);
-                          // print(uid);
-                          // print(designation);
+                          String name = docData[getListData.name];
+                          String uid = docData[getListData.uid];
+                          var designation = docData[getListData.designation];
                           return currentUserId == uid
                               ? Container(height: 0)
                               : ListTile(
@@ -94,9 +74,9 @@ class chatList extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => chatPage3(
-                                            targetChatName: name,
-                                            targetChatUid: uid,
-                                            senderName: currentUserName),
+                                          targetUserValue: docData,
+                                          currentUserValue: currentUserValue,
+                                        ),
                                       ),
                                     );
                                   },
@@ -141,7 +121,6 @@ class chatList extends StatelessWidget {
                         padding: EdgeInsets.symmetric(horizontal: 20.0),
                         child: Center(
                           child: Image.asset('assets/images/backgroundImg.png'),
-                          // child: Text('eita run hoitase'),
                         ),
                       );
                     }
