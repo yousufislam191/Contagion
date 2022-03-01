@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:lu_ahatting_application/infoGroup/studentChatList.dart';
 import 'package:lu_ahatting_application/infoGroup/teacherChatList.dart';
+import 'package:lu_ahatting_application/models/user.dart';
 
 class infoPage extends StatefulWidget {
   final String title;
-  final currentUserName;
+  final currentUserValue;
   const infoPage({
     Key? key,
     required this.title,
-    this.currentUserName,
+    this.currentUserValue,
   }) : super(key: key);
 
   @override
-  _infoPageState createState() => _infoPageState();
+  _infoPageState createState() => _infoPageState(currentUserValue);
 }
 
 class _infoPageState extends State<infoPage> {
+  final currentUserValue;
+  _infoPageState(this.currentUserValue);
+
   String Title = '';
-  String currentUserName = '';
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -84,19 +88,17 @@ class _infoPageState extends State<infoPage> {
                     ),
                     onPressed: () async {
                       Title = '${widget.title}';
-                      currentUserName = '${widget.currentUserName}';
 
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => chatList(
                                   Title: Title,
-                                  currentUserName: currentUserName,
+                                  currentUserValue: currentUserValue,
                                 )),
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                        // textStyle: TextStyle(color: Colors.black),
                         side: BorderSide(width: 3, color: Color(0xff49c42b)),
                         fixedSize: const Size(100, 100),
                         primary: Colors.white,
@@ -145,14 +147,13 @@ class _infoPageState extends State<infoPage> {
                     // onPressed: null,
                     onPressed: () async {
                       Title = '${widget.title}';
-                      currentUserName = '${widget.currentUserName}';
 
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => studentChatList(
                                   Title: Title,
-                                  currentUserName: currentUserName,
+                                  currentUserValue: currentUserValue,
                                 )),
                       );
                     },

@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:lu_ahatting_application/models/user.dart';
 import 'package:lu_ahatting_application/widgets/editProfile.dart';
 
 class NavHeader extends StatefulWidget {
   final currentUserName;
-  NavHeader({Key? key, this.currentUserName}) : super(key: key);
+  final subTitle;
+  NavHeader({Key? key, this.currentUserName, this.subTitle}) : super(key: key);
 
   @override
-  State<NavHeader> createState() => _NavHeaderState(currentUserName);
+  State<NavHeader> createState() => _NavHeaderState(currentUserName, subTitle);
 }
 
 class _NavHeaderState extends State<NavHeader> {
   final currentUserName;
+  final subTitle;
+  _NavHeaderState(this.currentUserName, this.subTitle);
 
-  _NavHeaderState(this.currentUserName);
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -39,13 +42,18 @@ class _NavHeaderState extends State<NavHeader> {
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
+                                fontWeight: FontWeight.w600,
                                 fontFamily: 'JosefinSans'),
                           ),
+                          SizedBox(
+                            height: 5,
+                          ),
                           Text(
-                            "1912020139",
+                            subTitle,
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 17,
+                                fontWeight: FontWeight.w400,
                                 fontFamily: 'JosefinSans'),
                           ),
                         ],

@@ -12,6 +12,7 @@ import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_6.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lu_ahatting_application/encryption/encrypt_service.dart';
+import 'package:lu_ahatting_application/models/user.dart';
 import 'package:uuid/uuid.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
@@ -22,31 +23,28 @@ extension StringExtension on String {
 }
 
 class chatPage3 extends StatefulWidget {
-  final targetChatName;
-  final targetChatUid;
-  final senderName;
-  const chatPage3(
-      {Key? key, this.targetChatName, this.targetChatUid, this.senderName})
+  final currentUserValue;
+  final targetUserValue;
+  const chatPage3({Key? key, this.currentUserValue, this.targetUserValue})
       : super(key: key);
 
   @override
   _chatPage3State createState() =>
-      _chatPage3State(targetChatName, targetChatUid, senderName);
+      _chatPage3State(currentUserValue, targetUserValue);
 }
 
 class _chatPage3State extends State<chatPage3> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   CollectionReference chats = FirebaseFirestore.instance.collection('chats');
-  final targetChatName;
-  final targetChatUid;
-  final senderName;
+  final currentUserValue;
+  final targetUserValue;
   final currentUserId = FirebaseAuth.instance.currentUser?.uid;
 
   var chatDocId, encryptedText, decryptedText, plainText;
   String decryptedPlainText = '';
   final _message = new TextEditingController();
 
-  _chatPage3State(this.targetChatName, this.targetChatUid, this.senderName);
+  _chatPage3State(this.currentUserValue, this.targetUserValue);
 
   @override
   void initState() {
@@ -55,6 +53,8 @@ class _chatPage3State extends State<chatPage3> {
   }
 
   void checkUser() async {
+    UserModel _getData = new UserModel.fromMap(currentUserValue);
+    String targetChatUid = targetUserValue[getListData.uid];
     await chats
         .where('users', isEqualTo: {targetChatUid: null, currentUserId: null})
         .limit(1)
@@ -66,15 +66,15 @@ class _chatPage3State extends State<chatPage3> {
                 chatDocId = querySnapshot.docs.single.id;
               });
               print(chatDocId);
-              print(targetChatName);
+              print(targetUserValue[getListData.name]);
               print(targetChatUid);
             } else {
               await chats.add({
                 'users': {currentUserId: null, targetChatUid: null},
                 'senderId': currentUserId,
-                'senderName': senderName,
+                'senderName': _getData.name,
                 'receiverId': targetChatUid,
-                'receiverName': targetChatName
+                'receiverName': targetUserValue[getListData.name],
               }).then((value) => {chatDocId = value.toString()});
             }
           },
@@ -202,15 +202,45 @@ class _chatPage3State extends State<chatPage3> {
                                 radius: 25,
                               ),
                               SizedBox(width: 10),
-                              Text(
-                                targetChatName,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontFamily: 'JosefinSans',
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    targetUserValue[getListData.name],
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontFamily: 'JosefinSans',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  targetUserValue[getListData.status] ==
+                                          'Online'
+                                      ? Text(
+                                          'online',
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontFamily: 'JosefinSans',
+                                            fontSize: 12,
+                                            // fontWeight: FontWeight.bold,
+                                            color: Colors.green,
+                                          ),
+                                        )
+                                      : Text(
+                                          'Offline',
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontFamily: 'JosefinSans',
+                                            fontSize: 12,
+                                            // fontWeight: FontWeight.bold,
+                                            color: Colors.black54,
+                                          ),
+                                        ),
+                                ],
                               ),
                             ],
                           ),
@@ -272,7 +302,6 @@ class _chatPage3State extends State<chatPage3> {
                                 data = document.data()!;
                                 decryptedText = encryptionService.decryptAES(
                                     data['msg']); //Decrypted Text Here
-                                print('decryptedText: $decryptedText');
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),

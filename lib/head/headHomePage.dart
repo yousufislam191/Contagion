@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:lu_ahatting_application/models/user.dart';
 import 'package:lu_ahatting_application/navigation/navigationHeader.dart';
 import 'package:lu_ahatting_application/widgets/chatHomePage.dart';
 import 'package:lu_ahatting_application/messages/chatHomePageChat.dart';
 
 class headHomePage extends StatefulWidget {
-  final name;
-  const headHomePage({Key? key, this.name}) : super(key: key);
+  final currentUserValue;
+  const headHomePage({Key? key, this.currentUserValue}) : super(key: key);
 
   @override
-  _headHomePageState createState() => _headHomePageState(name);
+  _headHomePageState createState() => _headHomePageState(currentUserValue);
 }
 
 class _headHomePageState extends State<headHomePage> {
-  final name;
+  final currentUserValue;
   final searchEditingController = TextEditingController();
 
-  _headHomePageState(this.name);
+  _headHomePageState(this.currentUserValue);
 
   @override
   Widget build(BuildContext context) {
+    UserModel getData = new UserModel.fromMap(currentUserValue);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Lu Chatting Application',
@@ -27,11 +29,11 @@ class _headHomePageState extends State<headHomePage> {
           length: 4,
           backgroundColor: Color(0xFF7144F0),
           backgroundImage: AssetImage("assets/images/profileImg.jpg"),
-          profileText: name,
+          profileText: getData.name.toString(),
           controller: searchEditingController,
           searchbarCursorColor: Color(0xFF7144F0),
           searchbarIconColor: Color(0xFF7144F0),
-          currentUserName: name,
+          currentUserValue: currentUserValue,
           tabs: [
             Tab(text: 'Chat'),
             Tab(text: 'Groups'),
@@ -40,7 +42,7 @@ class _headHomePageState extends State<headHomePage> {
           ],
           // bodyImage: AssetImage("assets/images/backgroundImg.png"),
           children: [
-            chatHomePageChat(),
+            chatHomePageChat(currentUserValue: currentUserValue),
             Center(
               child: Text(
                   'Group chat feature is not available at this moment. \n Developers will work with this in future.'),
