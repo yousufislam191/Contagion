@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lu_ahatting_application/login_registration_verification/loginPage.dart';
 import 'package:lu_ahatting_application/messages/chatHomePageChat.dart';
 import 'package:lu_ahatting_application/widgets/chatHomePage.dart';
@@ -15,6 +16,7 @@ class Ppage extends StatefulWidget {
 
 class _PpageState extends State<Ppage> {
   final user = FirebaseAuth.instance.currentUser;
+  final storage = new FlutterSecureStorage();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -84,5 +86,6 @@ class _PpageState extends State<Ppage> {
 
   Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
+    await storage.delete(key: "uid");
   }
 }

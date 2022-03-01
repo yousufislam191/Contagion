@@ -15,6 +15,7 @@ import 'package:lu_ahatting_application/widgets/elevatedButton.dart';
 import 'package:lu_ahatting_application/widgets/loginTxtField.dart';
 import 'package:lu_ahatting_application/widgets/txtButton.dart';
 import 'package:regexed_validator/regexed_validator.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class loginPage extends StatefulWidget {
   @override
@@ -26,6 +27,7 @@ class _loginPageState extends State<loginPage> {
 
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  final storage = new FlutterSecureStorage();
 
   final emailEditingController = TextEditingController();
   final passEditingController = TextEditingController();
@@ -278,6 +280,9 @@ class _loginPageState extends State<loginPage> {
                                               password:
                                                   _pass); // login with user email & pass
 
+                                      await storage.write(
+                                          key: "uid", value: newUser.user?.uid);
+
                                       // if login successfull then go to the if condition
                                       if (newUser != null) {
                                         final user = await _auth
@@ -321,6 +326,21 @@ class _loginPageState extends State<loginPage> {
                                                       .collection(_identity)
                                                       .doc(userID)
                                                       .get();
+
+
+                                              getCurrentUserData(value);
+
+                                              _Svalue = (value['identity']);
+                                              _Tvalue = (value['designation']);
+                                              _name = (value['name']);
+                                              print('student name: $_name');
+                                              print(
+                                                  'student identity: $_Svalue');
+                                              print(
+                                                  'student designation: $_Tvalue');
+                                              // UserModel(value);
+                                              break;
+
                                               UserModel getData =
                                                   new UserModel.fromMap(value);
                                               print(getData.name);
@@ -366,6 +386,7 @@ class _loginPageState extends State<loginPage> {
                                                 Fluttertoast.showToast(
                                                     msg: "Successfully login.");
                                               }
+
                                             } catch (e) {
                                               print(e);
                                             }

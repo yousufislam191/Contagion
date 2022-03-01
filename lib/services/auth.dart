@@ -115,6 +115,7 @@ class AuthService with ChangeNotifier {
         userEmail: value.get("email"),
         userName: value.get("name"),
         userid: value.get("id"),
+        useridentity: value.get("identity"),
       );
       currentData = userModel;
       notifyListeners();
