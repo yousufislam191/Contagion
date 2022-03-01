@@ -7,8 +7,8 @@ import 'package:lu_ahatting_application/models/user.dart';
 
 class studentChatList extends StatelessWidget {
   final String Title;
-  final currentUserName;
-  studentChatList({Key? key, required this.Title, this.currentUserName})
+  final currentUserValue;
+  studentChatList({Key? key, required this.Title, this.currentUserValue})
       : super(key: key);
 
   final currentUserId = FirebaseAuth.instance.currentUser?.uid;
@@ -63,10 +63,8 @@ class studentChatList extends StatelessWidget {
                     .snapshots(),
                 builder: (BuildContext,
                     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                        // AsyncSnapshot<QuerySnapshot<Map<dynamic, dynamic>>>
                         snapshot) {
                   if (snapshot.hasData && snapshot.data != null) {
-                    // print("Total documents: ${snapshot.data!.docs.length}");
                     if (snapshot.data!.docs.isNotEmpty) {
                       return ListView.builder(
                         itemCount: snapshot.data!.docs.length,
@@ -80,34 +78,20 @@ class studentChatList extends StatelessWidget {
                             );
                           }
 
-                          // if (docData.isEmpty) {
-                          //   return Container(
-                          //     padding: EdgeInsets.symmetric(horizontal: 20.0),
-                          //     child: Center(
-                          //       child: Image.asset(
-                          //           'assets/images/backgroundImg.png'),
-                          //     ),
-                          //   );
-                          // }
-
-                          String name = docData[getStudentData.name];
-                          String uid = docData[getStudentData.uid];
-                          String id = docData[getStudentData.id];
-                          // print('currentUserId, $currentUserId');
-                          // print('uid, $uid');
-
+                          String name = docData[getListData.name];
+                          String uid = docData[getListData.uid];
+                          String id = docData[getListData.id];
                           return currentUserId == uid
                               ? Container(height: 0)
                               : ListTile(
-                                  // return ListTile(
                                   onTap: () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => chatPage3(
-                                            targetChatName: name,
-                                            targetChatUid: uid,
-                                            senderName: currentUserName),
+                                          targetUserValue: docData,
+                                          currentUserValue: currentUserValue,
+                                        ),
                                       ),
                                     );
                                   },

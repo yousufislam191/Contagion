@@ -6,15 +6,19 @@ import 'package:lu_ahatting_application/models/user.dart';
 
 class studentSearchScreen extends StatefulWidget {
   final Title;
-  const studentSearchScreen({Key? key, this.Title}) : super(key: key);
+  final currentUserValue;
+  const studentSearchScreen({Key? key, this.Title, this.currentUserValue})
+      : super(key: key);
 
   @override
-  _studentSearchScreenState createState() => _studentSearchScreenState(Title);
+  _studentSearchScreenState createState() =>
+      _studentSearchScreenState(Title, currentUserValue);
 }
 
 class _studentSearchScreenState extends State<studentSearchScreen> {
   final String Title;
-  _studentSearchScreenState(this.Title);
+  final currentUserValue;
+  _studentSearchScreenState(this.Title, this.currentUserValue);
 
   TextEditingController _searchController = TextEditingController();
   final currentUserId = FirebaseAuth.instance.currentUser?.uid;
@@ -136,14 +140,14 @@ class _studentSearchScreenState extends State<studentSearchScreen> {
             itemBuilder: (BuildContext context, int index) {
               Map<String, dynamic> docData = _resultsList[index].data();
 
-              String name = docData[getStudentData.name];
-              String uid = docData[getStudentData.uid];
-              String id = docData[getStudentData.id];
+              String name = docData[getListData.name];
+              String uid = docData[getListData.uid];
+              String id = docData[getListData.id];
 
-              print(docData);
-              print('name $name');
-              print('uid $uid');
-              print('id $id');
+              // print(docData);
+              // print('name $name');
+              // print('uid $uid');
+              // print('id $id');
 
               return currentUserId == uid
                   ? Container(height: 0)
@@ -153,8 +157,8 @@ class _studentSearchScreenState extends State<studentSearchScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => chatPage3(
-                                targetChatName: name, targetChatUid: uid),
+                            builder: (context) =>
+                                chatPage3(targetUserValue: docData),
                           ),
                         );
                       },
