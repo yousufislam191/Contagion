@@ -15,6 +15,7 @@ import 'package:lu_ahatting_application/widgets/elevatedButton.dart';
 import 'package:lu_ahatting_application/widgets/loginTxtField.dart';
 import 'package:lu_ahatting_application/widgets/txtButton.dart';
 import 'package:regexed_validator/regexed_validator.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class loginPage extends StatefulWidget {
   // loginPage({Key? key, this._identityValue}): super(key: key);
@@ -25,6 +26,7 @@ class loginPage extends StatefulWidget {
 class _loginPageState extends State<loginPage> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  final storage = new FlutterSecureStorage();
 
   final emailEditingController = TextEditingController();
   final passEditingController = TextEditingController();
@@ -280,6 +282,9 @@ class _loginPageState extends State<loginPage> {
                                               password:
                                                   _pass); // login with user email & pass
 
+                                      await storage.write(
+                                          key: "uid", value: newUser.user?.uid);
+
                                       // if login successfull then go to the if condition
                                       if (newUser != null) {
                                         final user = await _auth
@@ -324,7 +329,7 @@ class _loginPageState extends State<loginPage> {
                                                       .doc(userID)
                                                       .get();
 
-                                              // getCurrentUserData(value);
+                                              getCurrentUserData(value);
 
                                               _Svalue = (value['identity']);
                                               _Tvalue = (value['designation']);
