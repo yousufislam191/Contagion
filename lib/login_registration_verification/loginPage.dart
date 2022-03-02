@@ -16,6 +16,7 @@ import 'package:lu_ahatting_application/widgets/loginTxtField.dart';
 import 'package:lu_ahatting_application/widgets/txtButton.dart';
 import 'package:regexed_validator/regexed_validator.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:lu_ahatting_application/models/user.dart';
 
 class loginPage extends StatefulWidget {
   @override
@@ -327,22 +328,26 @@ class _loginPageState extends State<loginPage> {
                                                       .doc(userID)
                                                       .get();
 
-
-                                              getCurrentUserData(value);
-
-                                              _Svalue = (value['identity']);
-                                              _Tvalue = (value['designation']);
-                                              _name = (value['name']);
-                                              print('student name: $_name');
-                                              print(
-                                                  'student identity: $_Svalue');
-                                              print(
-                                                  'student designation: $_Tvalue');
-                                              // UserModel(value);
-                                              break;
-
                                               UserModel getData =
                                                   new UserModel.fromMap(value);
+
+                                              String? name = getData.name;
+                                              String? identity =
+                                                  getData.identity;
+                                              String? UID = getData.uid;
+
+                                              // await storage.write(
+                                              //   key: "name",
+                                              //   value: name,
+                                              // );
+
+                                              // await storage.write(
+                                              //     key: "identity",
+                                              //     value: identity);
+
+                                              // await storage.write(
+                                              //     key: "uid", value: UID);
+
                                               print(getData.name);
                                               print(getData.id);
                                               print(getData.email);
@@ -386,7 +391,6 @@ class _loginPageState extends State<loginPage> {
                                                 Fluttertoast.showToast(
                                                     msg: "Successfully login.");
                                               }
-
                                             } catch (e) {
                                               print(e);
                                             }
