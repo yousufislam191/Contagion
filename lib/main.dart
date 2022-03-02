@@ -7,7 +7,6 @@ import 'package:lu_ahatting_application/Utils/user_simple_preference.dart';
 import 'package:lu_ahatting_application/head/headHomePage.dart';
 import 'package:lu_ahatting_application/loader.dart';
 import 'package:lu_ahatting_application/login_registration_verification/loginPage.dart';
-import 'package:lu_ahatting_application/models/user.dart';
 import 'package:lu_ahatting_application/openPage.dart';
 import 'package:lu_ahatting_application/login_registration_verification/registration.dart';
 import 'package:lu_ahatting_application/services/auth.dart';
@@ -28,17 +27,19 @@ class MyApp extends StatelessWidget {
 
   // This widget is the root of your application.
 
-  // final storage = new FlutterSecureStorage();
-  // Future<bool> checkLoginStatus() async {
-  //   String? value = await storage.read(key: "uid");
-  //   if (value != null) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
 
-  // String _email = '', _pass = '', _Svalue = '', _name = '';
-  // var _Tvalue;
+  final storage = new FlutterSecureStorage();
+  Future<bool> checkLoginStatus() async {
+    String? value = await storage.read(key: "uid");
+    if (value != null) {
+      return true;
+    }
+    return false;
+  }
+
+  String _email = '', _pass = '', _Svalue = '', _name = '';
+  var _Tvalue;
+
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +51,6 @@ class MyApp extends StatelessWidget {
 //         "/": (context) => openPage(),
 //         // "/": (context) => developer(),
 //       },
-
-    final user = FirebaseAuth.instance.currentUser;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthService>(
@@ -61,57 +60,33 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Lu Chatting Application',
-        // home: FutureBuilder(
-        //     future: checkLoginStatus(),
-        //     builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        //       if (snapshot.data == true) {
-        //         return studentHomePage();
-        //         // List<String> dept =
-        //         //     List.filled(11, 'null'); // declare a String type List
-        //         // dept[0] = 'BBA';
-        //         // dept[1] = 'CSE';
-        //         // dept[2] = 'English';
-        //         // dept[3] = 'EEE';
-        //         // dept[4] = 'Civil Engineering';
-        //         // dept[5] = 'Architecture';
-        //         // dept[6] = 'Law';
-        //         // dept[7] = 'Islamic Studies';
-        //         // dept[8] = 'Public Health';
-        //         // dept[9] = 'Tourism & Hospitality Management';
-        //         // dept[10] = 'Bangla';
-
-        //         // List<String> identity =
-        //         //     List.filled(2, 'null'); // declare a String type List
-        //         // identity[0] = 'Student';
-        //         // identity[1] = 'Teacher';
-
-        //         // for (int i = 0; i < 11; i++) {
-        //         //   String _dept = dept[i];
-        //         //   for (int i = 0; i < 2; i++) {
-        //         //     // we use loop for matchin collection with database
-        //         //     String _identity =
-        //         //         identity[i]; // convert List Srting to String
-        //         //     try {
-        //         //       // when user login then it will find user identity from database & keep the identity value in '_value' variable
-        //         //       DocumentSnapshot value = FirebaseFirestore.instance
-        //         //           .collection(_dept)
-        //         //           .doc(_dept)
-        //         //           .collection(_identity)
-        //         //           .doc(user!.uid)
-        //         //           .get() as DocumentSnapshot<Object?>;
-
-        //         //       // getCurrentUserData(value);
-
-        //         //       _Svalue = (value['identity']);
-
-        //         //       _name = (value['name']);
-
-        //         //       break;
-        //         //     } catch (e) {
-        //         //       print(e);
-        //         //     }
-        //         //   }
-        //         // }
+        home: FutureBuilder(
+            future: checkLoginStatus(),
+            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+              if (snapshot.data == true) {
+                setStatus();
+                // return openPage();
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Container(
+                  color: Colors.white,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+              // if (snapshot.data == false) {
+              //   return openPage();
+              // }
+              // if (snapshot.data == true) {
+              //   return studentHomePage();
+              // }
+              return openPage();
+            }),
+        // initialRoute: "/",
+        // routes: {
+        //   // "/": (context) => openPage(),
+        //   // // "/": (context) => registration(),
 
         //         // if (_Svalue == 'Student') {
         //         //   // Navigator.push(
@@ -154,5 +129,76 @@ class MyApp extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Future setStatus() async {
+    // await FirebaseFirestore.instance..collection('users').doc(_auth.currentUser!.uid).update({
+    //   "status": status,
+    // });
+    // await currentUserValue.update({
+    //   "status": status,
+    // });
+    // print("work");
+    final user = FirebaseAuth.instance.currentUser;
+    List<String> dept = List.filled(11, 'null');
+    dept[0] = 'BBA';
+    dept[1] = 'CSE';
+    dept[2] = 'English';
+    dept[3] = 'EEE';
+    dept[4] = 'Civil Engineering';
+    dept[5] = 'Architecture';
+    dept[6] = 'Law';
+    dept[7] = 'Islamic Studies';
+    dept[8] = 'Public Health';
+    dept[9] = 'Tourism & Hospitality Management';
+    dept[10] = 'Bangla';
+
+    List<String> identity = List.filled(2, 'null');
+    identity[0] = 'Student';
+    identity[1] = 'Teacher';
+
+    for (int i = 0; i < 11; i++) {
+      String _dept = dept[i];
+      for (int i = 0; i < 2; i++) {
+        String _identity = identity[i];
+        // print("work");
+
+        try {
+          DocumentSnapshot value = await FirebaseFirestore.instance
+              .collection(_dept)
+              .doc(_dept)
+              .collection(_identity)
+              .doc(user?.uid)
+              .get();
+
+          _Svalue = (value['identity']);
+
+          _name = (value['name']);
+
+          if (_Svalue == 'Student') {
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => studentHomePage(name: _name),
+            //   ),
+            // );
+            print("working");
+            return studentHomePage(currentUserValue: value);
+            // print("work");
+          } else if (_Tvalue == 'Head') {
+            return headHomePage(currentUserValue: value);
+          } else if (_Tvalue == 'Lecturer' ||
+              _Tvalue == "Professor" ||
+              _Tvalue == "Assistant Professor" ||
+              _Tvalue == "Associate Professor") {
+            return teacherHomePage(
+              currentUserValue: value,
+            );
+          }
+        } catch (e) {
+          print(e);
+        }
+      }
+    }
   }
 }
