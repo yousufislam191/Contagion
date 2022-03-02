@@ -241,8 +241,23 @@ class getSenderId extends StatelessWidget {
       },
       title: Row(
         children: [
-          CircleAvatar(
-            radius: 30,
+          Stack(
+            alignment: AlignmentDirectional.bottomEnd +
+                AlignmentDirectional(-0.1, -0.3),
+            children: [
+              CircleAvatar(
+                radius: 30,
+              ),
+              receiverStatus == 'Online'
+                  ? Container(
+                      width: 12,
+                      height: 12,
+                      // alignment: Alignment.bottomLeft,
+                      decoration: BoxDecoration(
+                          color: Colors.green, shape: BoxShape.circle),
+                    )
+                  : Container(),
+            ],
           ),
           SizedBox(
             width: 10,
@@ -295,8 +310,23 @@ class getReceiverID extends StatelessWidget {
       },
       title: Row(
         children: [
-          CircleAvatar(
-            radius: 30,
+          Stack(
+            alignment: AlignmentDirectional.bottomEnd +
+                AlignmentDirectional(-0.1, -0.3),
+            children: [
+              CircleAvatar(
+                radius: 30,
+              ),
+              senderStatus == 'Online'
+                  ? Container(
+                      width: 12,
+                      height: 12,
+                      // alignment: Alignment.bottomLeft,
+                      decoration: BoxDecoration(
+                          color: Colors.green, shape: BoxShape.circle),
+                    )
+                  : Container(),
+            ],
           ),
           SizedBox(
             width: 10,

@@ -27,17 +27,18 @@ class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
-  final storage = new FlutterSecureStorage();
-  Future<bool> checkLoginStatus() async {
-    String? value = await storage.read(key: "uid");
-    if (value != null) {
-      return true;
-    }
-    return false;
-  }
 
-  String _email = '', _pass = '', _Svalue = '', _name = '';
-  var _Tvalue;
+  // final storage = new FlutterSecureStorage();
+  // Future<bool> checkLoginStatus() async {
+  //   String? value = await storage.read(key: "uid");
+  //   if (value != null) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
+  // String _email = '', _pass = '', _Svalue = '', _name = '';
+  // var _Tvalue;
 
   @override
   Widget build(BuildContext context) {
@@ -60,100 +61,97 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Lu Chatting Application',
-        home: FutureBuilder(
-            future: checkLoginStatus(),
-            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-              if (snapshot.data == true) {
-                return studentHomePage(
-                  name: "Name",
-                );
-                // List<String> dept =
-                //     List.filled(11, 'null'); // declare a String type List
-                // dept[0] = 'BBA';
-                // dept[1] = 'CSE';
-                // dept[2] = 'English';
-                // dept[3] = 'EEE';
-                // dept[4] = 'Civil Engineering';
-                // dept[5] = 'Architecture';
-                // dept[6] = 'Law';
-                // dept[7] = 'Islamic Studies';
-                // dept[8] = 'Public Health';
-                // dept[9] = 'Tourism & Hospitality Management';
-                // dept[10] = 'Bangla';
+        // home: FutureBuilder(
+        //     future: checkLoginStatus(),
+        //     builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        //       if (snapshot.data == true) {
+        //         return studentHomePage();
+        //         // List<String> dept =
+        //         //     List.filled(11, 'null'); // declare a String type List
+        //         // dept[0] = 'BBA';
+        //         // dept[1] = 'CSE';
+        //         // dept[2] = 'English';
+        //         // dept[3] = 'EEE';
+        //         // dept[4] = 'Civil Engineering';
+        //         // dept[5] = 'Architecture';
+        //         // dept[6] = 'Law';
+        //         // dept[7] = 'Islamic Studies';
+        //         // dept[8] = 'Public Health';
+        //         // dept[9] = 'Tourism & Hospitality Management';
+        //         // dept[10] = 'Bangla';
 
-                // List<String> identity =
-                //     List.filled(2, 'null'); // declare a String type List
-                // identity[0] = 'Student';
-                // identity[1] = 'Teacher';
+        //         // List<String> identity =
+        //         //     List.filled(2, 'null'); // declare a String type List
+        //         // identity[0] = 'Student';
+        //         // identity[1] = 'Teacher';
 
-                // for (int i = 0; i < 11; i++) {
-                //   String _dept = dept[i];
-                //   for (int i = 0; i < 2; i++) {
-                //     // we use loop for matchin collection with database
-                //     String _identity =
-                //         identity[i]; // convert List Srting to String
-                //     try {
-                //       // when user login then it will find user identity from database & keep the identity value in '_value' variable
-                //       DocumentSnapshot value = FirebaseFirestore.instance
-                //           .collection(_dept)
-                //           .doc(_dept)
-                //           .collection(_identity)
-                //           .doc(user!.uid)
-                //           .get() as DocumentSnapshot<Object?>;
+        //         // for (int i = 0; i < 11; i++) {
+        //         //   String _dept = dept[i];
+        //         //   for (int i = 0; i < 2; i++) {
+        //         //     // we use loop for matchin collection with database
+        //         //     String _identity =
+        //         //         identity[i]; // convert List Srting to String
+        //         //     try {
+        //         //       // when user login then it will find user identity from database & keep the identity value in '_value' variable
+        //         //       DocumentSnapshot value = FirebaseFirestore.instance
+        //         //           .collection(_dept)
+        //         //           .doc(_dept)
+        //         //           .collection(_identity)
+        //         //           .doc(user!.uid)
+        //         //           .get() as DocumentSnapshot<Object?>;
 
-                //       // getCurrentUserData(value);
+        //         //       // getCurrentUserData(value);
 
-                //       _Svalue = (value['identity']);
+        //         //       _Svalue = (value['identity']);
 
-                //       _name = (value['name']);
+        //         //       _name = (value['name']);
 
-                //       break;
-                //     } catch (e) {
-                //       print(e);
-                //     }
-                //   }
-                // }
+        //         //       break;
+        //         //     } catch (e) {
+        //         //       print(e);
+        //         //     }
+        //         //   }
+        //         // }
 
-                // if (_Svalue == 'Student') {
-                //   // Navigator.push(
-                //   //   context,
-                //   //   MaterialPageRoute(
-                //   //     builder: (context) => studentHomePage(name: _name),
-                //   //   ),
-                //   // );
-                //   return studentHomePage(
-                //     name: _name,
-                //   );
-                // } else if (_Tvalue == 'Head') {
-                //   return headHomePage(name: _name);
-                // } else if (_Tvalue == 'Lecturer' ||
-                //     _Tvalue == "Professor" ||
-                //     _Tvalue == "Assistant Professor" ||
-                //     _Tvalue == "Associate Professor") {
-                //   return teacherHomePage(
-                //     name: _name,
-                //   );
-                // }
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container(
-                  color: Colors.white,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-              // if (snapshot.data == true) {
-              //   return studentHomePage();
-              // }
-              return openPage();
-            }),
-        // initialRoute: "/",
-        // routes: {
-        //   // "/": (context) => openPage(),
-        //   // // "/": (context) => registration(),
-
-        // },
+        //         // if (_Svalue == 'Student') {
+        //         //   // Navigator.push(
+        //         //   //   context,
+        //         //   //   MaterialPageRoute(
+        //         //   //     builder: (context) => studentHomePage(name: _name),
+        //         //   //   ),
+        //         //   // );
+        //         //   return studentHomePage(
+        //         //     name: _name,
+        //         //   );
+        //         // } else if (_Tvalue == 'Head') {
+        //         //   return headHomePage(name: _name);
+        //         // } else if (_Tvalue == 'Lecturer' ||
+        //         //     _Tvalue == "Professor" ||
+        //         //     _Tvalue == "Assistant Professor" ||
+        //         //     _Tvalue == "Associate Professor") {
+        //         //   return teacherHomePage(
+        //         //     name: _name,
+        //         //   );
+        //         // }
+        //       }
+        //       if (snapshot.connectionState == ConnectionState.waiting) {
+        //         return Container(
+        //           color: Colors.white,
+        //           child: Center(
+        //             child: CircularProgressIndicator(),
+        //           ),
+        //         );
+        //       }
+        //       // if (snapshot.data == true) {
+        //       //   return studentHomePage();
+        //       // }
+        //       return openPage();
+        //     }),
+        initialRoute: "/",
+        routes: {
+          "/": (context) => openPage(),
+          //   // // "/": (context) => registration(),
+        },
       ),
     );
   }

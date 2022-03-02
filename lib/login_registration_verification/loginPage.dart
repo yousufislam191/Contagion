@@ -327,25 +327,24 @@ class _loginPageState extends State<loginPage> {
                                                       .doc(userID)
                                                       .get();
 
+                                              // getCurrentUserData(value);
 
-                                              getCurrentUserData(value);
-
-                                              _Svalue = (value['identity']);
-                                              _Tvalue = (value['designation']);
-                                              _name = (value['name']);
-                                              print('student name: $_name');
-                                              print(
-                                                  'student identity: $_Svalue');
-                                              print(
-                                                  'student designation: $_Tvalue');
-                                              // UserModel(value);
-                                              break;
+                                              // _Svalue = (value['identity']);
+                                              // _Tvalue = (value['designation']);
+                                              // _name = (value['name']);
+                                              // print('student name: $_name');
+                                              // print(
+                                              //     'student identity: $_Svalue');
+                                              // print(
+                                              //     'student designation: $_Tvalue');
+                                              // // UserModel(value);
+                                              // break;
 
                                               UserModel getData =
                                                   new UserModel.fromMap(value);
-                                              print(getData.name);
-                                              print(getData.id);
-                                              print(getData.email);
+                                              // print(getData.name);
+                                              // print(getData.id);
+                                              // print(getData.email);
                                               if (getData.identity ==
                                                   'Student') {
                                                 Navigator.push(
@@ -386,7 +385,6 @@ class _loginPageState extends State<loginPage> {
                                                 Fluttertoast.showToast(
                                                     msg: "Successfully login.");
                                               }
-
                                             } catch (e) {
                                               print(e);
                                             }
