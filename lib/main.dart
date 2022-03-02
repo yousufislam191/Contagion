@@ -26,6 +26,8 @@ class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
+
+
   final storage = new FlutterSecureStorage();
   Future<bool> checkLoginStatus() async {
     String? value = await storage.read(key: "uid");
@@ -37,6 +39,8 @@ class MyApp extends StatelessWidget {
 
   String _email = '', _pass = '', _Svalue = '', _name = '';
   var _Tvalue;
+
+
   @override
   Widget build(BuildContext context) {
 //     return MaterialApp(
@@ -84,7 +88,45 @@ class MyApp extends StatelessWidget {
         //   // "/": (context) => openPage(),
         //   // // "/": (context) => registration(),
 
-        // },
+        //         // if (_Svalue == 'Student') {
+        //         //   // Navigator.push(
+        //         //   //   context,
+        //         //   //   MaterialPageRoute(
+        //         //   //     builder: (context) => studentHomePage(name: _name),
+        //         //   //   ),
+        //         //   // );
+        //         //   return studentHomePage(
+        //         //     name: _name,
+        //         //   );
+        //         // } else if (_Tvalue == 'Head') {
+        //         //   return headHomePage(name: _name);
+        //         // } else if (_Tvalue == 'Lecturer' ||
+        //         //     _Tvalue == "Professor" ||
+        //         //     _Tvalue == "Assistant Professor" ||
+        //         //     _Tvalue == "Associate Professor") {
+        //         //   return teacherHomePage(
+        //         //     name: _name,
+        //         //   );
+        //         // }
+        //       }
+        //       if (snapshot.connectionState == ConnectionState.waiting) {
+        //         return Container(
+        //           color: Colors.white,
+        //           child: Center(
+        //             child: CircularProgressIndicator(),
+        //           ),
+        //         );
+        //       }
+        //       // if (snapshot.data == true) {
+        //       //   return studentHomePage();
+        //       // }
+        //       return openPage();
+        //     }),
+        initialRoute: "/",
+        routes: {
+          "/": (context) => openPage(),
+          //   // // "/": (context) => registration(),
+        },
       ),
     );
   }

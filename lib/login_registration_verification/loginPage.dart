@@ -328,6 +328,7 @@ class _loginPageState extends State<loginPage> {
                                                       .doc(userID)
                                                       .get();
 
+                                             
                                               UserModel getData =
                                                   new UserModel.fromMap(value);
 
@@ -351,6 +352,7 @@ class _loginPageState extends State<loginPage> {
                                               print(getData.name);
                                               print(getData.id);
                                               print(getData.email);
+
                                               if (getData.identity ==
                                                   'Student') {
                                                 Navigator.push(
