@@ -38,6 +38,7 @@ class _chatHomePageChatState extends State<chatHomePageChat> {
 
   void getReceiverData(receiverid) async {
     // UserModel _getCurrentUserData = new UserModel.fromMap(currentUserValue);
+    // for(int i=0; i<docData.length; i++)
     List<String> dept = List.filled(11, 'null'); // declare a String type List
     dept[0] = 'BBA';
     dept[1] = 'CSE';
@@ -190,20 +191,83 @@ class _chatHomePageChatState extends State<chatHomePageChat> {
                     // getSenderData(senderid);
 
                     if (senderid == _getCurrentUserData.uid) {
+                      // List<String> dept =
+                      //     List.filled(11, 'null'); // declare a String type List
+                      // dept[0] = 'BBA';
+                      // dept[1] = 'CSE';
+                      // dept[2] = 'English';
+                      // dept[3] = 'EEE';
+                      // dept[4] = 'Civil Engineering';
+                      // dept[5] = 'Architecture';
+                      // dept[6] = 'Law';
+                      // dept[7] = 'Islamic Studies';
+                      // dept[8] = 'Public Health';
+                      // dept[9] = 'Tourism & Hospitality Management';
+                      // dept[10] = 'Bangla';
+
+                      // List<String> identity = List.filled(2, 'null');
+                      // identity[0] = 'Student';
+                      // identity[1] = 'Teacher';
+
+                      // for (int i = 0; i < 11; i++) {
+                      //   String _dept = dept[i];
+                      //   for (int i = 0; i < 2; i++) {
+                      //     String _identity = identity[i];
+
+                      //     StreamBuilder(
+                      //         stream: FirebaseFirestore.instance
+                      //             .collection(_dept)
+                      //             .doc(_dept)
+                      //             .collection(_identity)
+                      //             .where('uid', isEqualTo: receiverid)
+                      //             .snapshots(),
+                      //         builder: (BuildContext,
+                      //             AsyncSnapshot<
+                      //                     QuerySnapshot<Map<dynamic, dynamic>>>
+                      //                 snapshot) {
+                      //           if (snapshot.hasData && snapshot.data != null) {
+                      //             if (snapshot.data!.docs.isNotEmpty) {
+                      //               return ListView.builder(
+                      //                   itemCount: snapshot.data!.docs.length,
+                      //                   itemBuilder: (BuildContext, int index) {
+                      //                     Map<dynamic, dynamic> docData =
+                      //                         snapshot.data!.docs[index].data();
+                      //                     print(docData);
+                      //                     // return getSenderId(
+                      //                     //     receiverStatus: docData["status"],
+                      //                     //     receiverName: docData["name"],
+                      //                     //     receiverValue: docData);
+                      //                     return Container();
+                      //                   });
+                      //             } else {
+                      //               return const Center(
+                      //                 child: Text('Document aren\'t availavle'),
+                      //               );
+                      //             }
+                      //           } else {
+                      //             return const Center(
+                      //               child: Text('Getting Error'),
+                      //             );
+                      //           }
+                      //         });
+                      //     // }
+                      //   }
+                      // }
+
                       getReceiverData(receiverid);
                       return getSenderId(
                           receiverStatus: gRstatus,
                           receiverName: gRname,
                           receiverValue: rRdocdata);
                     }
-                    if (receiverid == _getCurrentUserData.uid) {
-                      // pass sender user
-                      getSenderData(senderid);
-                      return getReceiverID(
-                          sendervalue: sSdocData,
-                          senderName: gSRname,
-                          senderStatus: gSRstatus);
-                    }
+                    // if (receiverid == _getCurrentUserData.uid) {
+                    //   // pass sender user
+                    //   getSenderData(senderid);
+                    //   return getReceiverID(
+                    //       sendervalue: sSdocData,
+                    //       senderName: gSRname,
+                    //       senderStatus: gSRstatus);
+                    // }
                     return Container();
                   });
             } else {
