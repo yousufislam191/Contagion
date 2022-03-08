@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lu_ahatting_application/infoGroup/studentChatList.dart';
 import 'package:lu_ahatting_application/infoGroup/teacherChatList.dart';
 import 'package:lu_ahatting_application/models/user.dart';
-import 'package:lu_ahatting_application/widgets/crpage.dart';
+import 'package:lu_ahatting_application/infoGroup/crpage.dart';
 
 class infoPage extends StatefulWidget {
   final String title;
@@ -118,9 +118,14 @@ class _infoPageState extends State<infoPage> {
                       ],
                     ),
                     onPressed: () {
+                      Title = '${widget.title}';
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => crinfo()),
+                        MaterialPageRoute(
+                            builder: (context) => crinfo(
+                                  Title: Title,
+                                  currentUserValue: currentUserValue,
+                                )),
                       );
                     },
                     style: ElevatedButton.styleFrom(
