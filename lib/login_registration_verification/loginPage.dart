@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +18,6 @@ import 'package:lu_ahatting_application/widgets/loginTxtField.dart';
 import 'package:lu_ahatting_application/widgets/txtButton.dart';
 import 'package:regexed_validator/regexed_validator.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:lu_ahatting_application/models/user.dart';
 
 class loginPage extends StatefulWidget {
   @override
@@ -24,7 +25,7 @@ class loginPage extends StatefulWidget {
 }
 
 class _loginPageState extends State<loginPage> {
-  var currentUserValue;
+  var currentUserValue, verifying;
 
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
@@ -41,13 +42,15 @@ class _loginPageState extends State<loginPage> {
   late double height, width;
   bool loading = false;
 
+  bool isEmailVerified = false;
+  Timer? timer;
+
   final _formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-
     return loading
         ? ColorLoader3()
         : MaterialApp(
@@ -280,16 +283,15 @@ class _loginPageState extends State<loginPage> {
                                               email: _email,
                                               password:
                                                   _pass); // login with user email & pass
-
-                                      await storage.write(
-                                          key: "uid", value: newUser.user?.uid);
-
                                       // if login successfull then go to the if condition
                                       if (newUser != null) {
                                         final user = await _auth
                                             .currentUser!; // when user login with their email & pass then will find the current user
                                         final userID =
                                             user.uid; // get current user 'uid'
+                                        await storage.write(
+                                            key: "uid",
+                                            value: newUser.user?.uid);
 
                                         List<String> dept = List.filled(11,
                                             'null'); // declare a String type List
@@ -328,30 +330,12 @@ class _loginPageState extends State<loginPage> {
                                                       .doc(userID)
                                                       .get();
 
-                                             
                                               UserModel getData =
                                                   new UserModel.fromMap(value);
 
-                                              String? name = getData.name;
-                                              String? identity =
-                                                  getData.identity;
-                                              String? UID = getData.uid;
-
-                                              // await storage.write(
-                                              //   key: "name",
-                                              //   value: name,
-                                              // );
-
-                                              // await storage.write(
-                                              //     key: "identity",
-                                              //     value: identity);
-
-                                              // await storage.write(
-                                              //     key: "uid", value: UID);
-
-                                              print(getData.name);
-                                              print(getData.id);
-                                              print(getData.email);
+                                              // print(getData.name);
+                                              // print(getData.id);
+                                              // print(getData.email);
 
                                               if (getData.identity ==
                                                   'Student') {
@@ -399,6 +383,7 @@ class _loginPageState extends State<loginPage> {
                                           }
                                         }
                                       }
+
                                       setState(() {
                                         loading = false;
                                       });

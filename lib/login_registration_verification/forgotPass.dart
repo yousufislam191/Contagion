@@ -3,18 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:adobe_xd/blend_mask.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:lu_ahatting_application/head/headHomePage.dart';
-import 'package:lu_ahatting_application/login_registration_verification/forgotPass.dart';
 import 'package:lu_ahatting_application/loader.dart';
-import 'package:lu_ahatting_application/models/user.dart';
-import 'package:lu_ahatting_application/login_registration_verification/registration.dart';
-import 'package:lu_ahatting_application/student/studentHomePage.dart';
-import 'package:lu_ahatting_application/teacher/teacherHomePage.dart';
 import 'package:lu_ahatting_application/widgets/elevatedButton.dart';
 import 'package:lu_ahatting_application/widgets/loginTxtField.dart';
-import 'package:lu_ahatting_application/widgets/txtButton.dart';
-import 'package:regexed_validator/regexed_validator.dart';
 
 class forgotPass extends StatefulWidget {
   // loginPage({Key? key, this._identityValue}): super(key: key);
