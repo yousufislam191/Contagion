@@ -27,13 +27,6 @@ class MyApp extends StatelessWidget {
 
   // This widget is the root of your application.
   final storage = new FlutterSecureStorage();
-  Future<bool> checkLoginStatus() async {
-    String? value = await storage.read(key: "uid");
-    if (value != null) {
-      return true;
-    }
-    return false;
-  }
 
   String _email = '', _pass = '', _Svalue = '', _name = '';
   var _Tvalue;
@@ -56,107 +49,12 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Lu Chatting Application',
-        home: FutureBuilder(
-            future: checkLoginStatus(),
-            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-              if (snapshot.data == true) {
-                setStatus();
-                // return openPage();
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container(
-                  color: Colors.white,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-              // if (snapshot.data == false) {
-              //   return openPage();
-              // }
-              // if (snapshot.data == true) {
-              //   return studentHomePage();
-              // }
-              return openPage();
-            }),
-        // initialRoute: "/",
-        // routes: {
-        //   // "/": (context) => openPage(),
-        //   // // "/": (context) => registration(),
-
-        // },
+        initialRoute: "/",
+        routes: {
+          "/": (context) => openPage(),
+          // // "/": (context) => registration(),
+        },
       ),
     );
-  }
-
-  Future setStatus() async {
-    // await FirebaseFirestore.instance..collection('users').doc(_auth.currentUser!.uid).update({
-    //   "status": status,
-    // });
-    // await currentUserValue.update({
-    //   "status": status,
-    // });
-    // print("work");
-    final user = FirebaseAuth.instance.currentUser;
-    List<String> dept = List.filled(11, 'null');
-    dept[0] = 'BBA';
-    dept[1] = 'CSE';
-    dept[2] = 'English';
-    dept[3] = 'EEE';
-    dept[4] = 'Civil Engineering';
-    dept[5] = 'Architecture';
-    dept[6] = 'Law';
-    dept[7] = 'Islamic Studies';
-    dept[8] = 'Public Health';
-    dept[9] = 'Tourism & Hospitality Management';
-    dept[10] = 'Bangla';
-
-    List<String> identity = List.filled(2, 'null');
-    identity[0] = 'Student';
-    identity[1] = 'Teacher';
-
-    for (int i = 0; i < 11; i++) {
-      String _dept = dept[i];
-      for (int i = 0; i < 2; i++) {
-        String _identity = identity[i];
-        // print("work");
-
-        try {
-          DocumentSnapshot value = await FirebaseFirestore.instance
-              .collection(_dept)
-              .doc(_dept)
-              .collection(_identity)
-              .doc(user?.uid)
-              .get();
-
-          _Svalue = (value['identity']);
-
-          _name = (value['name']);
-
-          if (_Svalue == 'Student') {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => studentHomePage(name: _name),
-            //   ),
-            // );
-            print("working");
-            return studentHomePage(currentUserValue: value);
-            // print("work");
-          } else if (_Tvalue == 'Head') {
-            return headHomePage(currentUserValue: value);
-          } else if (_Tvalue == 'Lecturer' ||
-              _Tvalue == "Professor" ||
-              _Tvalue == "Assistant Professor" ||
-              _Tvalue == "Associate Professor") {
-            return teacherHomePage(
-              currentUserValue: value,
-            );
-          }
-        } catch (e) {
-          print(e);
-        }
-      }
-    }
   }
 }

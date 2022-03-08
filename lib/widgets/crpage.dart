@@ -2,25 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:lu_ahatting_application/infoGroup/studentChatList.dart';
 import 'package:lu_ahatting_application/infoGroup/teacherChatList.dart';
 import 'package:lu_ahatting_application/models/user.dart';
-import 'package:lu_ahatting_application/widgets/crpage.dart';
 
-class infoPage extends StatefulWidget {
-  final String title;
-  final currentUserValue;
-  const infoPage({
+class crinfo extends StatefulWidget {
+  const crinfo({
     Key? key,
-    required this.title,
-    this.currentUserValue,
   }) : super(key: key);
 
   @override
-  _infoPageState createState() => _infoPageState(currentUserValue);
+  _crinfoState createState() => _crinfoState();
 }
 
-class _infoPageState extends State<infoPage> {
-  final currentUserValue;
-  _infoPageState(this.currentUserValue);
-
+class _crinfoState extends State<crinfo> {
   String Title = '';
 
   @override
@@ -39,7 +31,7 @@ class _infoPageState extends State<infoPage> {
             },
           ),
           title: Text(
-            '${widget.title}',
+            "CR INFO",
             style: TextStyle(
                 fontFamily: 'JosefinSans',
                 fontSize: 24,
@@ -61,47 +53,22 @@ class _infoPageState extends State<infoPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.book,
+                          Icons.person,
                           color: Colors.black,
                         ),
-                        Text("Notice", style: TextStyle(color: Colors.black))
+                        Text("Naima", style: TextStyle(color: Colors.black)),
+                        Text(
+                          "1912020139",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        Text("50(D)", style: TextStyle(color: Colors.black)),
                       ],
                     ),
                     onPressed: null,
                     style: ElevatedButton.styleFrom(
                         // textStyle: TextStyle(color: Colors.black),
                         side: BorderSide(width: 3, color: Color(0xff49c42b)),
-                        fixedSize: const Size(100, 100),
-                        primary: Colors.white,
-                        elevation: 7,
-                        shadowColor: Colors.black),
-                  ),
-                  ElevatedButton(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.people,
-                          color: Colors.black,
-                        ),
-                        Text("Teachers", style: TextStyle(color: Colors.black))
-                      ],
-                    ),
-                    onPressed: () async {
-                      Title = '${widget.title}';
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => chatList(
-                                  Title: Title,
-                                  currentUserValue: currentUserValue,
-                                )),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                        side: BorderSide(width: 3, color: Color(0xff49c42b)),
-                        fixedSize: const Size(100, 100),
+                        fixedSize: const Size(150, 120),
                         primary: Colors.white,
                         elevation: 7,
                         shadowColor: Colors.black),
@@ -114,22 +81,42 @@ class _infoPageState extends State<infoPage> {
                           Icons.person,
                           color: Colors.black,
                         ),
-                        Text("CR", style: TextStyle(color: Colors.black))
+                        Text("Name", style: TextStyle(color: Colors.black)),
+                        Text(
+                          "ID",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        Text("Section", style: TextStyle(color: Colors.black)),
                       ],
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => crinfo()),
-                      );
-                    },
+                    onPressed: null,
                     style: ElevatedButton.styleFrom(
+                        // textStyle: TextStyle(color: Colors.black),
                         side: BorderSide(width: 3, color: Color(0xff49c42b)),
-                        fixedSize: const Size(100, 100),
+                        fixedSize: const Size(150, 120),
                         primary: Colors.white,
                         elevation: 7,
                         shadowColor: Colors.black),
                   ),
+                  // ElevatedButton(
+                  //   child: Column(
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: [
+                  //       Icon(
+                  //         Icons.person,
+                  //         color: Colors.black,
+                  //       ),
+                  //       Text("CR", style: TextStyle(color: Colors.black))
+                  //     ],
+                  //   ),
+                  //   onPressed: null,
+                  //   style: ElevatedButton.styleFrom(
+                  //       side: BorderSide(width: 3, color: Color(0xff49c42b)),
+                  //       fixedSize: const Size(100, 100),
+                  //       primary: Colors.white,
+                  //       elevation: 7,
+                  //       shadowColor: Colors.black),
+                  // ),
                 ],
               ),
               SizedBox(
@@ -147,25 +134,19 @@ class _infoPageState extends State<infoPage> {
                           Icons.person,
                           color: Colors.black,
                         ),
-                        Text("Students", style: TextStyle(color: Colors.black))
+                        Text("Name", style: TextStyle(color: Colors.black)),
+                        Text(
+                          "ID",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        Text("Section", style: TextStyle(color: Colors.black)),
                       ],
                     ),
-                    // onPressed: null,
-                    onPressed: () async {
-                      Title = '${widget.title}';
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => studentChatList(
-                                  Title: Title,
-                                  currentUserValue: currentUserValue,
-                                )),
-                      );
-                    },
+                    onPressed: null,
                     style: ElevatedButton.styleFrom(
+                        // textStyle: TextStyle(color: Colors.black),
                         side: BorderSide(width: 3, color: Color(0xff49c42b)),
-                        fixedSize: const Size(100, 100),
+                        fixedSize: const Size(150, 120),
                         primary: Colors.white,
                         elevation: 7,
                         shadowColor: Colors.black),
@@ -175,43 +156,49 @@ class _infoPageState extends State<infoPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.pause_presentation,
+                          Icons.person,
                           color: Colors.black,
                         ),
-                        Text("Routine", style: TextStyle(color: Colors.black))
+                        Text("Name", style: TextStyle(color: Colors.black)),
+                        Text(
+                          "ID",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        Text("Section", style: TextStyle(color: Colors.black)),
                       ],
                     ),
                     onPressed: null,
                     style: ElevatedButton.styleFrom(
+                        // textStyle: TextStyle(color: Colors.black),
                         side: BorderSide(width: 3, color: Color(0xff49c42b)),
-                        fixedSize: const Size(100, 100),
+                        fixedSize: const Size(150, 120),
                         primary: Colors.white,
                         elevation: 7,
                         shadowColor: Colors.black),
                   ),
-                  ElevatedButton(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.report_problem,
-                          color: Colors.black,
-                        ),
-                        Text("Report Box",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black,
-                            ))
-                      ],
-                    ),
-                    onPressed: null,
-                    style: ElevatedButton.styleFrom(
-                        side: BorderSide(width: 3, color: Color(0xff49c42b)),
-                        fixedSize: const Size(100, 100),
-                        primary: Colors.white,
-                        elevation: 7,
-                        shadowColor: Colors.black),
-                  )
+                  // ElevatedButton(
+                  //   child: Column(
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: [
+                  //       Icon(
+                  //         Icons.report_problem,
+                  //         color: Colors.black,
+                  //       ),
+                  //       Text("Report Box",
+                  //           textAlign: TextAlign.center,
+                  //           style: TextStyle(
+                  //             color: Colors.black,
+                  //           ))
+                  //     ],
+                  //   ),
+                  //   onPressed: null,
+                  //   style: ElevatedButton.styleFrom(
+                  //       side: BorderSide(width: 3, color: Color(0xff49c42b)),
+                  //       fixedSize: const Size(100, 100),
+                  //       primary: Colors.white,
+                  //       elevation: 7,
+                  //       shadowColor: Colors.black),
+                  // )
                 ],
               )
             ],

@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
@@ -33,17 +34,17 @@ class _EditProfileState extends State<EditProfile> {
   var section;
   String line = '';
   String number = '';
-  String _call = '', _txt = '';
+  String _call = '', _txt = '', call = '';
   late User1 user1;
 
   @override
   void initState() {
     super.initState();
-    batch = UserSimplePreferences.getBatch() ?? '';
-    section = UserSimplePreferences.getSection() ?? '';
+    // batch = UserSimplePreferences.getBatch() ?? '';
+    // section = UserSimplePreferences.getSection() ?? '';
     user1 = UserSimplePreferences.getUser1();
-    number = UserSimplePreferences.getUsername() ?? '';
-    line = UserSimplePreferences.getLine() ?? '';
+    _call = UserSimplePreferences.getUsername() ?? '';
+    _txt = UserSimplePreferences.getLine() ?? '';
   }
 
   final nameController = TextEditingController();
@@ -79,8 +80,11 @@ class _EditProfileState extends State<EditProfile> {
     'Section: H',
     'Section: I',
   ];
-
+  Reference storageReference = FirebaseStorage.instance.ref();
   File? image;
+  bool valuefirst = false;
+  // bool valuesecond = false;
+  final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +93,8 @@ class _EditProfileState extends State<EditProfile> {
     // var userData = userProvider.currentUserData;
 
     return Material(
+        child: SingleChildScrollView(
+      scrollDirection: Axis.vertical,
       child: Column(children: [
         AppBar(
           title: Text("Edit Profile"),
@@ -126,135 +132,223 @@ class _EditProfileState extends State<EditProfile> {
             ),
           ),
         ),
-        Form(
-          key: _formkey,
-          child: Column(
-            children: [
-              SizedBox(
-                width: 20,
-                height: 20,
-              ),
-              Padding(
-                padding: EdgeInsets.all(12),
-                child: buildName(),
-              ),
+        SingleChildScrollView(
+          child: Form(
+            key: _formkey,
+            child: Column(
+              children: [
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                ),
+                // Padding(
+                //   padding: EdgeInsets.all(12),
+                //   child: buildName(),
+                // ),
 
-              // editTextField(
-              //   // Call FIELD
-              //   controller: callController,
-              //   autofillHints: [AutofillHints.email],
-              //   keyboardType: TextInputType.number,
-              //   // hintText: "01*********",
-              //   labelText: "call",
-              //   prefixIcon: Icon(
-              //     Icons.call,
-              //     color: Color(0xff49c42b),
-              //   ),
-              //   validator: (value) {},
-              //   onChanged: (value) {
-              //     setState(() {
-              //       _call = value; //STORE INPUT VALUE _email VARIABLE
-              //     });
-              //   },
-              // ),
+                editTextField(
+                  // Call FIELD
+                  initialvalue: _call,
+                  controller: callController,
+                  autofillHints: [AutofillHints.email],
+                  keyboardType: TextInputType.number,
+                  // hintText: "01*********",
+                  labelText: "call",
+                  prefixIcon: Icon(
+                    Icons.call,
+                    color: Color(0xff49c42b),
+                  ),
+                  validator: (value) {},
+                  // onChanged: (no) => setState(() => this.number = no),
+                  onChanged: (value) {
+                    setState(() {
+                      this._call = value; //STORE INPUT VALUE _email VARIABLE
+                    });
+                  },
+                ),
 
-              // SizedBox(
-              //   width: 20,
-              //   height: 20,
-              // ),
-              // editTextField(
-              //   // PASSWORD FIELD
-              //   controller: emailController,
-              //   // hintText: "",
-              //   labelText: "email",
-              //   prefixIcon: Icon(
-              //     Icons.email_rounded,
-              //     color: Color(0xff49c42b),
-              //   ),
-              //   validator: (value) {},
-              //   onChanged: (value) {
-              //     setState(() {
-              //       _call = value; //STORE INPUT VALUE _pass VARIABLE
-              //     });
-              //   },
-              // ),
-              // SizedBox(
-              //   width: 20,
-              //   height: 20,
-              // ),
-              // Editdropdown_button(
-              //   hint_text: 'Batch',
-              //   value: deptselectedType,
-              //   validator: (value) =>
-              //       value == null ? 'Please select your department' : null,
-              //   onChanged: (value) {
-              //     //print('$value'); //when I clicked then it print that value
-              //     setState(() {
-              //       deptselectedType = value;
-              //     });
-              //   },
-              //   itemtyType: _batch,
-              // ),
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                ),
+                // editTextField(
+                //   // PASSWORD FIELD
+                //   controller: emailController,
+                //   // hintText: "",
+                //   labelText: "email",
+                //   prefixIcon: Icon(
+                //     Icons.email_rounded,
+                //     color: Color(0xff49c42b),
+                //   ),
+                //   validator: (value) {},
+                //   onChanged: (value) {
+                //     setState(() {
+                //       _call = value; //STORE INPUT VALUE _pass VARIABLE
+                //     });
+                //   },
+                // ),
+                // SizedBox(
+                //   width: 20,
+                //   height: 20,
+                // ),
+                // Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Editdropdown_button(
+                //         hint_text: 'Batch',
+                //         value: deptselectedType,
+                //         validator: (value) => value == null
+                //             ? 'Please select your department'
+                //             : null,
+                //         onChanged: (value) {
+                //           //print('$value'); //when I clicked then it print that value
+                //           setState(() {
+                //             deptselectedType = value;
+                //           });
+                //         },
+                //         itemtyType: _batch,
+                //       ),
 
-              Padding(
-                padding: EdgeInsets.all(12),
-                child: buildbatch(),
-              ),
+                //       // Padding(
+                //       //   padding: EdgeInsets.all(20),
+                //       //   child: buildbatch(),
+                //       // ),
 
-              // Editdropdown_button(
-              //   hint_text: 'Section',
-              //   value: selectedType,
-              //   validator: (value) =>
-              //       value == null ? 'Please select your identity' : null,
-              //   onChanged: (value) {
-              //     setState(() {
-              //       selectedType = value;
-              //     });
-              //   },
-              //   itemtyType: _section,
-              // ),
-              Padding(
-                padding: EdgeInsets.all(8),
-                child: buildSection(),
-              ),
-              SizedBox(
-                width: 20,
-                height: 10,
-              ),
-              // editTextField(
-              //   maxLine: 4,
-              //   controller: txtController,
-              //   labelText: " Status Line",
-              //   validator: (value) {},
-              //   onChanged: (value) {
-              //     setState(() {
-              //       _txt = value; //STORE INPUT VALUE _pass VARIABLE
-              //     });
-              //   },
-              // ),
-              Padding(
-                padding: EdgeInsets.all(8),
-                child: buildline(),
-              ),
+                //       Editdropdown_button(
+                //         hint_text: 'Section',
+                //         value: selectedType,
+                //         validator: (value) => value == null
+                //             ? 'Please select your identity'
+                //             : null,
+                //         onChanged: (value) {
+                //           setState(() {
+                //             selectedType = value;
+                //           });
+                //         },
+                //         itemtyType: _section,
+                //       ),
+                //     ]),
+                Editdropdown_button(
+                  hint_text: 'Batch',
+                  value: deptselectedType,
+                  validator: (value) =>
+                      value == null ? 'Please select your department' : null,
+                  onChanged: (value) {
+                    //print('$value'); //when I clicked then it print that value
+                    setState(() {
+                      deptselectedType = value;
+                    });
+                  },
+                  itemtyType: _batch,
+                ),
 
-              // SizedBox(
-              //   width: 20,
-              //   height: 20,
-              // ),
+                // Padding(
+                //   padding: EdgeInsets.all(20),
+                //   child: buildbatch(),
+                // ),
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                ),
 
-              Padding(
-                padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
-                child: buildButton(),
-              ),
-              // RaisedButton(
-              //   child: Text('Save'),
-              //   onPressed: () {},
-              // ),
-            ],
+                Editdropdown_button(
+                  hint_text: 'Section',
+                  value: selectedType,
+                  validator: (value) =>
+                      value == null ? 'Please select your identity' : null,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedType = value;
+                    });
+                  },
+                  itemtyType: _section,
+                ),
+                // Padding(
+                //   padding: EdgeInsets.all(8),
+                //   child: buildSection(),
+                // ),
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                ),
+                Row(
+                  children: <Widget>[
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      '  Class Representative?',
+                      style: TextStyle(
+                        color: Colors.grey[800],
+                        fontSize: 18,
+                        fontFamily: 'JosefinSans',
+                        fontStyle: FontStyle.normal,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 115,
+                    ),
+                    Checkbox(
+                      checkColor: Colors.greenAccent,
+                      activeColor: Colors.red,
+                      value: this.valuefirst,
+                      onChanged: (value) {
+                        setState(() {
+                          this.valuefirst = value!;
+                        });
+                      },
+                    ),
+                    // Checkbox(
+                    //   value: this.valuesecond,
+                    //   onChanged: (value) {
+                    //     setState(() {
+                    //       this.valuesecond = value!;
+                    //     });
+                    //   },
+                    // ),
+                  ],
+                ),
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                ),
+                editTextField(
+                  maxLine: 4,
+                  initialvalue: _txt,
+                  keyboardType: TextInputType.text,
+                  controller: txtController,
+                  labelText: " About You",
+                  validator: (value) {},
+                  onChanged: (value) {
+                    setState(() {
+                      this._txt = value; //STORE INPUT VALUE _pass VARIABLE
+                    });
+                  },
+                ),
+                // Padding(
+                //   padding: EdgeInsets.all(8),
+                //   child: buildline(),
+                // ),
+
+                // SizedBox(
+                //   width: 20,
+                //   height: 20,
+                // ),
+
+                Padding(
+                  padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
+                  child: buildButton(),
+                ),
+                // RaisedButton(
+                //   child: Text('Save'),
+                //   onPressed: () {},
+                // ),
+              ],
+            ),
           ),
-        ),
+        )
       ]),
-    );
+    ));
   }
 
   Widget Bottom_Sheet() {
@@ -318,6 +412,19 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
+//   Future<void> addImageToFirebase() async {
+
+//     String fileName = basename(image.path);
+//     Reference firebaseStorageRef =
+//         FirebaseStorage.instance.ref().child('uploads/$fileName');
+//     UploadTask uploadTask = firebaseStorageRef.putFile(image);
+//     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+//     taskSnapshot.ref.getDownloadURL().then(
+//           (value) => print("Done: $value"),
+//         );
+
+// }
+
   // dynamic names = AuthService().getCurrentUserData();
 
   // _fetch() async {
@@ -339,125 +446,165 @@ class _EditProfileState extends State<EditProfile> {
   //     });
   // }
 
-  Widget buildName() => buildTitle(
-        title: 'Mobile No.',
-        child: TextFormField(
-          keyboardType: TextInputType.number,
-          initialValue: number,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Your Mobile No.',
-          ),
-          onChanged: (no) => setState(() => this.number = no),
-        ),
-      );
+  // Widget buildName() => buildTitle(
+  //       title: 'Mobile No.',
+  //       child: TextFormField(
+  //         keyboardType: TextInputType.number,
+  //         initialValue: number,
+  //         decoration: InputDecoration(
+  //           border: OutlineInputBorder(),
+  //           hintText: 'Your Mobile No.',
+  //         ),
+  //         onChanged: (no) => setState(() => this.number = no),
+  //       ),
+  //     );
 
-  Widget buildline() => buildTitle(
-        title: 'About you',
-        child: TextFormField(
-          keyboardType: TextInputType.text,
-          maxLines: 4,
-          initialValue: line,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Max 4 line',
-          ),
-          onChanged: (line) => setState(() => this.line = line),
-        ),
-      );
+  // Widget buildline() => buildTitle(
+  //       title: 'About you',
+  //       child: TextFormField(
+  //         keyboardType: TextInputType.text,
+  //         maxLines: 4,
+  //         initialValue: line,
+  //         decoration: InputDecoration(
+  //           border: OutlineInputBorder(),
+  //           hintText: 'Max 4 line',
+  //         ),
+  //         onChanged: (line) => setState(() => this.line = line),
+  //       ),
+  //     );
 
-  Widget buildbatch() => buildTitle(
-        title: 'Batch',
-        child: DropdownButtonFormField(
-          icon: Icon(
-            Icons.arrow_drop_down,
-            color: Color(0xff49c42b),
-          ),
-          decoration: InputDecoration(
-              border: UnderlineInputBorder(
-                  borderSide: BorderSide(
-            color: Color(0xff49c42b),
-            width: 1.5,
-            style: BorderStyle.solid,
-          ))),
-          // isExpanded: true,
-          items: _batch.map((batch) {
-            return DropdownMenuItem(
-              value: batch,
-              child: Text(
-                batch,
-                style: TextStyle(
-                  color: Colors.grey[800],
-                  fontSize: 18,
-                  fontFamily: 'JosefinSans',
-                  fontStyle: FontStyle.normal,
-                ),
-              ),
-            );
-          }).toList(),
-          onChanged: (ba) => setState(() => this.batch = ba),
-        ),
-      );
+  // Widget buildbatch() => buildTitle(
+  //       title: 'Batch',
+  //       child: DropdownButtonFormField(
+  //         icon: Icon(
+  //           Icons.arrow_drop_down,
+  //           color: Color(0xff49c42b),
+  //         ),
+  //         decoration: InputDecoration(
+  //             border: UnderlineInputBorder(
+  //                 borderSide: BorderSide(
+  //           color: Color(0xff49c42b),
+  //           width: 1.5,
+  //           style: BorderStyle.solid,
+  //         ))),
+  //         // isExpanded: true,
+  //         items: _batch.map((batch) {
+  //           return DropdownMenuItem(
+  //             value: batch,
+  //             child: Text(
+  //               batch,
+  //               style: TextStyle(
+  //                 color: Colors.grey[800],
+  //                 fontSize: 18,
+  //                 fontFamily: 'JosefinSans',
+  //                 fontStyle: FontStyle.normal,
+  //               ),
+  //             ),
+  //           );
+  //         }).toList(),
+  //         onChanged: (ba) => setState(() => this.batch = ba),
+  //       ),
+  //     );
 
-  Widget buildSection() => buildTitle(
-        title: 'Section',
-        child: DropdownButtonFormField(
-          icon: Icon(
-            Icons.arrow_drop_down,
-            color: Color(0xff49c42b),
-          ),
-          decoration: InputDecoration(
-              border: UnderlineInputBorder(
-                  borderSide: BorderSide(
-            color: Color(0xff49c42b),
-            width: 1.5,
-            style: BorderStyle.solid,
-          ))),
-          isExpanded: true,
-          items: _section.map((section) {
-            return DropdownMenuItem(
-              value: section,
-              child: Text(
-                section,
-                style: TextStyle(
-                  color: Colors.grey[800],
-                  fontSize: 18,
-                  fontFamily: 'JosefinSans',
-                  fontStyle: FontStyle.normal,
-                ),
-              ),
-            );
-          }).toList(),
-          onChanged: (se) => setState(() => this.section = se),
-        ),
-      );
+  // Widget buildSection() => buildTitle(
+  //       title: 'Section',
+  //       child: DropdownButtonFormField(
+  //         icon: Icon(
+  //           Icons.arrow_drop_down,
+  //           color: Color(0xff49c42b),
+  //         ),
+  //         decoration: InputDecoration(
+  //             border: UnderlineInputBorder(
+  //                 borderSide: BorderSide(
+  //           color: Color(0xff49c42b),
+  //           width: 1.5,
+  //           style: BorderStyle.solid,
+  //         ))),
+  //         isExpanded: true,
+  //         items: _section.map((section) {
+  //           return DropdownMenuItem(
+  //             value: section,
+  //             child: Text(
+  //               section,
+  //               style: TextStyle(
+  //                 color: Colors.grey[800],
+  //                 fontSize: 18,
+  //                 fontFamily: 'JosefinSans',
+  //                 fontStyle: FontStyle.normal,
+  //               ),
+  //             ),
+  //           );
+  //         }).toList(),
+  //         onChanged: (se) => setState(() => this.section = se),
+  //       ),
+  //     );
 
-  Widget buildTitle({
-    required String title,
-    required Widget child,
-  }) =>
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-          ),
-          // const SizedBox(
-          //   height: 8,
-          // ),
-          child,
-        ],
-      );
+  // Widget buildTitle({
+  //   required String title,
+  //   required Widget child,
+  // }) =>
+  //     Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text(
+  //           title,
+  //         ),
+  //         // const SizedBox(
+  //         //   height: 8,
+  //         // ),
+  //         child,
+  //       ],
+  //     );
 
   Widget buildButton() => ButtonWidget(
       text: 'Save',
       onClicked: () async {
         await UserSimplePreferences.setUser(user1);
-        await UserSimplePreferences.setUsername(number);
-        await UserSimplePreferences.setLine(line);
-        await UserSimplePreferences.setBatch(batch);
-        await UserSimplePreferences.setSection(section);
-        // await UserSimplePreferences.setBirthday(birthday);
-        // await UserSimplePreferences.setPets(pets);
+        await UserSimplePreferences.setUsername(_call);
+        await UserSimplePreferences.setLine(_txt);
+        // await UserSimplePreferences.setBatch(batch);
+        // await UserSimplePreferences.setSection(section);
+        if (_formkey.currentState!.validate()) {
+          List<String> dept = List.filled(11, 'null');
+          dept[0] = 'BBA';
+          dept[1] = 'CSE';
+          dept[2] = 'English';
+          dept[3] = 'EEE';
+          dept[4] = 'Civil Engineering';
+          dept[5] = 'Architecture';
+          dept[6] = 'Law';
+          dept[7] = 'Islamic Studies';
+          dept[8] = 'Public Health';
+          dept[9] = 'Tourism & Hospitality Management';
+          dept[10] = 'Bangla';
+
+          List<String> identity = List.filled(2, 'null');
+          identity[0] = 'Student';
+          identity[1] = 'Teacher';
+
+          for (int i = 0; i < 11; i++) {
+            String _dept = dept[i];
+            for (int i = 0; i < 2; i++) {
+              String _identity = identity[i];
+
+              try {
+                await FirebaseFirestore.instance
+                    .collection(_dept)
+                    .doc(_dept)
+                    .collection(_identity)
+                    .doc(user?.uid)
+                    .update({
+                  "mobile": _call,
+                  "batch": deptselectedType,
+                  "section": selectedType,
+                  "about": _txt,
+                  "cr": valuefirst,
+                });
+              } catch (e) {
+                print(e);
+              }
+            }
+          }
+        }
       });
 }
