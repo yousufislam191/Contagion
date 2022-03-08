@@ -1,18 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:lu_ahatting_application/developers.dart';
 import 'package:lu_ahatting_application/Utils/user_simple_preference.dart';
-import 'package:lu_ahatting_application/head/headHomePage.dart';
-import 'package:lu_ahatting_application/loader.dart';
-import 'package:lu_ahatting_application/login_registration_verification/loginPage.dart';
 import 'package:lu_ahatting_application/openPage.dart';
-import 'package:lu_ahatting_application/login_registration_verification/registration.dart';
+import 'package:lu_ahatting_application/openPage2.dart';
 import 'package:lu_ahatting_application/services/auth.dart';
-import 'package:lu_ahatting_application/student/studentHomePage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:lu_ahatting_application/teacher/teacherHomePage.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -26,20 +18,18 @@ class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
-  final storage = new FlutterSecureStorage();
 
-  String _email = '', _pass = '', _Svalue = '', _name = '';
-  var _Tvalue;
+  final storage = new FlutterSecureStorage();
+  Future<bool> checkLoginStatus() async {
+    String? value = await storage.read(key: "uid");
+    if (value != null) {
+      return true;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       title: 'Lu Chatting Application',
-//       initialRoute: "/",
-//       routes: {
-//         "/": (context) => openPage(),
-//         // "/": (context) => developer(),
-//       },
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthService>(
@@ -49,11 +39,14 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Lu Chatting Application',
-        initialRoute: "/",
-        routes: {
-          "/": (context) => openPage(),
-          // // "/": (context) => registration(),
-        },
+        home: FutureBuilder(
+            future: checkLoginStatus(),
+            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+              if (snapshot.data == false) {
+                return openPage();
+              }
+              return openPage2();
+            }),
       ),
     );
   }

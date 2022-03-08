@@ -1,18 +1,20 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_chat_bubble/bubble_type.dart';
-import 'package:flutter_chat_bubble/chat_bubble.dart';
-import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_6.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lu_ahatting_application/encryption/encrypt_service.dart';
+import 'package:lu_ahatting_application/messages/downloading_file.dart';
 import 'package:lu_ahatting_application/models/user.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
@@ -40,7 +42,18 @@ class _chatPage3State extends State<chatPage3> {
   final targetUserValue;
   final currentUserId = FirebaseAuth.instance.currentUser?.uid;
 
-  var chatDocId, encryptedText, decryptedText, plainText;
+  final Dio dio = Dio();
+  bool loading = false;
+  double progress = 0;
+
+  File? file;
+
+  var chatDocId,
+      chatMsgDocId,
+      encryptedText,
+      decryptedText,
+      plainText,
+      encryptedImgUrl;
   String decryptedPlainText = '';
   final _message = new TextEditingController();
 
@@ -82,52 +95,82 @@ class _chatPage3State extends State<chatPage3> {
         .catchError((error) {});
   }
 
-  // //get image from gallary
-  // File? imageFile;
-  // Future getImage() async {
-  //   ImagePicker _picker = ImagePicker();
+  //get image from gallary
+  File? imageFile;
+  Future getImage() async {
+    ImagePicker _picker = ImagePicker();
 
-  //   await _picker.pickImage(source: ImageSource.gallery).then((xFile) {
-  //     if (xFile != null) {
-  //       imageFile = File(xFile.path);
-  //       uploadImage();
-  //     }
-  //   });
-  // }
+    await _picker.pickImage(source: ImageSource.gallery).then((xFile) {
+      if (xFile != null) {
+        imageFile = File(xFile.path);
+        uploadImage();
+      }
+    });
+  }
 
-  // //upload image in server
-  // Future uploadImage() async {
-  //   String fileName = Uuid().v1();
-  //   int status = 1;
+  //upload image in server
+  Future uploadImage() async {
+    String fileName = Uuid().v1();
+    int status = 1;
 
-  //   var ref =
-  //       FirebaseStorage.instance.ref().child('images').child("$fileName.jpg");
+    // await FirebaseFirestore.instance
 
-  //   var uploadTask = await ref.putFile(imageFile!).catchError((error) async {
-  //     await chats.doc(chatDocId).collection('messages').doc(fileName).delete();
+    var ref =
+        FirebaseStorage.instance.ref().child('images').child("$fileName.jpg");
 
-  //     status = 0;
-  //   });
+    // var uploadTask = await ref.putFile(imageFile!);
+    var uploadTask = await ref.putFile(imageFile!).catchError((error) async {
+      await chats.doc(chatDocId).collection('messages').doc(fileName).delete();
 
-  //   if (status == 1) {
-  //     String imageUrl = await uploadTask.ref.getDownloadURL();
+      status = 0;
+    });
 
-  //     await chats.doc(chatDocId).collection('messages').doc(fileName).update({
-  //       "message": imageUrl,
-  //       'time': FieldValue.serverTimestamp(),
-  //       'uid': currentUserId,
-  //     });
+    if (status == 1) {
+      String imageUrl = await uploadTask.ref.getDownloadURL();
+      // String plainImgUrl = imageUrl;
+      // setState(() {
+      //   encryptedImgUrl = encryptionService.encryptAES(imageUrl);
+      // });
 
-  //     print(imageUrl);
-  //   }
-  // }
+      // await chats
+      //     .doc(chatDocId)
+      //     .collection('messages')
+      //     .get()
+      //     .then((QuerySnapshot querySnapshot) {
+      //   // if (querySnapshot.docs.isNotEmpty) {
+      //   //   setState(() {
+      //   //     chatMsgDocId = querySnapshot.docs.single.id;
+      //   //   });
+      //   //   print(chatMsgDocId);
+      //   // } else {
+      //   chats.doc(chatDocId).collection('messages').add({
+      //     "msg": imageUrl,
+      //     'time': FieldValue.serverTimestamp(),
+      //     'uid': currentUserId,
+      //     'msgid': querySnapshot.docs.single.id,
+      //     "type": "img",
+      //   }).then((value) => {chatMsgDocId = value.toString()});
+      //   // }
+      // }).catchError((error) {});
+
+      await chats.doc(chatDocId).collection('messages').add({
+        "msg": imageUrl,
+        'time': FieldValue.serverTimestamp(),
+        'uid': currentUserId,
+        "type": "img",
+      });
+
+      print(imageUrl);
+    }
+  }
 
   void sendMessage(var msg) {
     if (msg == '') return;
     chats.doc(chatDocId).collection('messages').add({
       'time': FieldValue.serverTimestamp(),
       'uid': currentUserId,
-      'msg': msg
+      'msg': msg,
+      "type": "text",
     }).then((value) {
       _message.clear();
     });
@@ -162,15 +205,7 @@ class _chatPage3State extends State<chatPage3> {
             );
           }
 
-          // if (snapshot.connectionState == ConnectionState.waiting) {
-          //   return Center(
-          //     // child: Text("Loading"),
-          //     child: CircularProgressIndicator(),
-          //   );
-          // }
-
           if (snapshot.hasData) {
-            var data;
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Lu Chatting Application',
@@ -226,7 +261,6 @@ class _chatPage3State extends State<chatPage3> {
                                           style: TextStyle(
                                             fontFamily: 'JosefinSans',
                                             fontSize: 12,
-                                            // fontWeight: FontWeight.bold,
                                             color: Colors.green,
                                           ),
                                         )
@@ -249,8 +283,7 @@ class _chatPage3State extends State<chatPage3> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Align(
-                                alignment:
-                                    Alignment.centerLeft, //+ Alignment(.1, .2),
+                                alignment: Alignment.centerLeft,
                                 widthFactor: .8,
                                 child: IconButton(
                                   icon: new Icon(
@@ -295,116 +328,218 @@ class _chatPage3State extends State<chatPage3> {
                     child: Column(
                       children: [
                         Expanded(
-                          child: ListView(
-                            reverse: true,
-                            children: snapshot.data!.docs.map(
-                              (DocumentSnapshot document) {
-                                data = document.data()!;
-                                decryptedText = encryptionService.decryptAES(
-                                    data['msg']); //Decrypted Text Here
+                          child: ListView.builder(
+                              reverse: true,
+                              itemCount: snapshot.data!.docs.length,
+                              itemBuilder: (BuildContext, int index) {
+                                var data = snapshot.data!.docs[index];
+                                var currentText = data['msg'];
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
-                                  child: ChatBubble(
-                                    clipper: ChatBubbleClipper6(
-                                      nipSize: 1,
-                                      radius: 26,
-                                      type: isSender(data['uid'].toString())
-                                          ? BubbleType.sendBubble
-                                          : BubbleType.receiverBubble,
-                                    ),
+                                  child: Align(
                                     alignment:
                                         getAlignment(data['uid'].toString()),
-                                    margin: EdgeInsets.only(top: 20),
-                                    backGroundColor:
-                                        isSender(data['uid'].toString())
-                                            ? Color(0xFF08C187)
-                                            : Color(0xffE7E7ED),
-                                    child: Container(
-                                      // color: Colors.black26,
-                                      constraints: BoxConstraints(
-                                        maxWidth:
-                                            MediaQuery.of(context).size.width *
-                                                0.7,
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Flexible(
-                                                child: Text(decryptedText,
-                                                    style: TextStyle(
-                                                      color: isSender(
-                                                              data['uid']
-                                                                  .toString())
-                                                          ? Colors.white
-                                                          : Colors.black,
-                                                      fontFamily: 'JosefinSans',
-                                                      fontSize: 16,
+                                    child: isSender(data['uid'].toString())
+                                        ? GestureDetector(
+                                            onLongPress: () =>
+                                                openDialog(currentText),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Container(
+                                                  constraints: BoxConstraints(
+                                                    maxWidth:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.7,
+                                                  ),
+                                                  decoration: data['type'] ==
+                                                          'text'
+                                                      ? BoxDecoration(
+                                                          color:
+                                                              Color(0xFF08C187),
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    26),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    26),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    26),
+                                                          ),
+                                                        )
+                                                      : BoxDecoration(
+                                                          color:
+                                                              Color(0xFF08C187),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                        ),
+                                                  child: Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 12.0,
+                                                          vertical: 14),
+                                                      child: Flexible(
+                                                        child: data['type'] ==
+                                                                'text'
+                                                            ? Text(
+                                                                decryptedText =
+                                                                    encryptionService
+                                                                        .decryptAES(data[
+                                                                            'msg']), //Decrypted Text Here
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontFamily:
+                                                                      'JosefinSans',
+                                                                  fontSize: 16,
+                                                                ),
+                                                                maxLines: 100,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .visible)
+                                                            : data['msg'] != ''
+                                                                ? GestureDetector(
+                                                                    onTap: () =>
+                                                                        expandedImg(
+                                                                            currentText),
+                                                                    child: Image
+                                                                        .network(
+                                                                      data[
+                                                                          'msg'],
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ),
+                                                                  )
+                                                                : CircularProgressIndicator(),
+                                                      )),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 8.0),
+                                                  child: Text(
+                                                    data['time']
+                                                        .toDate()
+                                                        .toString(),
+                                                    style: const TextStyle(
+                                                      color: Colors.black26,
+                                                      fontSize: 10,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
-                                                    // textAlign: TextAlignVertical.center,
-                                                    maxLines: 100,
-                                                    overflow:
-                                                        TextOverflow.visible),
-                                              )
-                                            ],
-                                          ),
-                                          Row(
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        : Column(
                                             mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Flexible(
-                                                // child: Text(
-                                                //   data['time'] == null
-                                                //       ? DateTime.now()
-                                                //           .toString()
-                                                //       : data['time']
-                                                //           .toDate()
-                                                //           .toString(),
-                                                //   style: TextStyle(
-                                                //     fontSize: 14,
-                                                //     color: isSender(data['uid']
-                                                //             .toString())
-                                                //         ? Colors.white
-                                                //         : Colors.black,
-                                                //     fontFamily: 'JosefinSans',
-                                                //     overflow:
-                                                //         TextOverflow.visible,
-                                                //   ),
-                                                // ),
+                                              Container(
+                                                constraints: BoxConstraints(
+                                                  maxWidth:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.7,
+                                                ),
+                                                decoration: data['type'] ==
+                                                        'text'
+                                                    ? BoxDecoration(
+                                                        color:
+                                                            Color(0xffE7E7ED),
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  26),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  26),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  26),
+                                                        ),
+                                                      )
+                                                    : BoxDecoration(
+                                                        color:
+                                                            Color(0xffE7E7ED),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                      ),
+                                                child: Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 12.0,
+                                                        vertical: 14),
+                                                    child: Flexible(
+                                                      child: data['type'] ==
+                                                              'text'
+                                                          ? Text(
+                                                              decryptedText =
+                                                                  encryptionService
+                                                                      .decryptAES(
+                                                                          data[
+                                                                              'msg']), //Decrypted Text Here
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontFamily:
+                                                                    'JosefinSans',
+                                                                fontSize: 16,
+                                                              ),
+                                                              maxLines: 100,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .visible)
+                                                          : data['msg'] != ''
+                                                              ? GestureDetector(
+                                                                  onTap: () =>
+                                                                      expandedImg(
+                                                                          data[
+                                                                              'msg']),
+                                                                  child: Image
+                                                                      .network(
+                                                                    data['msg'],
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  ),
+                                                                )
+                                                              : CircularProgressIndicator(),
+                                                    )),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 8.0),
                                                 child: Text(
-                                                  data['time'] == null
-                                                      ? DateTime.now()
-                                                          .toString()
-                                                      : data['time']
-                                                          .toDate()
-                                                          .toString(),
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: isSender(data['uid']
-                                                            .toString())
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                    fontFamily: 'JosefinSans',
-                                                    overflow:
-                                                        TextOverflow.visible,
+                                                  data['time']
+                                                      .toDate()
+                                                      .toString(),
+                                                  style: const TextStyle(
+                                                    color: Colors.black26,
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
                                               )
                                             ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
+                                          ),
                                   ),
                                 );
-                              },
-                            ).toList(),
-                          ),
+                              }),
                         ),
                         Container(
                           ///bottom bar
@@ -430,6 +565,7 @@ class _chatPage3State extends State<chatPage3> {
                                           Icons.more_sharp,
                                           color: Color(0xff49c42b),
                                         ),
+                                        // onPressed: () => selectFile(),
                                         onPressed: () {},
                                       ),
                                     ),
@@ -452,8 +588,8 @@ class _chatPage3State extends State<chatPage3> {
                                           Icons.image,
                                           color: Color(0xff49c42b),
                                         ),
-                                        // onPressed: () => getImage(),
-                                        onPressed: () {},
+                                        onPressed: () => getImage(),
+                                        // onPressed: () {},
                                       ),
                                     ),
                                     Align(
@@ -476,7 +612,8 @@ class _chatPage3State extends State<chatPage3> {
                                   child: TextField(
                                     keyboardType: TextInputType.multiline,
                                     controller: _message,
-                                    maxLines: null,
+                                    maxLines: 5,
+                                    minLines: 1,
                                     cursorColor: Color(0xff49c42b),
                                     cursorHeight: 25,
                                     style: TextStyle(fontSize: 16),
@@ -540,6 +677,322 @@ class _chatPage3State extends State<chatPage3> {
             return Container();
           }
         });
+  }
+
+  ///for expand image
+  Future expandedImg(img) => showDialog(
+      context: context,
+      builder: (BuildContext context) => Container(
+            child: Scaffold(
+              appBar: AppBar(
+                  elevation: 0,
+                  backgroundColor: Colors.transparent,
+                  leading: IconButton(
+                    icon: new Icon(
+                      Icons.arrow_back_outlined,
+                      color: Color(0xff49c42b),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )),
+              body: loading
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: LinearProgressIndicator(
+                        minHeight: 10,
+                        value: progress,
+                      ),
+                    )
+                  : Column(
+                      children: [
+                        Expanded(
+                            child: Center(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            // height: MediaQuery.of(context).size.height,
+                            // height: 100,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.contain,
+                                image: NetworkImage(img),
+                              ),
+                            ),
+                          ),
+                        )),
+                        Container(
+                          child: GestureDetector(
+                            // onTap: () {
+                            //   DownloadingDialog(url: img);
+                            // },
+                            onTap: () => downloadFile(img),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.download,
+                                  color: Color(0xff49c42b),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  'Save',
+                                  style: TextStyle(
+                                    fontFamily: 'JosefinSans',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                      ],
+                    ),
+            ),
+          ));
+
+  downloadFile(url) async {
+    setState(() {
+      loading = true;
+      progress = 0;
+    });
+    bool downloaded = await saveVideo(url, "video.jpg");
+    if (downloaded) {
+      print("File Downloaded");
+    } else {
+      print("Problem Downloading File");
+    }
+    setState(() {
+      loading = false;
+    });
+  }
+
+  Future<bool> saveVideo(String url, String fileName) async {
+    Directory directory;
+    try {
+      if (Platform.isAndroid) {
+        if (await _requestPermission(Permission.storage) &&
+            await _requestPermission(Permission.accessMediaLocation) &&
+            await _requestPermission(Permission.manageExternalStorage)) {
+          // if (await _requestPermission(Permission.storage)) {
+          directory = (await getExternalStorageDirectory())!;
+          String newPath = "";
+          print(directory);
+          List<String> paths = directory.path.split("/");
+          for (int x = 1; x < paths.length; x++) {
+            String folder = paths[x];
+            if (folder != "Android") {
+              newPath += "/" + folder;
+            } else {
+              break;
+            }
+          }
+          newPath = newPath + "/ChatApp";
+          directory = Directory(newPath);
+        } else {
+          return false;
+        }
+      } else {
+        if (await _requestPermission(Permission.photos)) {
+          directory = await getTemporaryDirectory();
+        } else {
+          return false;
+        }
+      }
+      File saveFile = File(directory.path + "/$fileName");
+      if (!await directory.exists()) {
+        await directory.create(recursive: true);
+        print('android');
+      }
+      if (await directory.exists()) {
+        await dio.download(url, saveFile.path,
+            onReceiveProgress: (value1, value2) {
+          setState(() {
+            progress = value1 / value2;
+          });
+        });
+        if (Platform.isIOS) {
+          await ImageGallerySaver.saveFile(saveFile.path,
+              isReturnPathOfIOS: true);
+        }
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> _requestPermission(Permission permission) async {
+    if (await permission.isGranted) {
+      return true;
+    } else {
+      var result = await permission.request();
+      if (result == PermissionStatus.granted) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // void _requestDownload(String url) async {
+  //   final dir = await getApplicationDocumentsDirectory();
+  //   final file = File('${dir.path}/${url.name}')
+  //   await url.writeToFile(file);
+  // }
+  // Future requestDownload(String url) async {
+  //   // final status = await Permissions.storage.request();
+  //   // if (status.isGranted) {
+  //   //   final baseStorage = await getExternalStorageDirectory();
+  //   // }
+  //   // final name = fileName ?? url.split('/').last;
+  //   // final baseStorage = await getApplicationDocumentsDirectory();
+  //   // final taskId = await FlutterDownloader.enqueue(
+  //   //   url: url,
+  //   //   savedDir: baseStorage.path,
+  //   //   // fileName: ,
+  //   // );
+  //   Map<Permission, PermissionStatus> statuses = await [
+  //     Permission.storage,
+  //     //add more permission to request here.
+  //   ].request();
+
+  //   if (statuses[Permission.storage]!.isGranted) {
+  //     var dir = await DownloadsPathProvider.downloadsDirectory;
+  //     if (dir != null) {
+  //       String savename = "file.jpg";
+  //       String savePath = dir.path + "/$savename";
+  //       print(savePath);
+  //       //output:  /storage/emulated/0/Download/banner.png
+
+  //       try {
+  //         await Dio().download(url, savePath,
+  //             onReceiveProgress: (received, total) {
+  //           if (total != -1) {
+  //             print((received / total * 100).toStringAsFixed(0) + "%");
+  //             Fluttertoast.showToast(msg: 'File download completed');
+  //             //you can build progressbar feature too
+  //           }
+  //         });
+  //         print("File is saved to download folder.");
+  //       } on DioError catch (e) {
+  //         print(e.message);
+  //       }
+  //     }
+  //   } else {
+  //     print("No permission to read and write.");
+  //   }
+  //   // if (taskId != null) {
+  //   //   Fluttertoast.showToast(msg: 'File download completed');
+  //   // }
+  // }
+
+  // ///for download image
+  // Future openFile({required String url, String? fileName}) async {
+  //   final name = fileName ?? url.split('/').last;
+  //   final file = await downloadFile(url, name);
+
+  //   if (file == null) return;
+  //   if (file != null) {
+  //     print('Path: ${file.path}');
+  //     Fluttertoast.showToast(msg: 'File download completed');
+
+  //     OpenFile.open(file.path);
+  //   }
+  // }
+
+  // // Future<File?> downloadFile(String url, String name) async {
+  // Future<File?> downloadFile(String url, String? fileName) async {
+  //   final name = fileName ?? url.split('/').last;
+  //   final appStorage = await getApplicationDocumentsDirectory();
+  //   final file = File('${appStorage.path}/$name');
+
+  //   try {
+  //     final response = await Dio().get(url,
+  //         options: Options(
+  //             responseType: ResponseType.bytes,
+  //             followRedirects: false,
+  //             receiveTimeout: 0));
+
+  //     final raf = file.openSync(mode: FileMode.write);
+  //     raf.writeFromSync(response.data);
+  //     await raf.close();
+
+  //     return file;
+  //   } catch (e) {
+  //     return null;
+  //   }
+  // }
+
+  ///for file sharing
+  // Future selectFile() async {
+  //   FilePickerResult? result =
+  //       await FilePicker.platform.pickFiles(allowMultiple: false);
+
+  //   if (result == null) return;
+  //   final path = result.files.single.path!;
+
+  //   setState(() => file = File(path));
+  // }
+
+  ///for delete message
+  Future openDialog(currentText) => showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+            title: const Text(
+              'Message will remove from both',
+              style: TextStyle(
+                fontFamily: 'JosefinSans',
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () async {
+                  print(currentText);
+                  deleteMessage(currentText);
+                  Navigator.pop(context, false);
+                },
+                child: const Text(
+                  'Yes',
+                  style: TextStyle(
+                    fontFamily: 'JosefinSans',
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text(
+                  'No',
+                  style: TextStyle(
+                    fontFamily: 'JosefinSans',
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ],
+          ));
+  deleteMessage(var msg) {
+    if (msg == '') return;
+    chats
+        .doc(chatDocId)
+        .collection('messages')
+        .where('msg', isEqualTo: msg)
+        .get()
+        .then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.docs) {
+        ds.reference.delete();
+        Fluttertoast.showToast(msg: 'Document has been deleted.');
+      }
+    });
   }
 }
 

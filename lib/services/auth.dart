@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lu_ahatting_application/login_registration_verification/email_verification.dart';
 import 'package:lu_ahatting_application/models/get_user_model.dart';
 import 'package:lu_ahatting_application/services/database.dart';
 
@@ -28,6 +29,9 @@ class AuthService with ChangeNotifier {
           .createUserWithEmailAndPassword(email: _email, password: _conPass)
           .then((value) {
         user_data(name, id, departmentType, identityType, teacherSelectedType);
+        _auth.currentUser!.sendEmailVerification();
+        Fluttertoast.showToast(msg: 'Email verification link has been sent.');
+        email_verification();
       });
     } catch (error) {
       Fluttertoast.showToast(msg: error.toString());

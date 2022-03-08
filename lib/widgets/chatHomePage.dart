@@ -8,7 +8,7 @@ import 'package:lu_ahatting_application/models/user.dart';
 import 'package:lu_ahatting_application/navigation/navigationHeader.dart';
 import 'package:lu_ahatting_application/navigation/navigationItem.dart';
 import 'package:lu_ahatting_application/services/auth.dart';
-import 'package:lu_ahatting_application/widgets/Ppage.dart';
+import 'package:lu_ahatting_application/login_registration_verification/logout.dart';
 import 'package:provider/provider.dart';
 
 class homePage extends StatefulWidget {
@@ -22,7 +22,6 @@ class homePage extends StatefulWidget {
   final List<Widget> tabs;
   final List<Widget> children;
   final DocumentSnapshot currentUserValue;
-  // String title = title;
 
   homePage(
       {Key? key,
@@ -45,9 +44,6 @@ class homePage extends StatefulWidget {
 class _homePageState extends State<homePage> with WidgetsBindingObserver {
   final currentUserValue;
   _homePageState(this.currentUserValue);
-
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final currentUserId = FirebaseAuth.instance.currentUser?.uid;
   String subTitle = '';
 
   @override
@@ -58,47 +54,18 @@ class _homePageState extends State<homePage> with WidgetsBindingObserver {
   }
 
   void setStatus(String status) async {
-    // await FirebaseFirestore.instance..collection('users').doc(_auth.currentUser!.uid).update({
-    //   "status": status,
-    // });
-    // await currentUserValue.update({
-    //   "status": status,
-    // });
-    List<String> dept = List.filled(11, 'null');
-    dept[0] = 'BBA';
-    dept[1] = 'CSE';
-    dept[2] = 'English';
-    dept[3] = 'EEE';
-    dept[4] = 'Civil Engineering';
-    dept[5] = 'Architecture';
-    dept[6] = 'Law';
-    dept[7] = 'Islamic Studies';
-    dept[8] = 'Public Health';
-    dept[9] = 'Tourism & Hospitality Management';
-    dept[10] = 'Bangla';
-
-    List<String> identity = List.filled(2, 'null');
-    identity[0] = 'Student';
-    identity[1] = 'Teacher';
-
-    for (int i = 0; i < 11; i++) {
-      String _dept = dept[i];
-      for (int i = 0; i < 2; i++) {
-        String _identity = identity[i];
-
-        try {
-          await FirebaseFirestore.instance
-              .collection(_dept)
-              .doc(_dept)
-              .collection(_identity)
-              .doc(currentUserId)
-              .update({
-            "status": status,
-          });
-        } catch (e) {
-          print(e);
-        }
-      }
+    UserModel _getCurrentUserData = new UserModel.fromMap(currentUserValue);
+    try {
+      await FirebaseFirestore.instance
+          .collection(_getCurrentUserData.department.toString())
+          .doc(_getCurrentUserData.department.toString())
+          .collection(_getCurrentUserData.identity.toString())
+          .doc(_getCurrentUserData.uid)
+          .update({
+        "status": status,
+      });
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -268,7 +235,8 @@ class _homePageState extends State<homePage> with WidgetsBindingObserver {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Ppage(),
+                          builder: (context) =>
+                              Ppage(currentUserValue: currentUserValue),
                         ));
                   },
                   child: CircleAvatar(
