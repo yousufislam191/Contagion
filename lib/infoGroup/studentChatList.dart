@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lu_ahatting_application/infoGroup/studentSearchScreen.dart';
 import 'package:lu_ahatting_application/messages/chatPage3.dart';
 import 'package:lu_ahatting_application/models/user.dart';
+import 'package:lu_ahatting_application/widgets/user_info.dart';
 
 class studentChatList extends StatelessWidget {
   final String Title;
@@ -97,8 +98,21 @@ class studentChatList extends StatelessWidget {
                                   },
                                   title: Row(
                                     children: [
-                                      CircleAvatar(
-                                        radius: 30,
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Ppage(docData: docData),
+                                              ));
+                                        },
+                                        child: CircleAvatar(
+                                          // backgroundColor: Colors.white,
+                                          // child: ProfileWidget(
+                                          //     imagePath: 'assets/images/images.jpeg'),
+                                          radius: 30,
+                                        ),
                                       ),
                                       SizedBox(
                                         width: 10,

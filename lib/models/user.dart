@@ -12,16 +12,27 @@ class UserModel {
   String? identity;
   var designation;
   var status;
+  String? mobile;
+  String? batch;
+  String? section;
+  String? about;
+  bool? cr;
 
-  UserModel(
-      {this.uid,
-      this.name,
-      this.email,
-      this.id,
-      this.department,
-      this.identity,
-      this.designation,
-      this.status});
+  UserModel({
+    this.uid,
+    this.name,
+    this.email,
+    this.id,
+    this.department,
+    this.identity,
+    this.designation,
+    this.status,
+    this.mobile,
+    this.batch,
+    this.section,
+    this.about,
+    this.cr,
+  });
 
   //sending data to server
   Map<String, dynamic> toMap() {
@@ -34,6 +45,11 @@ class UserModel {
       'identity': identity,
       'designation': designation,
       'status': 'unavailable',
+      'mobile': mobile,
+      'batch': batch,
+      'section': section,
+      'about': about,
+      'cr': cr,
     };
   }
 
@@ -49,6 +65,11 @@ class UserModel {
         identity: map['identity'],
         designation: map['designation'],
         status: map['status'],
+        mobile: map['mobile'],
+        batch: map['batch'],
+        section: map['section'],
+        about: map['about'],
+        cr: map['cr'],
       );
     }
     return UserModel();
@@ -62,7 +83,12 @@ class UserModel {
         id = snapshot['id'],
         department = snapshot['department'],
         identity = snapshot['identity'],
-        designation = snapshot['designation'];
+        designation = snapshot['designation'],
+        mobile = snapshot['mobile'],
+        batch = snapshot['batch'],
+        section = snapshot['section'],
+        about = snapshot['about'],
+        cr = snapshot['cr'];
 
   UserModel.getTargetUserData(value) {}
 }
@@ -74,8 +100,12 @@ class getListData {
   static const String id = "id";
   static const String uid = "uid";
   static const String status = "status";
+  static const String mobile = "mobile";
+  static const String batch = "batch";
+  static const String section = "section";
+  static const String about = "about";
+  static const String cr = "cr";
 }
-
 
 // class getHomePageData {
 //   static const Map users = users{};
@@ -119,10 +149,16 @@ void getCurrentUserData(DocumentSnapshot<Object?> value) {
   String id = value['id'];
   String department = value['department'];
   String uid = value['uid'];
+  String mobile = value['mobile'];
+  String batch = value['batch'];
+  String section = value['section'];
+  String about = value['about'];
+  String cr = value['cr'];
 
   print(name);
   print(identity);
-  currentUserData(name, identity, email, id, department, uid);
+  currentUserData(name, identity, email, id, department, uid, mobile, batch,
+      section, about, cr);
 }
 
 // // }
@@ -144,9 +180,24 @@ class currentUserData {
   final String id;
   final String department;
   final String uid;
+  final String mobile;
+  final String batch;
+  final String section;
+  final String about;
+  final String cr;
 
   currentUserData(
-      this.name, this.identity, this.email, this.id, this.department, this.uid);
+      this.name,
+      this.identity,
+      this.email,
+      this.id,
+      this.department,
+      this.uid,
+      this.about,
+      this.batch,
+      this.cr,
+      this.mobile,
+      this.section);
 
   // print(name);
 

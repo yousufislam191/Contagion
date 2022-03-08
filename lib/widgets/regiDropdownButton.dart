@@ -6,14 +6,14 @@ class dropdown_button extends StatelessWidget {
   final void Function(Object?)? onChanged;
   final List<String> itemtyType;
   final String? Function(String?)? validator;
-  const dropdown_button(
-      {Key? key,
-      required this.hint_text,
-      required this.value,
-      required this.onChanged,
-      required this.itemtyType,
-      required this.validator})
-      : super(key: key);
+  const dropdown_button({
+    Key? key,
+    required this.hint_text,
+    required this.value,
+    required this.onChanged,
+    required this.itemtyType,
+    required this.validator,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

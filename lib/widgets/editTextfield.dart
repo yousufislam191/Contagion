@@ -7,6 +7,7 @@ class editTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   // final String? initialValue;
   final String? Function(String?)? validator;
+  final String? initialvalue;
   final String? hintText;
   final String? labelText;
   final Widget? prefixIcon;
@@ -15,24 +16,24 @@ class editTextField extends StatelessWidget {
   final int? maxLength;
   final int? maxLine;
   final double? width;
-  editTextField(
-      {Key? key,
-      required this.controller,
-      this.keyboardType,
-      required this.validator,
-      this.hintText,
-      this.labelText,
-      this.prefixIcon,
-      this.autofillHints,
-      this.onChanged,
-      this.maxLength,
-      this.maxLine,
-      this.width
+  editTextField({
+    Key? key,
+    required this.controller,
+    this.keyboardType,
+    required this.validator,
+    this.hintText,
+    this.labelText,
+    this.prefixIcon,
+    this.autofillHints,
+    this.onChanged,
+    this.maxLength,
+    this.maxLine,
+    this.width,
+    this.initialvalue,
 
-      // required this.userProvider,
-      // this.initialValue,
-      })
-      : super(key: key);
+    // required this.userProvider,
+    // this.initialValue,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,7 @@ class editTextField extends StatelessWidget {
       margin: EdgeInsets.only(top: 0),
       child: Material(
         child: TextFormField(
-          // initialValue: initialValue,
+          // initialValue: initialvalue,
           // expands: true,
           cursorWidth: 2,
           maxLines: maxLine,
