@@ -17,7 +17,7 @@ class UserModel {
   var section;
   var about;
   bool? cr;
-  String? url;
+  var url;
   var msg;
   String? type;
   Timestamp? time;

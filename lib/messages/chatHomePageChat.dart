@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lu_ahatting_application/messages/chatPage3.dart';
 import 'package:lu_ahatting_application/messages/receiverData.dart';
 import 'package:lu_ahatting_application/messages/senderData.dart';
 import 'package:lu_ahatting_application/models/user.dart';

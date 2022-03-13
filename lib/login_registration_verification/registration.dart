@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:adobe_xd/blend_mask.dart';
@@ -33,7 +32,6 @@ class _registrationState extends State<registration> {
 
   var selectedType, deptselectedType, teacherSelectedType;
   List<String> provience = [];
-  // var _identityType = ['Student', 'Teacher', 'Dept. Head'];
   var _identityType = ['Student', 'Teacher'];
   var _teacherIdentityType = [
     'Professor',
@@ -149,7 +147,6 @@ class _registrationState extends State<registration> {
                       children: [
                         Container(
                           //TEXT
-                          // padding: EdgeInsets.symmetric(horizontal: 20.0),
                           margin: EdgeInsets.only(top: 200, bottom: 25),
                           alignment: Alignment(-0.70, 0),
                           child: Column(

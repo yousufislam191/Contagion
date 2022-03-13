@@ -49,7 +49,6 @@ class chatList extends StatelessWidget {
                     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                         snapshot) {
                   if (snapshot.hasData && snapshot.data != null) {
-                    // print("Total documents: ${snapshot.data!.docs.length}");
                     if (snapshot.data!.docs.isNotEmpty) {
                       return ListView.builder(
                         itemCount: snapshot.data!.docs.length,
@@ -67,6 +66,7 @@ class chatList extends StatelessWidget {
                           String name = docData[getListData.name];
                           String uid = docData[getListData.uid];
                           var designation = docData[getListData.designation];
+                          var url = docData[getListData.url];
                           return currentUserId == uid
                               ? Container(height: 0)
                               : ListTile(
@@ -93,17 +93,10 @@ class chatList extends StatelessWidget {
                                               ));
                                         },
                                         child: CircleAvatar(
-                                          // backgroundColor: Colors.white,
-                                          // child: ProfileWidget(
-                                          //     imagePath: 'assets/images/images.jpeg'),
+                                          backgroundImage: NetworkImage(url),
                                           radius: 30,
                                         ),
                                       ),
-
-                                      // CircleAvatar(
-
-                                      //   radius: 30,
-                                      // ),
                                       SizedBox(
                                         width: 10,
                                       ),

@@ -20,7 +20,6 @@ class crinfo extends StatefulWidget {
 class _crinfoState extends State<crinfo> {
   final String Title;
   final currentUserValue;
-  // String Title = '';
 
   _crinfoState(this.Title, this.currentUserValue);
   final currentUserId = FirebaseAuth.instance.currentUser?.uid;

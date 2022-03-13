@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lu_ahatting_application/models/user.dart';
-import 'package:lu_ahatting_application/navigation/navigationHeader.dart';
 import 'package:lu_ahatting_application/widgets/chatHomePage.dart';
 import 'package:lu_ahatting_application/messages/chatHomePageChat.dart';
 
@@ -40,7 +39,6 @@ class _headHomePageState extends State<headHomePage> {
             Tab(text: 'Anonymous'),
             Tab(text: 'Classroom')
           ],
-          // bodyImage: AssetImage("assets/images/backgroundImg.png"),
           children: [
             chatHomePageChat(currentUserValue: currentUserValue),
             Center(

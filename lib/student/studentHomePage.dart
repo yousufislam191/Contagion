@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lu_ahatting_application/messages/chatHomeScreen.dart';
 import 'package:lu_ahatting_application/messages/chatPage3.dart';
 import 'package:lu_ahatting_application/models/user.dart';
 import 'package:lu_ahatting_application/navigation/navigationHeader.dart';
@@ -36,7 +35,7 @@ class _studentHomePageState extends State<studentHomePage> {
           length: 4,
           backgroundColor: Color(0xff49c42b),
           backgroundImage: NetworkImage(getCurrentUserData.url.toString()),
-          profileText:  name.capitalize(),
+          profileText: name.capitalize(),
           controller: searchEditingController,
           searchbarCursorColor: Color(0xff49c42b),
           searchbarIconColor: Color(0xff49c42b),

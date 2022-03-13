@@ -109,10 +109,7 @@ class studentChatList extends StatelessWidget {
                                               ));
                                         },
                                         child: CircleAvatar(
-                                          // backgroundColor: Colors.white,
-                                          // child: ProfileWidget(
-                                          //     imagePath: 'assets/images/images.jpeg'),
-
+                                          backgroundImage: NetworkImage(url),
                                           radius: 30,
                                         ),
                                       ),
@@ -148,9 +145,6 @@ class studentChatList extends StatelessWidget {
                         },
                       );
                     } else {
-                      // return const Center(
-                      //   child: Text('Document aren\'t availavle'),
-                      // );
                       return Container(
                         padding: EdgeInsets.symmetric(horizontal: 20.0),
                         child: Center(
