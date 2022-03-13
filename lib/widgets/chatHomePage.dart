@@ -91,6 +91,7 @@ class _homePageState extends State<homePage> with WidgetsBindingObserver {
     String id = getData.id.toString();
     String identity = getData.identity.toString();
     var designation = getData.designation.toString();
+    String image = getData.url.toString();
 
     if (identity == 'Student') {
       setState(() {
@@ -111,6 +112,7 @@ class _homePageState extends State<homePage> with WidgetsBindingObserver {
               NavHeader(
                 currentUserName: name.capitalize(),
                 subTitle: subTitle,
+                imgurl: image,
               ),
               Divider(),
               Expanded(

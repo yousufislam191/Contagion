@@ -71,7 +71,8 @@ class _PpageState extends State<Ppage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CircleAvatar(
-                    backgroundImage: AssetImage("assets/images/profileImg.jpg"),
+                    backgroundImage:
+                        NetworkImage(_getCurrentUserData.url.toString()),
                     radius: 60,
                   ),
                   SizedBox(

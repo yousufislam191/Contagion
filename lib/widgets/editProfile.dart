@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:lu_ahatting_application/Utils/user_simple_preference.dart';
+import 'package:lu_ahatting_application/api/api.dart';
 import 'package:lu_ahatting_application/widgets/ProfileWidget.dart';
 // import 'package:lu_ahatting_application/widgets/bottomSheet.dart';
 import 'package:lu_ahatting_application/widgets/editDropdown.dart';
@@ -16,9 +17,11 @@ import 'package:lu_ahatting_application/services/auth.dart';
 import 'package:lu_ahatting_application/widgets/box_deco.dart';
 import 'package:lu_ahatting_application/widgets/button_widget.dart';
 import 'package:lu_ahatting_application/models/user_model.dart';
+import 'package:lu_ahatting_application/widgets/profileTXTfield.dart';
 // import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -36,6 +39,7 @@ class _EditProfileState extends State<EditProfile> {
   String number = '';
   String _call = '', _txt = '', call = '';
   late User1 user1;
+  late var name;
 
   @override
   void initState() {
@@ -85,7 +89,7 @@ class _EditProfileState extends State<EditProfile> {
   bool valuefirst = false;
   // bool valuesecond = false;
   final user = FirebaseAuth.instance.currentUser;
-
+  late String url;
   @override
   Widget build(BuildContext context) {
     // AuthService userProvider = Provider.of<AuthService>(context);
@@ -146,10 +150,10 @@ class _EditProfileState extends State<EditProfile> {
                 //   child: buildName(),
                 // ),
 
-                editTextField(
+                editTextField1(
                   // Call FIELD
                   initialvalue: _call,
-                  controller: callController,
+                  // controller: callController,
                   autofillHints: [AutofillHints.email],
                   keyboardType: TextInputType.number,
                   // hintText: "01*********",
@@ -312,11 +316,11 @@ class _EditProfileState extends State<EditProfile> {
                   width: 20,
                   height: 20,
                 ),
-                editTextField(
+                editTextField1(
                   maxLine: 4,
                   initialvalue: _txt,
                   keyboardType: TextInputType.text,
-                  controller: txtController,
+                  // controller: txtController,
                   labelText: " About You",
                   validator: (value) {},
                   onChanged: (value) {
@@ -392,24 +396,33 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  Future takephoto(ImageSource source) async {
+  takephoto(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(
         source: source,
       );
       if (image == null) return;
       final directory = await getApplicationDocumentsDirectory();
-      final name = basename(image.path);
+      name = basename(image.path);
       final imageFile = File('${directory.path}/$name');
       final newImage = await File(image.path).copy(imageFile.path);
 
       setState(() => user1 = user1.copy(imagePath: newImage.path));
-
+      uploadImageToFirebase(image);
       // final imageTemporary = File(image.path);
       // setState(() => this.image = imageTemporary);
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
+  }
+
+  Future uploadImageToFirebase(XFile image1) async {
+    final ref = FirebaseStorage.instance.ref().child('uploads/$name');
+    image = File(image1!.path);
+    final uploadTask = ref.putFile(image!);
+    final taskSnapshot = await uploadTask.whenComplete(() {});
+    url = await taskSnapshot.ref.getDownloadURL();
+    print(url);
   }
 
 //   Future<void> addImageToFirebase() async {
@@ -599,6 +612,7 @@ class _EditProfileState extends State<EditProfile> {
                   "section": selectedType,
                   "about": _txt,
                   "cr": valuefirst,
+                  "url": url,
                 });
               } catch (e) {
                 print(e);

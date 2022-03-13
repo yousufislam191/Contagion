@@ -17,6 +17,7 @@ class UserModel {
   var section;
   var about;
   bool? cr;
+  String? url;
   var msg;
   String? type;
   Timestamp? time;
@@ -35,6 +36,7 @@ class UserModel {
     this.section,
     this.about,
     this.cr,
+    this.url,
     this.msg,
     this.time,
     this.type,
@@ -56,6 +58,7 @@ class UserModel {
       'section': section,
       'about': about,
       'cr': cr,
+      'url': url,
     };
   }
 
@@ -76,6 +79,7 @@ class UserModel {
         section: map['section'],
         about: map['about'],
         cr: map['cr'],
+        url: map['url'],
       );
     }
     return UserModel();
@@ -125,6 +129,7 @@ class getListData {
   static const String section = "section";
   static const String about = "about";
   static const String cr = "cr";
+  static const String url = "url";
 }
 
 // class getHomePageData {
@@ -174,11 +179,12 @@ void getCurrentUserData(DocumentSnapshot<Object?> value) {
   String section = value['section'];
   String about = value['about'];
   String cr = value['cr'];
+  String url = value['url'];
 
   print(name);
   print(identity);
   currentUserData(name, identity, email, id, department, uid, mobile, batch,
-      section, about, cr);
+      section, about, cr, url);
 }
 
 // // }
@@ -205,6 +211,7 @@ class currentUserData {
   final String section;
   final String about;
   final String cr;
+  final String url;
 
   currentUserData(
       this.name,
@@ -217,7 +224,8 @@ class currentUserData {
       this.batch,
       this.cr,
       this.mobile,
-      this.section);
+      this.section,
+      this.url);
 
   // print(name);
 

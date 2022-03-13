@@ -7,16 +7,20 @@ import 'package:lu_ahatting_application/widgets/user_info.dart';
 class NavHeader extends StatefulWidget {
   final currentUserName;
   final subTitle;
-  NavHeader({Key? key, this.currentUserName, this.subTitle}) : super(key: key);
+  final imgurl;
+  NavHeader({Key? key, this.currentUserName, this.subTitle, this.imgurl})
+      : super(key: key);
 
   @override
-  State<NavHeader> createState() => _NavHeaderState(currentUserName, subTitle);
+  State<NavHeader> createState() =>
+      _NavHeaderState(currentUserName, subTitle, imgurl);
 }
 
 class _NavHeaderState extends State<NavHeader> {
   final currentUserName;
   final subTitle;
-  _NavHeaderState(this.currentUserName, this.subTitle);
+  final imgurl;
+  _NavHeaderState(this.currentUserName, this.subTitle, this.imgurl);
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +35,9 @@ class _NavHeaderState extends State<NavHeader> {
                     children: [
                       CircleAvatar(
                         backgroundColor: Colors.white,
-                        child: ProfileWidget(
-                            imagePath: 'assets/images/images.jpeg'),
+                        // child: ProfileWidget(
+                        //     imagePath: 'assets/images/images.jpeg'),
+                        backgroundImage: NetworkImage(imgurl),
                         radius: 45.0,
                       ),
                       SizedBox(width: 10),

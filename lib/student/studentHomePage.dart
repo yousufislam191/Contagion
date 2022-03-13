@@ -35,8 +35,8 @@ class _studentHomePageState extends State<studentHomePage> {
         child: homePage(
           length: 4,
           backgroundColor: Color(0xff49c42b),
-          backgroundImage: AssetImage("assets/images/profileImg.jpg"),
-          profileText: name.capitalize(),
+          backgroundImage: NetworkImage(getCurrentUserData.url.toString()),
+          profileText:  name.capitalize(),
           controller: searchEditingController,
           searchbarCursorColor: Color(0xff49c42b),
           searchbarIconColor: Color(0xff49c42b),
