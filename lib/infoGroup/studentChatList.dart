@@ -82,6 +82,7 @@ class studentChatList extends StatelessWidget {
                           String name = docData[getListData.name];
                           String uid = docData[getListData.uid];
                           String id = docData[getListData.id];
+                          var url = docData[getListData.url];
                           return currentUserId == uid
                               ? Container(height: 0)
                               : ListTile(
@@ -111,6 +112,7 @@ class studentChatList extends StatelessWidget {
                                           // backgroundColor: Colors.white,
                                           // child: ProfileWidget(
                                           //     imagePath: 'assets/images/images.jpeg'),
+
                                           radius: 30,
                                         ),
                                       ),
