@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lu_ahatting_application/infoGroup/studentChatList.dart';
 import 'package:lu_ahatting_application/infoGroup/teacherChatList.dart';
-import 'package:lu_ahatting_application/models/user.dart';
 import 'package:lu_ahatting_application/infoGroup/crpage.dart';
 
 class infoPage extends StatefulWidget {
@@ -69,7 +68,6 @@ class _infoPageState extends State<infoPage> {
                     ),
                     onPressed: null,
                     style: ElevatedButton.styleFrom(
-                        // textStyle: TextStyle(color: Colors.black),
                         side: BorderSide(width: 3, color: Color(0xff49c42b)),
                         fixedSize: const Size(100, 100),
                         primary: Colors.white,

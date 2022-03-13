@@ -65,8 +65,6 @@ class _loginPageState extends State<loginPage> {
                     FocusManager.instance.primaryFocus?.unfocus();
                   },
                   child: Container(
-                    // height: MediaQuery.of(context).size.height,
-                    // width: MediaQuery.of(context).size.width,
                     child: Stack(
                       children: <Widget>[
                         //DESIGN
@@ -157,7 +155,6 @@ class _loginPageState extends State<loginPage> {
                         ),
                         Form(
                           key: _formkey,
-                          // autovalidateMode: true,
                           child: Column(
                             children: [
                               Container(

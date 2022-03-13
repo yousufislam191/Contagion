@@ -144,11 +144,6 @@ class _studentSearchScreenState extends State<studentSearchScreen> {
               String uid = docData[getListData.uid];
               String id = docData[getListData.id];
 
-              // print(docData);
-              // print('name $name');
-              // print('uid $uid');
-              // print('id $id');
-
               return currentUserId == uid
                   ? Container(height: 0)
                   : ListTile(

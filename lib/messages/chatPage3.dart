@@ -9,13 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:lu_ahatting_application/encryption/encrypt_service.dart';
 import 'package:lu_ahatting_application/models/user.dart';
-import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:uuid/uuid.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
 extension StringExtension on String {
@@ -130,8 +127,6 @@ class _chatPage3State extends State<chatPage3> {
 
   @override
   Widget build(BuildContext context) {
-    // double _height = MediaQuery.of(context).size.height;
-    // final size = MediaQuery.of(context).size;
     var UIfilename;
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: chats
@@ -560,7 +555,6 @@ class _chatPage3State extends State<chatPage3> {
                         ),
                         Container(
                           ///bottom bar
-                          // height: _height * .06,
                           child: Row(
                             children: [
                               Container(
@@ -843,7 +837,6 @@ class _chatPage3State extends State<chatPage3> {
       var url_token = imageUrl.split('?');
       var url = url_token[0].split('/');
       var filePath = url[url.length - 1].replaceAll("%2F", "/");
-
       // print('Split path: $filePath');
 
       await chats.doc(chatDocId).collection('messages').add({
@@ -852,8 +845,6 @@ class _chatPage3State extends State<chatPage3> {
         'uid': currentUserId,
         "type": "img",
       });
-
-      // print(imageUrl);
     }
   }
 
@@ -974,13 +965,10 @@ class _chatPage3State extends State<chatPage3> {
 
     if (status == 1) {
       String documentFileUrl = await uploadTask.ref.getDownloadURL();
-      // print('download path: $documentFileUrl');
 
       var url_token = documentFileUrl.split('?');
       var url = url_token[0].split('/');
       var filePath = url[url.length - 1].replaceAll("%2F", "/");
-
-      // print('Split path: $filePath');
 
       await chats.doc(chatDocId).collection('messages').add({
         "msg": documentFileUrl,
@@ -988,8 +976,6 @@ class _chatPage3State extends State<chatPage3> {
         'uid': currentUserId,
         "type": "doc",
       });
-
-      // print(documentFileUrl);
     }
   }
 
@@ -1011,7 +997,6 @@ class _chatPage3State extends State<chatPage3> {
                   var imageUrl = url_token[0].split('/');
                   var UIfilename =
                       imageUrl[imageUrl.length - 1].replaceAll("%2F", "/");
-                  // print(UIfilename);
                   downloadFile(currentText, UIfilename);
                   Navigator.pop(context, false);
                   Fluttertoast.showToast(msg: 'Wait for the file to download.');

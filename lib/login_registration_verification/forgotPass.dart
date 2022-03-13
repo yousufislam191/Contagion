@@ -18,7 +18,6 @@ class _forgotPassState extends State<forgotPass> {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   final emailEditingController = TextEditingController();
-  // final passEditingController = TextEditingController();
 
   RegExp emailvalidation = RegExp(r"^[a-z0-9_]+@lus.ac.bd$");
 
@@ -29,8 +28,6 @@ class _forgotPassState extends State<forgotPass> {
   bool loading = false;
 
   final _formkey = GlobalKey<FormState>();
-
-  // const loginPage({Key? key, required this._value}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +48,6 @@ class _forgotPassState extends State<forgotPass> {
                     FocusManager.instance.primaryFocus?.unfocus();
                   },
                   child: Container(
-                    // height: MediaQuery.of(context).size.height,
-                    // width: MediaQuery.of(context).size.width,
                     child: Stack(
                       children: <Widget>[
                         //DESIGN
@@ -147,34 +142,6 @@ class _forgotPassState extends State<forgotPass> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              // Container(
-                              //   //TEXT
-                              //   margin: EdgeInsets.only(top: 250, bottom: 20),
-                              //   alignment: Alignment(-0.70, 0),
-                              //   child: Column(
-                              //     crossAxisAlignment: CrossAxisAlignment.start,
-                              //     children: [
-                              //       Text(
-                              //         'Login',
-                              //         style: TextStyle(
-                              //           fontFamily: 'JosefinSans',
-                              //           fontSize: 34,
-                              //           fontWeight: FontWeight.w700,
-                              //           color: Color(0xff49c42b),
-                              //         ),
-                              //       ),
-                              //       Text(
-                              //         'Please login to continue',
-                              //         style: TextStyle(
-                              //           fontFamily: 'JosefinSans',
-                              //           fontSize: 18,
-                              //           fontWeight: FontWeight.normal,
-                              //           color: Color(0xff49c42b),
-                              //         ),
-                              //       ),
-                              //     ],
-                              //   ),
-                              // ),
                               SingleChildScrollView(
                                 scrollDirection: Axis.vertical,
                                 child: Column(
@@ -223,9 +190,7 @@ class _forgotPassState extends State<forgotPass> {
                                         .sendPasswordResetEmail(email: _email)
                                         .then((value) =>
                                             Navigator.of(context).pop());
-                                  }
-                                  //CHECK INPUT FIELD VALIDATION
-                                  ),
+                                  }),
                             ],
                           ),
                         ),

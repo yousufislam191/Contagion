@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:adobe_xd/blend_mask.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lu_ahatting_application/login_registration_verification/loginPage.dart';
@@ -75,8 +74,6 @@ class _email_verificationState extends State<email_verification> {
                   FocusManager.instance.primaryFocus?.unfocus();
                 },
                 child: Container(
-                  // height: MediaQuery.of(context).size.height,
-                  // width: MediaQuery.of(context).size.width,
                   child: Stack(
                     children: <Widget>[
                       //DESIGN
