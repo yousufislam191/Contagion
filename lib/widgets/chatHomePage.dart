@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:lu_ahatting_application/developers.dart';
 import 'package:lu_ahatting_application/infoGroup/infoPage.dart';
+import 'package:lu_ahatting_application/messages/chatPage3.dart';
 import 'package:lu_ahatting_application/models/user.dart';
 import 'package:lu_ahatting_application/navigation/navigationHeader.dart';
 import 'package:lu_ahatting_application/navigation/navigationItem.dart';
@@ -108,7 +109,7 @@ class _homePageState extends State<homePage> with WidgetsBindingObserver {
           child: ListView(
             children: [
               NavHeader(
-                currentUserName: name,
+                currentUserName: name.capitalize(),
                 subTitle: subTitle,
               ),
               Divider(),

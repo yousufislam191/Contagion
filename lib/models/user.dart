@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 class UserModel {
   final currentUserId = FirebaseAuth.instance.currentUser?.uid;
-  String? uid;
+  var uid;
   String? name;
   String? email;
   String? id;
@@ -12,11 +12,14 @@ class UserModel {
   String? identity;
   var designation;
   var status;
-  String? mobile;
-  String? batch;
-  String? section;
-  String? about;
+  var mobile;
+  var batch;
+  var section;
+  var about;
   bool? cr;
+  var msg;
+  String? type;
+  Timestamp? time;
 
   UserModel({
     this.uid,
@@ -32,6 +35,9 @@ class UserModel {
     this.section,
     this.about,
     this.cr,
+    this.msg,
+    this.time,
+    this.type,
   });
 
   //sending data to server
@@ -75,6 +81,20 @@ class UserModel {
     return UserModel();
   }
 
+  //receiving last message data from server
+  factory UserModel.lastmsg(map) {
+    // if (map != null) {
+    if (map == null) return UserModel();
+    return UserModel(
+      // uid: map['uid'],
+      type: map['type'],
+      time: map['time'],
+      msg: map['msg'],
+    );
+    //}
+    //return UserModel();
+  }
+
   // Student Searching data
   UserModel.fromSnapshot(DocumentSnapshot snapshot)
       : uid = snapshot['uid'],
@@ -89,8 +109,6 @@ class UserModel {
         section = snapshot['section'],
         about = snapshot['about'],
         cr = snapshot['cr'];
-
-  UserModel.getTargetUserData(value) {}
 }
 
 class getListData {
@@ -99,6 +117,8 @@ class getListData {
   static const String designation = "designation";
   static const String id = "id";
   static const String uid = "uid";
+  static const String department = "department";
+  static const String identity = "identity";
   static const String status = "status";
   static const String mobile = "mobile";
   static const String batch = "batch";

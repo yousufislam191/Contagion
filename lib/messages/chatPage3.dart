@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lu_ahatting_application/encryption/encrypt_service.dart';
-import 'package:lu_ahatting_application/messages/downloading_file.dart';
 import 'package:lu_ahatting_application/models/user.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -65,6 +65,7 @@ class _chatPage3State extends State<chatPage3> {
     checkUser();
   }
 
+  /// Two user room create in database
   void checkUser() async {
     UserModel _getData = new UserModel.fromMap(currentUserValue);
     String targetChatUid = targetUserValue[getListData.uid];
@@ -86,8 +87,12 @@ class _chatPage3State extends State<chatPage3> {
                 'users': {currentUserId: null, targetChatUid: null},
                 'senderId': currentUserId,
                 'senderName': _getData.name,
+                'senderDept': _getData.department,
+                'senderIdentity': _getData.identity,
                 'receiverId': targetChatUid,
                 'receiverName': targetUserValue[getListData.name],
+                'receiverDept': targetUserValue[getListData.department],
+                'receiverIdentity': targetUserValue[getListData.identity],
               }).then((value) => {chatDocId = value.toString()});
             }
           },
@@ -95,75 +100,11 @@ class _chatPage3State extends State<chatPage3> {
         .catchError((error) {});
   }
 
-  //get image from gallary
-  File? imageFile;
-  Future getImage() async {
-    ImagePicker _picker = ImagePicker();
-
-    await _picker.pickImage(source: ImageSource.gallery).then((xFile) {
-      if (xFile != null) {
-        imageFile = File(xFile.path);
-        uploadImage();
-      }
-    });
-  }
-
-  //upload image in server
-  Future uploadImage() async {
-    String fileName = Uuid().v1();
-    int status = 1;
-
-    // await FirebaseFirestore.instance
-
-    var ref =
-        FirebaseStorage.instance.ref().child('images').child("$fileName.jpg");
-
-    // var uploadTask = await ref.putFile(imageFile!);
-    var uploadTask = await ref.putFile(imageFile!).catchError((error) async {
-      await chats.doc(chatDocId).collection('messages').doc(fileName).delete();
-
-      status = 0;
-    });
-
-    if (status == 1) {
-      String imageUrl = await uploadTask.ref.getDownloadURL();
-      // String plainImgUrl = imageUrl;
-      // setState(() {
-      //   encryptedImgUrl = encryptionService.encryptAES(imageUrl);
-      // });
-
-      // await chats
-      //     .doc(chatDocId)
-      //     .collection('messages')
-      //     .get()
-      //     .then((QuerySnapshot querySnapshot) {
-      //   // if (querySnapshot.docs.isNotEmpty) {
-      //   //   setState(() {
-      //   //     chatMsgDocId = querySnapshot.docs.single.id;
-      //   //   });
-      //   //   print(chatMsgDocId);
-      //   // } else {
-      //   chats.doc(chatDocId).collection('messages').add({
-      //     "msg": imageUrl,
-      //     'time': FieldValue.serverTimestamp(),
-      //     'uid': currentUserId,
-      //     'msgid': querySnapshot.docs.single.id,
-      //     "type": "img",
-      //   }).then((value) => {chatMsgDocId = value.toString()});
-      //   // }
-      // }).catchError((error) {});
-
-      await chats.doc(chatDocId).collection('messages').add({
-        "msg": imageUrl,
-        'time': FieldValue.serverTimestamp(),
-        'uid': currentUserId,
-        "type": "img",
-      });
-
-      print(imageUrl);
-    }
-  }
-
+  /*
+  
+  FOR DELETE MESSAGES
+  
+  */
   void sendMessage(var msg) {
     if (msg == '') return;
     chats.doc(chatDocId).collection('messages').add({
@@ -191,6 +132,7 @@ class _chatPage3State extends State<chatPage3> {
   Widget build(BuildContext context) {
     // double _height = MediaQuery.of(context).size.height;
     // final size = MediaQuery.of(context).size;
+    var UIfilename;
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: chats
             .doc(chatDocId)
@@ -206,6 +148,7 @@ class _chatPage3State extends State<chatPage3> {
           }
 
           if (snapshot.hasData) {
+            String name = targetUserValue[getListData.name];
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Lu Chatting Application',
@@ -241,7 +184,7 @@ class _chatPage3State extends State<chatPage3> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    targetUserValue[getListData.name],
+                                    name.capitalize(),
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontFamily: 'JosefinSans',
@@ -334,6 +277,12 @@ class _chatPage3State extends State<chatPage3> {
                               itemBuilder: (BuildContext, int index) {
                                 var data = snapshot.data!.docs[index];
                                 var currentText = data['msg'];
+
+                                var url_token = currentText.split('?');
+                                var imageUrl = url_token[0].split('/');
+                                UIfilename = imageUrl[imageUrl.length - 1]
+                                    .replaceAll("%2F", "/");
+
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
@@ -375,13 +324,23 @@ class _chatPage3State extends State<chatPage3> {
                                                                     26),
                                                           ),
                                                         )
-                                                      : BoxDecoration(
-                                                          color:
-                                                              Color(0xFF08C187),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                        ),
+                                                      : data['type'] == 'img'
+                                                          ? BoxDecoration(
+                                                              color: Color(
+                                                                  0xFF08C187),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                            )
+                                                          : BoxDecoration(
+                                                              color: Color(
+                                                                  0xFF08C187),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          50),
+                                                            ),
                                                   child: Padding(
                                                       padding: const EdgeInsets
                                                               .symmetric(
@@ -407,7 +366,8 @@ class _chatPage3State extends State<chatPage3> {
                                                                 overflow:
                                                                     TextOverflow
                                                                         .visible)
-                                                            : data['msg'] != ''
+                                                            : data['type'] ==
+                                                                    'img'
                                                                 ? GestureDetector(
                                                                     onTap: () =>
                                                                         expandedImg(
@@ -420,24 +380,48 @@ class _chatPage3State extends State<chatPage3> {
                                                                           .cover,
                                                                     ),
                                                                   )
-                                                                : CircularProgressIndicator(),
+                                                                : GestureDetector(
+                                                                    onDoubleTap: () =>
+                                                                        fileDialog(
+                                                                            currentText),
+                                                                    child:
+                                                                        Container(
+                                                                      child:
+                                                                          Text(
+                                                                        UIfilename,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.white,
+                                                                          fontFamily:
+                                                                              'JosefinSans',
+                                                                          fontSize:
+                                                                              14,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
                                                       )),
                                                 ),
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
                                                           bottom: 8.0),
-                                                  child: Text(
-                                                    data['time']
-                                                        .toDate()
-                                                        .toString(),
-                                                    style: const TextStyle(
-                                                      color: Colors.black26,
-                                                      fontSize: 10,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
+                                                  child: data['time'] == null
+                                                      ? Container()
+                                                      : Text(
+                                                          data['time']
+                                                              .toDate()
+                                                              .toString(),
+                                                          style:
+                                                              const TextStyle(
+                                                            color:
+                                                                Colors.black26,
+                                                            fontSize: 10,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
                                                 )
                                               ],
                                             ),
@@ -473,13 +457,23 @@ class _chatPage3State extends State<chatPage3> {
                                                                   26),
                                                         ),
                                                       )
-                                                    : BoxDecoration(
-                                                        color:
-                                                            Color(0xffE7E7ED),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                      ),
+                                                    : data['type'] == 'img'
+                                                        ? BoxDecoration(
+                                                            color: Color(
+                                                                0xffE7E7ED),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                          )
+                                                        : BoxDecoration(
+                                                            color: Color(
+                                                                0xffE7E7ED),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        50),
+                                                          ),
                                                 child: Padding(
                                                     padding: const EdgeInsets
                                                             .symmetric(
@@ -505,7 +499,8 @@ class _chatPage3State extends State<chatPage3> {
                                                               overflow:
                                                                   TextOverflow
                                                                       .visible)
-                                                          : data['msg'] != ''
+                                                          : data['type'] ==
+                                                                  'img'
                                                               ? GestureDetector(
                                                                   onTap: () =>
                                                                       expandedImg(
@@ -518,22 +513,44 @@ class _chatPage3State extends State<chatPage3> {
                                                                         .cover,
                                                                   ),
                                                                 )
-                                                              : CircularProgressIndicator(),
+                                                              : GestureDetector(
+                                                                  onDoubleTap: () =>
+                                                                      fileDialog(
+                                                                          currentText),
+                                                                  child:
+                                                                      Container(
+                                                                    child: Text(
+                                                                      UIfilename,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontFamily:
+                                                                            'JosefinSans',
+                                                                        fontSize:
+                                                                            14,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
                                                     )),
                                               ),
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     bottom: 8.0),
-                                                child: Text(
-                                                  data['time']
-                                                      .toDate()
-                                                      .toString(),
-                                                  style: const TextStyle(
-                                                    color: Colors.black26,
-                                                    fontSize: 10,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
+                                                child: data['time'] == null
+                                                    ? Container()
+                                                    : Text(
+                                                        data['time']
+                                                            .toDate()
+                                                            .toString(),
+                                                        style: const TextStyle(
+                                                          color: Colors.black26,
+                                                          fontSize: 10,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
                                               )
                                             ],
                                           ),
@@ -565,8 +582,7 @@ class _chatPage3State extends State<chatPage3> {
                                           Icons.more_sharp,
                                           color: Color(0xff49c42b),
                                         ),
-                                        // onPressed: () => selectFile(),
-                                        onPressed: () {},
+                                        onPressed: () => selectFile(),
                                       ),
                                     ),
                                     Align(
@@ -589,7 +605,6 @@ class _chatPage3State extends State<chatPage3> {
                                           color: Color(0xff49c42b),
                                         ),
                                         onPressed: () => getImage(),
-                                        // onPressed: () {},
                                       ),
                                     ),
                                     Align(
@@ -679,93 +694,31 @@ class _chatPage3State extends State<chatPage3> {
         });
   }
 
-  ///for expand image
-  Future expandedImg(img) => showDialog(
-      context: context,
-      builder: (BuildContext context) => Container(
-            child: Scaffold(
-              appBar: AppBar(
-                  elevation: 0,
-                  backgroundColor: Colors.transparent,
-                  leading: IconButton(
-                    icon: new Icon(
-                      Icons.arrow_back_outlined,
-                      color: Color(0xff49c42b),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  )),
-              body: loading
-                  ? Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: LinearProgressIndicator(
-                        minHeight: 10,
-                        value: progress,
-                      ),
-                    )
-                  : Column(
-                      children: [
-                        Expanded(
-                            child: Center(
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            // height: MediaQuery.of(context).size.height,
-                            // height: 100,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                fit: BoxFit.contain,
-                                image: NetworkImage(img),
-                              ),
-                            ),
-                          ),
-                        )),
-                        Container(
-                          child: GestureDetector(
-                            // onTap: () {
-                            //   DownloadingDialog(url: img);
-                            // },
-                            onTap: () => downloadFile(img),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.download,
-                                  color: Color(0xff49c42b),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  'Save',
-                                  style: TextStyle(
-                                    fontFamily: 'JosefinSans',
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                      ],
-                    ),
-            ),
-          ));
+  /*
+  
+  FOR DOWNLOAD ANY FILE
+  
+  */
 
-  downloadFile(url) async {
+  downloadFile(url, String? fileName) async {
+    print(fileName);
     setState(() {
       loading = true;
       progress = 0;
     });
-    bool downloaded = await saveVideo(url, "video.jpg");
+
+    var url_token = url.split('?');
+    var imageUrl = url_token[0].split('/');
+    var filePath = imageUrl[imageUrl.length - 1].replaceAll("%2F", "/");
+    // print('Split path: $filePath');
+
+    bool downloaded = await saveVideo(url, filePath);
     if (downloaded) {
-      print("File Downloaded");
+      Fluttertoast.showToast(msg: 'File download completed');
+      // print("File download completed");
     } else {
-      print("Problem Downloading File");
+      Fluttertoast.showToast(msg: 'Problem Downloading File');
+      // print("Problem Downloading File");
     }
     setState(() {
       loading = false;
@@ -775,14 +728,18 @@ class _chatPage3State extends State<chatPage3> {
   Future<bool> saveVideo(String url, String fileName) async {
     Directory directory;
     try {
+      // You can request multiple permissions at once.
+      Map<Permission, PermissionStatus> statuses = await [
+        Permission.storage,
+      ].request();
+      print(statuses[Permission.storage]);
       if (Platform.isAndroid) {
         if (await _requestPermission(Permission.storage) &&
             await _requestPermission(Permission.accessMediaLocation) &&
             await _requestPermission(Permission.manageExternalStorage)) {
-          // if (await _requestPermission(Permission.storage)) {
           directory = (await getExternalStorageDirectory())!;
           String newPath = "";
-          print(directory);
+          // print(directory);
           List<String> paths = directory.path.split("/");
           for (int x = 1; x < paths.length; x++) {
             String folder = paths[x];
@@ -798,7 +755,7 @@ class _chatPage3State extends State<chatPage3> {
           return false;
         }
       } else {
-        if (await _requestPermission(Permission.photos)) {
+        if (await _requestPermission(Permission.storage)) {
           directory = await getTemporaryDirectory();
         } else {
           return false;
@@ -807,7 +764,7 @@ class _chatPage3State extends State<chatPage3> {
       File saveFile = File(directory.path + "/$fileName");
       if (!await directory.exists()) {
         await directory.create(recursive: true);
-        print('android');
+        // print('android');
       }
       if (await directory.exists()) {
         await dio.download(url, saveFile.path,
@@ -841,106 +798,250 @@ class _chatPage3State extends State<chatPage3> {
     return false;
   }
 
-  // void _requestDownload(String url) async {
-  //   final dir = await getApplicationDocumentsDirectory();
-  //   final file = File('${dir.path}/${url.name}')
-  //   await url.writeToFile(file);
-  // }
-  // Future requestDownload(String url) async {
-  //   // final status = await Permissions.storage.request();
-  //   // if (status.isGranted) {
-  //   //   final baseStorage = await getExternalStorageDirectory();
-  //   // }
-  //   // final name = fileName ?? url.split('/').last;
-  //   // final baseStorage = await getApplicationDocumentsDirectory();
-  //   // final taskId = await FlutterDownloader.enqueue(
-  //   //   url: url,
-  //   //   savedDir: baseStorage.path,
-  //   //   // fileName: ,
-  //   // );
-  //   Map<Permission, PermissionStatus> statuses = await [
-  //     Permission.storage,
-  //     //add more permission to request here.
-  //   ].request();
+  /*
+  
+  FOR IMAGES
+  
+  */
+  //get image from gallary
+  File? imageFile;
+  String imageFileName = '';
+  Future getImage() async {
+    ImagePicker _picker = ImagePicker();
 
-  //   if (statuses[Permission.storage]!.isGranted) {
-  //     var dir = await DownloadsPathProvider.downloadsDirectory;
-  //     if (dir != null) {
-  //       String savename = "file.jpg";
-  //       String savePath = dir.path + "/$savename";
-  //       print(savePath);
-  //       //output:  /storage/emulated/0/Download/banner.png
+    await _picker.pickImage(source: ImageSource.gallery).then((xFile) {
+      if (xFile != null) {
+        imageFile = File(xFile.path);
+        // print('Image file path: $imageFile');
+        imageFileName = imageFile!.path.split('/').last;
+        // print('Image file path with extention: $imageFileName');
+        uploadImage();
+      }
+    });
+  }
 
-  //       try {
-  //         await Dio().download(url, savePath,
-  //             onReceiveProgress: (received, total) {
-  //           if (total != -1) {
-  //             print((received / total * 100).toStringAsFixed(0) + "%");
-  //             Fluttertoast.showToast(msg: 'File download completed');
-  //             //you can build progressbar feature too
-  //           }
-  //         });
-  //         print("File is saved to download folder.");
-  //       } on DioError catch (e) {
-  //         print(e.message);
-  //       }
-  //     }
-  //   } else {
-  //     print("No permission to read and write.");
-  //   }
-  //   // if (taskId != null) {
-  //   //   Fluttertoast.showToast(msg: 'File download completed');
-  //   // }
-  // }
+  //upload image in server
+  Future uploadImage() async {
+    int status = 1;
+    var ref =
+        FirebaseStorage.instance.ref().child('images').child(imageFileName);
 
-  // ///for download image
-  // Future openFile({required String url, String? fileName}) async {
-  //   final name = fileName ?? url.split('/').last;
-  //   final file = await downloadFile(url, name);
+    var uploadTask = await ref.putFile(imageFile!).catchError((error) async {
+      await chats
+          .doc(chatDocId)
+          .collection('messages')
+          .doc(imageFileName)
+          .delete();
 
-  //   if (file == null) return;
-  //   if (file != null) {
-  //     print('Path: ${file.path}');
-  //     Fluttertoast.showToast(msg: 'File download completed');
+      status = 0;
+    });
 
-  //     OpenFile.open(file.path);
-  //   }
-  // }
+    if (status == 1) {
+      String imageUrl = await uploadTask.ref.getDownloadURL();
+      // print('download path: $imageUrl');
 
-  // // Future<File?> downloadFile(String url, String name) async {
-  // Future<File?> downloadFile(String url, String? fileName) async {
-  //   final name = fileName ?? url.split('/').last;
-  //   final appStorage = await getApplicationDocumentsDirectory();
-  //   final file = File('${appStorage.path}/$name');
+      var url_token = imageUrl.split('?');
+      var url = url_token[0].split('/');
+      var filePath = url[url.length - 1].replaceAll("%2F", "/");
 
-  //   try {
-  //     final response = await Dio().get(url,
-  //         options: Options(
-  //             responseType: ResponseType.bytes,
-  //             followRedirects: false,
-  //             receiveTimeout: 0));
+      // print('Split path: $filePath');
 
-  //     final raf = file.openSync(mode: FileMode.write);
-  //     raf.writeFromSync(response.data);
-  //     await raf.close();
+      await chats.doc(chatDocId).collection('messages').add({
+        "msg": imageUrl,
+        'time': FieldValue.serverTimestamp(),
+        'uid': currentUserId,
+        "type": "img",
+      });
 
-  //     return file;
-  //   } catch (e) {
-  //     return null;
-  //   }
-  // }
+      // print(imageUrl);
+    }
+  }
 
+  ///for expand image
+  Future expandedImg(img) => showDialog(
+      context: context,
+      builder: (BuildContext context) => Container(
+            child: Scaffold(
+              appBar: AppBar(
+                  elevation: 0,
+                  backgroundColor: Colors.transparent,
+                  leading: IconButton(
+                    icon: new Icon(
+                      Icons.arrow_back_outlined,
+                      color: Color(0xff49c42b),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )),
+              body: loading
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: LinearProgressIndicator(
+                        minHeight: 10,
+                        value: progress,
+                      ),
+                    )
+                  : Column(
+                      children: [
+                        Expanded(
+                            child: Center(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.contain,
+                                image: NetworkImage(img),
+                              ),
+                            ),
+                          ),
+                        )),
+                        Container(
+                          child: GestureDetector(
+                            onTap: () async {
+                              final filename = img.split('/').last;
+                              // print(filename);
+                              downloadFile(img, filename);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.download,
+                                  color: Color(0xff49c42b),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  'Save',
+                                  style: TextStyle(
+                                    fontFamily: 'JosefinSans',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                      ],
+                    ),
+            ),
+          ));
+
+  /*
+  
+  FOR FILES
+  
+  */
   ///for file sharing
-  // Future selectFile() async {
-  //   FilePickerResult? result =
-  //       await FilePicker.platform.pickFiles(allowMultiple: false);
+  File? documentFile;
+  String? documentFileName;
+  Future selectFile() async {
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(allowMultiple: false);
 
-  //   if (result == null) return;
-  //   final path = result.files.single.path!;
+    if (result == null) return;
+    // List<File> files = result.paths.map((path) => File(path!)).toList(); // for multiple file select
+    final path = result.files.single.path!; //for single file
 
-  //   setState(() => file = File(path));
-  // }
+    setState(() => documentFile = File(path));
+    // print(documentFile);
 
+    documentFileName = documentFile!.path.split('/').last;
+    uploadFile();
+  }
+
+  //upload file in server
+  Future uploadFile() async {
+    int status = 1;
+    var ref =
+        FirebaseStorage.instance.ref().child('files').child(documentFileName!);
+
+    var uploadTask = await ref.putFile(documentFile!).catchError((error) async {
+      await chats
+          .doc(chatDocId)
+          .collection('messages')
+          .doc(documentFileName)
+          .delete();
+
+      status = 0;
+    });
+
+    if (status == 1) {
+      String documentFileUrl = await uploadTask.ref.getDownloadURL();
+      // print('download path: $documentFileUrl');
+
+      var url_token = documentFileUrl.split('?');
+      var url = url_token[0].split('/');
+      var filePath = url[url.length - 1].replaceAll("%2F", "/");
+
+      // print('Split path: $filePath');
+
+      await chats.doc(chatDocId).collection('messages').add({
+        "msg": documentFileUrl,
+        'time': FieldValue.serverTimestamp(),
+        'uid': currentUserId,
+        "type": "doc",
+      });
+
+      // print(documentFileUrl);
+    }
+  }
+
+  Future fileDialog(currentText) => showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+            title: const Text(
+              'Are you sure to download this file?',
+              style: TextStyle(
+                fontFamily: 'JosefinSans',
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  var url_token = currentText.split('?');
+                  var imageUrl = url_token[0].split('/');
+                  var UIfilename =
+                      imageUrl[imageUrl.length - 1].replaceAll("%2F", "/");
+                  // print(UIfilename);
+                  downloadFile(currentText, UIfilename);
+                  Navigator.pop(context, false);
+                  Fluttertoast.showToast(msg: 'Wait for the file to download.');
+                },
+                child: const Text(
+                  'Yes',
+                  style: TextStyle(
+                    fontFamily: 'JosefinSans',
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text(
+                  'No',
+                  style: TextStyle(
+                    fontFamily: 'JosefinSans',
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ],
+          ));
+
+  /*
+  
+  FOR DELETE MESSAGES
+  
+  */
   ///for delete message
   Future openDialog(currentText) => showDialog(
       context: context,
@@ -993,74 +1094,5 @@ class _chatPage3State extends State<chatPage3> {
         Fluttertoast.showToast(msg: 'Document has been deleted.');
       }
     });
-  }
-}
-
-class _DateLable extends StatefulWidget {
-  const _DateLable({
-    Key? key,
-    required this.dateTime,
-  }) : super(key: key);
-
-  final DateTime dateTime;
-
-  @override
-  __DateLableState createState() => __DateLableState();
-}
-
-class __DateLableState extends State<_DateLable> {
-  late String dayInfo;
-
-  @override
-  void initState() {
-    final createdAt = Jiffy(widget.dateTime);
-    final now = DateTime.now();
-
-    if (Jiffy(createdAt).isSame(now, Units.DAY)) {
-      dayInfo = 'TODAY';
-    } else if (Jiffy(createdAt)
-        .isSame(now.subtract(const Duration(days: 1)), Units.DAY)) {
-      dayInfo = 'YESTERDAY';
-    } else if (Jiffy(createdAt).isAfter(
-      now.subtract(const Duration(days: 7)),
-      Units.DAY,
-    )) {
-      dayInfo = createdAt.EEEE;
-    } else if (Jiffy(createdAt).isAfter(
-      Jiffy(now).subtract(years: 1),
-      Units.DAY,
-    )) {
-      dayInfo = createdAt.MMMd;
-    } else {
-      dayInfo = createdAt.MMMd;
-    }
-
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 32.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 12),
-            child: Text(
-              dayInfo,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                color: Colors.black26,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
