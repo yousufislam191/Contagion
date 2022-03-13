@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:lu_ahatting_application/Utils/user_simple_preference.dart';
-import 'package:lu_ahatting_application/api/api.dart';
 import 'package:lu_ahatting_application/widgets/ProfileWidget.dart';
 // import 'package:lu_ahatting_application/widgets/bottomSheet.dart';
 import 'package:lu_ahatting_application/widgets/editDropdown.dart';
