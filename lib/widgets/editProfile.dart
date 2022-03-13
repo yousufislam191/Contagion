@@ -1,26 +1,20 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:lu_ahatting_application/Utils/user_simple_preference.dart';
 import 'package:lu_ahatting_application/widgets/ProfileWidget.dart';
 // import 'package:lu_ahatting_application/widgets/bottomSheet.dart';
 import 'package:lu_ahatting_application/widgets/editDropdown.dart';
-import 'package:lu_ahatting_application/widgets/editTextfield.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lu_ahatting_application/services/auth.dart';
-import 'package:lu_ahatting_application/widgets/box_deco.dart';
 import 'package:lu_ahatting_application/widgets/button_widget.dart';
 import 'package:lu_ahatting_application/models/user_model.dart';
 import 'package:lu_ahatting_application/widgets/profileTXTfield.dart';
 // import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
-import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);

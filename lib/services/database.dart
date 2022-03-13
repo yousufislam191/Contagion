@@ -72,27 +72,4 @@ user_data(String name, String id, var departmentType, var identityType,
       }
     }
   }
-
-  // late GetUserModel currentData;
-
-  // void getUserData() async {
-  //   GetUserModel userModel;
-  //   var value = await firebaseFirestore
-  //       .collection("usersData")
-  //       .doc(usermodel.uid)
-  //       .get();
-  //   if (value.exists) {
-  //     userModel = GetUserModel(
-  //       userEmail: value.get("email"),
-  //       userName: value.get("name"),
-  //       userid: value.get("id"),
-  //     );
-  //     currentData = userModel;
-  //     notifyListeners();
-  //   }
-  // }
-
-  // GetUserModel get currentUserData {
-  //   return currentData;
-  // }
 }

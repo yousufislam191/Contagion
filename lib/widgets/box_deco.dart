@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:lu_ahatting_application/services/auth.dart';
 
 class box_deco extends StatelessWidget {
   // AuthService userProvider;

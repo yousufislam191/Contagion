@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lu_ahatting_application/services/auth.dart';
 
 class editTextField1 extends StatelessWidget {
   // AuthService userProvider;

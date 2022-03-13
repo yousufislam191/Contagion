@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lu_ahatting_application/widgets/chatHomePage.dart';
 
 class NavItem extends StatelessWidget {
   const NavItem(
@@ -13,8 +12,6 @@ class NavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      // leading: Icon(this.icon),
-      // contentPadding: EdgeInsets.symmetric(vertical: 10),
       visualDensity: VisualDensity(horizontal: 0, vertical: -2),
       title: Text(
         this.title,
