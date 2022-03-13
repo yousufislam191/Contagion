@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lu_ahatting_application/models/user.dart';
-import 'package:lu_ahatting_application/widgets/ProfileWidget.dart';
 import 'package:lu_ahatting_application/widgets/editProfile.dart';
-import 'package:lu_ahatting_application/widgets/user_info.dart';
 
 class NavHeader extends StatefulWidget {
   final currentUserName;
@@ -35,8 +32,6 @@ class _NavHeaderState extends State<NavHeader> {
                     children: [
                       CircleAvatar(
                         backgroundColor: Colors.white,
-                        // child: ProfileWidget(
-                        //     imagePath: 'assets/images/images.jpeg'),
                         backgroundImage: NetworkImage(imgurl),
                         radius: 45.0,
                       ),

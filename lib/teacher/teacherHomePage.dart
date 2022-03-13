@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lu_ahatting_application/models/user.dart';
-import 'package:lu_ahatting_application/navigation/navigationHeader.dart';
 import 'package:lu_ahatting_application/widgets/chatHomePage.dart';
 import 'package:lu_ahatting_application/messages/chatHomePageChat.dart';
 
