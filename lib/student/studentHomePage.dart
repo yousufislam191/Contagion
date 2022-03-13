@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lu_ahatting_application/messages/chatHomeScreen.dart';
-import 'package:lu_ahatting_application/messages/messagePage.dart';
+import 'package:lu_ahatting_application/messages/chatPage3.dart';
 import 'package:lu_ahatting_application/models/user.dart';
 import 'package:lu_ahatting_application/navigation/navigationHeader.dart';
 import 'package:lu_ahatting_application/widgets/chatHomePage.dart';
@@ -27,6 +27,7 @@ class _studentHomePageState extends State<studentHomePage> {
   @override
   Widget build(BuildContext context) {
     UserModel getCurrentUserData = new UserModel.fromMap(currentUserValue);
+    String name = getCurrentUserData.name.toString();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Lu Chatting Application',
@@ -35,7 +36,7 @@ class _studentHomePageState extends State<studentHomePage> {
           length: 4,
           backgroundColor: Color(0xff49c42b),
           backgroundImage: NetworkImage(getCurrentUserData.url.toString()),
-          profileText: getCurrentUserData.name.toString(),
+          profileText:  name.capitalize(),
           controller: searchEditingController,
           searchbarCursorColor: Color(0xff49c42b),
           searchbarIconColor: Color(0xff49c42b),

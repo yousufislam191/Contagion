@@ -6,6 +6,7 @@ import 'package:lu_ahatting_application/openPage2.dart';
 import 'package:lu_ahatting_application/services/auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:dcdg/dcdg.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

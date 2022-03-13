@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lu_ahatting_application/login_registration_verification/loginPage.dart';
 import 'package:lu_ahatting_application/messages/chatHomePageChat.dart';
+import 'package:lu_ahatting_application/messages/chatPage3.dart';
 import 'package:lu_ahatting_application/models/user.dart';
 import 'package:lu_ahatting_application/widgets/chatHomePage.dart';
 
@@ -47,6 +48,7 @@ class _PpageState extends State<Ppage> {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     UserModel _getCurrentUserData = new UserModel.fromMap(currentUserValue);
+    String name = _getCurrentUserData.name.toString();
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: SafeArea(
@@ -78,7 +80,7 @@ class _PpageState extends State<Ppage> {
                     height: 20,
                   ),
                   Text(
-                    _getCurrentUserData.name.toString(),
+                    name.capitalize(),
                     style: TextStyle(
                       fontFamily: 'JosefinSans',
                       fontSize: 30,
