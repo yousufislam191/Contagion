@@ -65,6 +65,7 @@ dependencies:
   jiffy: ^5.0.0
   uuid: ^3.0.5
   flutter_secure_storage: ^5.0.2
+  font_awesome_flutter: ^9.2.0
 flutter_native_splash:
   android: true
   ios: true
