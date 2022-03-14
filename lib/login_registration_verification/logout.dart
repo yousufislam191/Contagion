@@ -52,11 +52,11 @@ class _PpageState extends State<Ppage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.transparent,
         leading: IconButton(
           icon: new Icon(
             Icons.arrow_back_outlined,
-            color: Colors.white,
+            color: Color(0xff49c42b),
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -66,68 +66,84 @@ class _PpageState extends State<Ppage> {
       body: Column(
         children: <Widget>[
           Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.greenAccent, Colors.blueAccent])),
+              // decoration: BoxDecoration(
+              //     gradient: LinearGradient(
+              //         begin: Alignment.topCenter,
+              //         end: Alignment.bottomCenter,
+              //         colors: [Colors.greenAccent, Colors.blueAccent])),
               child: Container(
-                width: double.infinity,
-                height: 350.0,
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(_getCurrentUserData.url.toString()),
-                        radius: 50.0,
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Text(
-                        name.capitalize(),
-                        style: TextStyle(
-                          fontSize: 22.0,
-                          color: Colors.white,
+            width: double.infinity,
+            // height: 350.0,
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  _getCurrentUserData.url.toString() == null
+                      ? CircleAvatar(
+                          radius: 80.0,
+                        )
+                      : CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(_getCurrentUserData.url.toString()),
+                          radius: 80.0,
                         ),
-                      ),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      Text(
-                        depertment.capitalize(),
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      Text(
-                        batch.capitalize(),
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      Text(
-                        section,
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
+                  SizedBox(
+                    height: 10.0,
                   ),
-                ),
-              )),
+                  Text(
+                    name.capitalize(),
+                    style: TextStyle(
+                      fontSize: 22.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  Text(
+                    depertment.capitalize(),
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  batch == null
+                      ? Text('The user has not updated his profile.',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                          ))
+                      : Text(
+                          batch.capitalize(),
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.black,
+                          ),
+                        ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  section == null
+                      ? Text('The user has not updated his profile.',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                          ))
+                      : Text(
+                          section,
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.black,
+                          ),
+                        ),
+                ],
+              ),
+            ),
+          )),
           Container(
             child: Padding(
               padding:
@@ -146,16 +162,22 @@ class _PpageState extends State<Ppage> {
                   SizedBox(
                     height: 10.0,
                   ),
-                  Text(
-                    about,
-                    style: TextStyle(
-                      fontSize: 22.0,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w300,
-                      color: Colors.black,
-                      letterSpacing: 2.0,
-                    ),
-                  ),
+                  about == null
+                      ? Text('The user has not updated his profile.',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                          ))
+                      : Text(
+                          about,
+                          style: TextStyle(
+                            fontSize: 22.0,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.black,
+                            letterSpacing: 2.0,
+                          ),
+                        ),
                 ],
               ),
             ),
@@ -176,9 +198,14 @@ class _PpageState extends State<Ppage> {
                 child: Ink(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                        begin: Alignment.centerRight,
-                        end: Alignment.centerLeft,
-                        colors: [Colors.blueAccent, Colors.greenAccent]),
+                      begin: Alignment(0.85, 0.19),
+                      end: Alignment(-1.58, 0.0),
+                      colors: [
+                        const Color(0xff4de927),
+                        const Color(0xff2ca70d)
+                      ],
+                      stops: [0.0, 1.0],
+                    ),
                     borderRadius: BorderRadius.circular(30.0),
                   ),
                   child: Container(
@@ -190,7 +217,7 @@ class _PpageState extends State<Ppage> {
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 26.0,
-                          fontWeight: FontWeight.w300),
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
                 )),

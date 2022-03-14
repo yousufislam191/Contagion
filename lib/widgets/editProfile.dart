@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lu_ahatting_application/Utils/user_simple_preference.dart';
 import 'package:lu_ahatting_application/widgets/ProfileWidget.dart';
-// import 'package:lu_ahatting_application/widgets/bottomSheet.dart';
 import 'package:lu_ahatting_application/widgets/editDropdown.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,7 +12,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lu_ahatting_application/widgets/button_widget.dart';
 import 'package:lu_ahatting_application/models/user_model.dart';
 import 'package:lu_ahatting_application/widgets/profileTXTfield.dart';
-// import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
@@ -86,10 +84,6 @@ class _EditProfileState extends State<EditProfile> {
   late String url;
   @override
   Widget build(BuildContext context) {
-    // AuthService userProvider = Provider.of<AuthService>(context);
-    // userProvider.getUserData();
-    // var userData = userProvider.currentUserData;
-
     return Material(
         child: SingleChildScrollView(
       scrollDirection: Axis.vertical,
@@ -119,13 +113,6 @@ class _EditProfileState extends State<EditProfile> {
                             builder: (BuildContext context) => Bottom_Sheet());
                       },
                     )),
-                // Align(
-                //     alignment: Alignment.topCenter + Alignment(1, .2),
-                //     child: IconButton(
-                //       icon: new Icon(Icons.edit),
-                //       color: Colors.white,
-                //       onPressed: () {},
-                //     ))
               ],
             ),
           ),
@@ -139,10 +126,6 @@ class _EditProfileState extends State<EditProfile> {
                   width: 20,
                   height: 20,
                 ),
-                // Padding(
-                //   padding: EdgeInsets.all(12),
-                //   child: buildName(),
-                // ),
 
                 editTextField1(
                   // Call FIELD
@@ -157,7 +140,6 @@ class _EditProfileState extends State<EditProfile> {
                     color: Color(0xff49c42b),
                   ),
                   validator: (value) {},
-                  // onChanged: (no) => setState(() => this.number = no),
                   onChanged: (value) {
                     setState(() {
                       this._call = value; //STORE INPUT VALUE _email VARIABLE
@@ -169,63 +151,6 @@ class _EditProfileState extends State<EditProfile> {
                   width: 20,
                   height: 20,
                 ),
-                // editTextField(
-                //   // PASSWORD FIELD
-                //   controller: emailController,
-                //   // hintText: "",
-                //   labelText: "email",
-                //   prefixIcon: Icon(
-                //     Icons.email_rounded,
-                //     color: Color(0xff49c42b),
-                //   ),
-                //   validator: (value) {},
-                //   onChanged: (value) {
-                //     setState(() {
-                //       _call = value; //STORE INPUT VALUE _pass VARIABLE
-                //     });
-                //   },
-                // ),
-                // SizedBox(
-                //   width: 20,
-                //   height: 20,
-                // ),
-                // Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       Editdropdown_button(
-                //         hint_text: 'Batch',
-                //         value: deptselectedType,
-                //         validator: (value) => value == null
-                //             ? 'Please select your department'
-                //             : null,
-                //         onChanged: (value) {
-                //           //print('$value'); //when I clicked then it print that value
-                //           setState(() {
-                //             deptselectedType = value;
-                //           });
-                //         },
-                //         itemtyType: _batch,
-                //       ),
-
-                //       // Padding(
-                //       //   padding: EdgeInsets.all(20),
-                //       //   child: buildbatch(),
-                //       // ),
-
-                //       Editdropdown_button(
-                //         hint_text: 'Section',
-                //         value: selectedType,
-                //         validator: (value) => value == null
-                //             ? 'Please select your identity'
-                //             : null,
-                //         onChanged: (value) {
-                //           setState(() {
-                //             selectedType = value;
-                //           });
-                //         },
-                //         itemtyType: _section,
-                //       ),
-                //     ]),
                 Editdropdown_button(
                   hint_text: 'Batch',
                   value: deptselectedType,
@@ -239,11 +164,6 @@ class _EditProfileState extends State<EditProfile> {
                   },
                   itemtyType: _batch,
                 ),
-
-                // Padding(
-                //   padding: EdgeInsets.all(20),
-                //   child: buildbatch(),
-                // ),
                 SizedBox(
                   width: 20,
                   height: 20,
@@ -261,10 +181,6 @@ class _EditProfileState extends State<EditProfile> {
                   },
                   itemtyType: _section,
                 ),
-                // Padding(
-                //   padding: EdgeInsets.all(8),
-                //   child: buildSection(),
-                // ),
                 SizedBox(
                   width: 20,
                   height: 20,
@@ -296,14 +212,6 @@ class _EditProfileState extends State<EditProfile> {
                         });
                       },
                     ),
-                    // Checkbox(
-                    //   value: this.valuesecond,
-                    //   onChanged: (value) {
-                    //     setState(() {
-                    //       this.valuesecond = value!;
-                    //     });
-                    //   },
-                    // ),
                   ],
                 ),
                 SizedBox(
@@ -323,16 +231,6 @@ class _EditProfileState extends State<EditProfile> {
                     });
                   },
                 ),
-                // Padding(
-                //   padding: EdgeInsets.all(8),
-                //   child: buildline(),
-                // ),
-
-                // SizedBox(
-                //   width: 20,
-                //   height: 20,
-                // ),
-
                 Padding(
                   padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
                   child: buildButton(),
@@ -418,150 +316,6 @@ class _EditProfileState extends State<EditProfile> {
     url = await taskSnapshot.ref.getDownloadURL();
     print(url);
   }
-
-//   Future<void> addImageToFirebase() async {
-
-//     String fileName = basename(image.path);
-//     Reference firebaseStorageRef =
-//         FirebaseStorage.instance.ref().child('uploads/$fileName');
-//     UploadTask uploadTask = firebaseStorageRef.putFile(image);
-//     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-//     taskSnapshot.ref.getDownloadURL().then(
-//           (value) => print("Done: $value"),
-//         );
-
-// }
-
-  // dynamic names = AuthService().getCurrentUserData();
-
-  // _fetch() async {
-  //   final FirebaseAuth _auth = FirebaseAuth.instance;
-  //   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  //   User? user = _auth.currentUser;
-  //   final firebaseUser = await user;
-  //   if (firebaseUser != null)
-  //     await firebaseFirestore
-  //         .collection('users')
-  //         .doc(firebaseUser.uid)
-  //         .get()
-  //         .then((ds) {
-  //       _email = ds.get('email');
-  //       _id = ds.get('id');
-  //       _name = ds.get('name');
-  //     }).catchError((e) {
-  //       print(e);
-  //     });
-  // }
-
-  // Widget buildName() => buildTitle(
-  //       title: 'Mobile No.',
-  //       child: TextFormField(
-  //         keyboardType: TextInputType.number,
-  //         initialValue: number,
-  //         decoration: InputDecoration(
-  //           border: OutlineInputBorder(),
-  //           hintText: 'Your Mobile No.',
-  //         ),
-  //         onChanged: (no) => setState(() => this.number = no),
-  //       ),
-  //     );
-
-  // Widget buildline() => buildTitle(
-  //       title: 'About you',
-  //       child: TextFormField(
-  //         keyboardType: TextInputType.text,
-  //         maxLines: 4,
-  //         initialValue: line,
-  //         decoration: InputDecoration(
-  //           border: OutlineInputBorder(),
-  //           hintText: 'Max 4 line',
-  //         ),
-  //         onChanged: (line) => setState(() => this.line = line),
-  //       ),
-  //     );
-
-  // Widget buildbatch() => buildTitle(
-  //       title: 'Batch',
-  //       child: DropdownButtonFormField(
-  //         icon: Icon(
-  //           Icons.arrow_drop_down,
-  //           color: Color(0xff49c42b),
-  //         ),
-  //         decoration: InputDecoration(
-  //             border: UnderlineInputBorder(
-  //                 borderSide: BorderSide(
-  //           color: Color(0xff49c42b),
-  //           width: 1.5,
-  //           style: BorderStyle.solid,
-  //         ))),
-  //         // isExpanded: true,
-  //         items: _batch.map((batch) {
-  //           return DropdownMenuItem(
-  //             value: batch,
-  //             child: Text(
-  //               batch,
-  //               style: TextStyle(
-  //                 color: Colors.grey[800],
-  //                 fontSize: 18,
-  //                 fontFamily: 'JosefinSans',
-  //                 fontStyle: FontStyle.normal,
-  //               ),
-  //             ),
-  //           );
-  //         }).toList(),
-  //         onChanged: (ba) => setState(() => this.batch = ba),
-  //       ),
-  //     );
-
-  // Widget buildSection() => buildTitle(
-  //       title: 'Section',
-  //       child: DropdownButtonFormField(
-  //         icon: Icon(
-  //           Icons.arrow_drop_down,
-  //           color: Color(0xff49c42b),
-  //         ),
-  //         decoration: InputDecoration(
-  //             border: UnderlineInputBorder(
-  //                 borderSide: BorderSide(
-  //           color: Color(0xff49c42b),
-  //           width: 1.5,
-  //           style: BorderStyle.solid,
-  //         ))),
-  //         isExpanded: true,
-  //         items: _section.map((section) {
-  //           return DropdownMenuItem(
-  //             value: section,
-  //             child: Text(
-  //               section,
-  //               style: TextStyle(
-  //                 color: Colors.grey[800],
-  //                 fontSize: 18,
-  //                 fontFamily: 'JosefinSans',
-  //                 fontStyle: FontStyle.normal,
-  //               ),
-  //             ),
-  //           );
-  //         }).toList(),
-  //         onChanged: (se) => setState(() => this.section = se),
-  //       ),
-  //     );
-
-  // Widget buildTitle({
-  //   required String title,
-  //   required Widget child,
-  // }) =>
-  //     Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Text(
-  //           title,
-  //         ),
-  //         // const SizedBox(
-  //         //   height: 8,
-  //         // ),
-  //         child,
-  //       ],
-  //     );
 
   Widget buildButton() => ButtonWidget(
       text: 'Save',

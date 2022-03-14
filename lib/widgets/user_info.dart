@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lu_ahatting_application/messages/chatPage3.dart';
 import 'package:lu_ahatting_application/models/user.dart';
 
 class Ppage extends StatelessWidget {
@@ -10,6 +11,7 @@ class Ppage extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    String name = docData[getListData.name];
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -32,11 +34,15 @@ class Ppage extends StatelessWidget {
                     child: CircleAvatar(
                         radius: 80,
                         backgroundColor: Colors.white,
-                        child: CircleAvatar(
-                          radius: 75,
-                          backgroundImage:
-                              NetworkImage(docData[getListData.url]),
-                        )))
+                        child: docData[getListData.url] == null
+                            ? CircleAvatar(
+                                radius: 75,
+                              )
+                            : CircleAvatar(
+                                radius: 75,
+                                backgroundImage:
+                                    NetworkImage(docData[getListData.url]),
+                              )))
               ]),
           SizedBox(
             height: 45,
@@ -44,7 +50,7 @@ class Ppage extends StatelessWidget {
           ListTile(
             title: Center(
                 child: Text(
-              docData[getListData.name],
+              name.capitalize(),
               style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
             )),
             subtitle: Center(
@@ -59,21 +65,39 @@ class Ppage extends StatelessWidget {
                       fontSize: 18,
                       color: Colors.black,
                     )),
-                Text(docData[getListData.batch],
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                    )),
-                Text(docData[getListData.section],
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                    )),
-                Text(docData[getListData.mobile],
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                    )),
+                docData[getListData.batch] == null
+                    ? Text('The user has not updated his profile.',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                        ))
+                    : Text(docData[getListData.batch],
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                        )),
+                docData[getListData.section] == null
+                    ? Text('The user has not updated his profile.',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                        ))
+                    : Text(docData[getListData.section],
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                        )),
+                docData[getListData.mobile] == null
+                    ? Text('The user has not updated his profile.',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                        ))
+                    : Text(docData[getListData.mobile],
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                        )),
               ]),
             ),
           ),
@@ -86,9 +110,15 @@ class Ppage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       decoration: TextDecoration.underline)),
             ),
-            subtitle: Text(
-              docData[getListData.about],
-            ),
+            subtitle: docData[getListData.about] == null
+                ? Text('.....',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                    ))
+                : Text(
+                    docData[getListData.about],
+                  ),
           ),
           SizedBox(
             height: 20,
