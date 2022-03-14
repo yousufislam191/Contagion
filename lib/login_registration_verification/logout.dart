@@ -45,68 +45,159 @@ class _PpageState extends State<Ppage> {
     width = MediaQuery.of(context).size.width;
     UserModel _getCurrentUserData = new UserModel.fromMap(currentUserValue);
     String name = _getCurrentUserData.name.toString();
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: SafeArea(
-          child: Scaffold(
-            appBar: AppBar(
-                elevation: 0,
-                backgroundColor: Colors.transparent,
-                leading: IconButton(
-                  icon: new Icon(
-                    Icons.arrow_back_outlined,
-                    color: Color(0xff49c42b),
+    String about = _getCurrentUserData.about.toString();
+    String depertment = _getCurrentUserData.department.toString();
+    String batch = _getCurrentUserData.batch.toString();
+    String section = _getCurrentUserData.section.toString();
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.blueAccent,
+        leading: IconButton(
+          icon: new Icon(
+            Icons.arrow_back_outlined,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+      body: Column(
+        children: <Widget>[
+          Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.greenAccent, Colors.blueAccent])),
+              child: Container(
+                width: double.infinity,
+                height: 350.0,
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CircleAvatar(
+                        backgroundImage:
+                            NetworkImage(_getCurrentUserData.url.toString()),
+                        radius: 50.0,
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Text(
+                        name.capitalize(),
+                        style: TextStyle(
+                          fontSize: 22.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      Text(
+                        depertment.capitalize(),
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      Text(
+                        batch.capitalize(),
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      Text(
+                        section,
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                )),
-            body: Center(
+                ),
+              )),
+          Container(
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 30.0, horizontal: 16.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    backgroundImage:
-                        NetworkImage(_getCurrentUserData.url.toString()),
-                    radius: 60,
+                // mainAxisAlignment: MainAxisAlignment.start,
+                // crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "About Me:",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontStyle: FontStyle.normal,
+                        fontSize: 28.0),
                   ),
                   SizedBox(
-                    width: 20,
-                    height: 20,
+                    height: 10.0,
                   ),
                   Text(
-                    name.capitalize(),
+                    about,
                     style: TextStyle(
-                      fontFamily: 'JosefinSans',
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xff49c42b),
+                      fontSize: 22.0,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w300,
+                      color: Colors.black,
+                      letterSpacing: 2.0,
                     ),
                   ),
-                  SizedBox(
-                    width: 20,
-                    height: 20,
-                  ),
-                  ElevatedButton(
-                    child: Text(
-                      "Logout",
-                      style: TextStyle(
-                        fontFamily: 'JosefinSans',
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () {
-                      openDialog();
-                    },
-                    style: ElevatedButton.styleFrom(primary: Colors.green),
-                  )
                 ],
               ),
             ),
           ),
-        ));
+          SizedBox(
+            height: 20.0,
+          ),
+          Container(
+            width: 300.00,
+            child: RaisedButton(
+                onPressed: () {
+                  openDialog();
+                },
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(80.0)),
+                elevation: 0.0,
+                padding: EdgeInsets.all(0.0),
+                child: Ink(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.centerRight,
+                        end: Alignment.centerLeft,
+                        colors: [Colors.blueAccent, Colors.greenAccent]),
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  child: Container(
+                    constraints:
+                        BoxConstraints(maxWidth: 300.0, minHeight: 50.0),
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Logout",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 26.0,
+                          fontWeight: FontWeight.w300),
+                    ),
+                  ),
+                )),
+          ),
+        ],
+      ),
+    );
   }
 
   Future openDialog() => showDialog(
