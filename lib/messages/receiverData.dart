@@ -21,7 +21,8 @@ class _receiverDataState extends State<receiverData> {
 
   _receiverDataState(this.docData, this.currentUserValue);
   Map<String, dynamic>? receiverData;
-  String name = '', status = '', url = '';
+  String name = '', status = '';
+  var url;
 
   @override
   void initState() {
