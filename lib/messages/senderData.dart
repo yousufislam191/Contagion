@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lu_ahatting_application/messages/chatPage3.dart';
 import 'package:lu_ahatting_application/models/user.dart';
+import 'package:lu_ahatting_application/widgets/user_info.dart';
 
 class senderData extends StatefulWidget {
   final docData;
@@ -20,7 +21,7 @@ class _senderDataState extends State<senderData> {
 
   _senderDataState(this.docData, this.currentUserValue);
   Map<String, dynamic>? receiverData;
-  String name = '', status = '';
+  String name = '', status = '', url = '';
 
   @override
   void initState() {
@@ -52,6 +53,7 @@ class _senderDataState extends State<senderData> {
       'section': _getCurrentUserData.section,
       'about': _getCurrentUserData.about,
       'cr': _getCurrentUserData.cr,
+      'url': _getCurrentUserData.url,
     };
   }
 
@@ -88,8 +90,22 @@ class _senderDataState extends State<senderData> {
             alignment: AlignmentDirectional.bottomEnd +
                 AlignmentDirectional(-0.1, -0.3),
             children: [
-              CircleAvatar(
-                radius: 30,
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Ppage(docData: receiverData),
+                      ));
+                },
+                child: url == null
+                    ? CircleAvatar(
+                        radius: 30,
+                      )
+                    : CircleAvatar(
+                        backgroundImage: NetworkImage(url),
+                        radius: 30,
+                      ),
               ),
               status == 'Online'
                   ? Container(

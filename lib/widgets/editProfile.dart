@@ -2,6 +2,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lu_ahatting_application/Utils/user_simple_preference.dart';
 import 'package:lu_ahatting_application/widgets/ProfileWidget.dart';
 // import 'package:lu_ahatting_application/widgets/bottomSheet.dart';
@@ -229,7 +230,7 @@ class _EditProfileState extends State<EditProfile> {
                   hint_text: 'Batch',
                   value: deptselectedType,
                   validator: (value) =>
-                      value == null ? 'Please select your department' : null,
+                      value == null ? 'Please select your batch' : null,
                   onChanged: (value) {
                     //print('$value'); //when I clicked then it print that value
                     setState(() {
@@ -252,7 +253,7 @@ class _EditProfileState extends State<EditProfile> {
                   hint_text: 'Section',
                   value: selectedType,
                   validator: (value) =>
-                      value == null ? 'Please select your identity' : null,
+                      value == null ? 'Please select your section' : null,
                   onChanged: (value) {
                     setState(() {
                       selectedType = value;
@@ -286,8 +287,8 @@ class _EditProfileState extends State<EditProfile> {
                       width: 115,
                     ),
                     Checkbox(
-                      checkColor: Colors.greenAccent,
-                      activeColor: Colors.red,
+                      // checkColor: Colors.greenAccent,
+                      activeColor: Color(0xff49c42b),
                       value: this.valuefirst,
                       onChanged: (value) {
                         setState(() {
@@ -607,6 +608,7 @@ class _EditProfileState extends State<EditProfile> {
                   "cr": valuefirst,
                   "url": url,
                 });
+                Fluttertoast.showToast(msg: 'Your profile has been saved.');
               } catch (e) {
                 print(e);
               }

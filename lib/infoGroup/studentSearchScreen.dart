@@ -143,6 +143,7 @@ class _studentSearchScreenState extends State<studentSearchScreen> {
               String name = docData[getListData.name];
               String uid = docData[getListData.uid];
               String id = docData[getListData.id];
+              var url = docData[getListData.url];
 
               return currentUserId == uid
                   ? Container(height: 0)
@@ -160,6 +161,7 @@ class _studentSearchScreenState extends State<studentSearchScreen> {
                       title: Row(
                         children: [
                           CircleAvatar(
+                            backgroundImage: NetworkImage(url),
                             radius: 30,
                           ),
                           SizedBox(

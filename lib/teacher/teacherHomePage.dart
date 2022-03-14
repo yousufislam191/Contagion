@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lu_ahatting_application/messages/chatPage3.dart';
 import 'package:lu_ahatting_application/models/user.dart';
 import 'package:lu_ahatting_application/widgets/chatHomePage.dart';
 import 'package:lu_ahatting_application/messages/chatHomePageChat.dart';
@@ -21,6 +22,7 @@ class _teacherHomePageState extends State<teacherHomePage> {
   @override
   Widget build(BuildContext context) {
     UserModel getData = new UserModel.fromMap(currentUserValue);
+    String name = getData.name.toString();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Lu Chatting Application',
@@ -28,8 +30,8 @@ class _teacherHomePageState extends State<teacherHomePage> {
           child: homePage(
         length: 3,
         backgroundColor: Color(0xFF186FB6),
-        backgroundImage: AssetImage("assets/images/profileImg.jpg"),
-        profileText: getData.name.toString(),
+        backgroundImage: NetworkImage(getData.url.toString()),
+        profileText: name.capitalize(),
         controller: searchEditingController,
         searchbarCursorColor: Color(0xFF186FB6),
         searchbarIconColor: Color(0xFF186FB6),

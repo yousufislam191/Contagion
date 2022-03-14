@@ -11,6 +11,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lu_ahatting_application/encryption/encrypt_service.dart';
 import 'package:lu_ahatting_application/models/user.dart';
+import 'package:lu_ahatting_application/widgets/user_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -144,6 +145,7 @@ class _chatPage3State extends State<chatPage3> {
 
           if (snapshot.hasData) {
             String name = targetUserValue[getListData.name];
+            var url = targetUserValue[getListData.url];
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Lu Chatting Application',
@@ -171,8 +173,23 @@ class _chatPage3State extends State<chatPage3> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              CircleAvatar(
-                                radius: 25,
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            Ppage(docData: targetUserValue),
+                                      ));
+                                },
+                                child: url == null
+                                    ? CircleAvatar(
+                                        radius: 25,
+                                      )
+                                    : CircleAvatar(
+                                        backgroundImage: NetworkImage(url),
+                                        radius: 25,
+                                      ),
                               ),
                               SizedBox(width: 10),
                               Column(
@@ -743,7 +760,7 @@ class _chatPage3State extends State<chatPage3> {
               break;
             }
           }
-          newPath = newPath + "/ChatApp";
+          newPath = newPath + "/Contagion";
           directory = Directory(newPath);
         } else {
           return false;

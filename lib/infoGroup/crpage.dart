@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lu_ahatting_application/messages/chatPage3.dart';
 import 'package:lu_ahatting_application/models/user.dart';
+import 'package:lu_ahatting_application/widgets/user_info.dart';
 
 class crinfo extends StatefulWidget {
   final String Title;
@@ -79,6 +80,7 @@ class _crinfoState extends State<crinfo> {
                         var phone = docData[getListData.mobile];
                         var batch = docData[getListData.batch];
                         var section = docData[getListData.section];
+                        var url = docData[getListData.url];
 
                         return currentUserId == uid
                             ? Container(height: 0)
@@ -125,29 +127,66 @@ class _crinfoState extends State<crinfo> {
                                             height: 10,
                                           ),
                                           status == 'Online'
-                                              ? Stack(
-                                                  alignment:
-                                                      AlignmentDirectional
-                                                              .bottomEnd +
-                                                          AlignmentDirectional(
-                                                              -0.1, -0.3),
-                                                  children: [
-                                                      CircleAvatar(
-                                                        radius: 40,
-                                                      ),
-                                                      Container(
-                                                        width: 16,
-                                                        height: 16,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                                color: Colors
-                                                                    .green,
-                                                                shape: BoxShape
-                                                                    .circle),
-                                                      ),
-                                                    ])
-                                              : CircleAvatar(
-                                                  radius: 40,
+                                              ? InkWell(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              Ppage(
+                                                                  docData:
+                                                                      docData),
+                                                        ));
+                                                  },
+                                                  child: Stack(
+                                                      alignment:
+                                                          AlignmentDirectional
+                                                                  .bottomEnd +
+                                                              AlignmentDirectional(
+                                                                  -0.1, -0.3),
+                                                      children: [
+                                                        url == null
+                                                            ? CircleAvatar(
+                                                                radius: 40,
+                                                              )
+                                                            : CircleAvatar(
+                                                                backgroundImage:
+                                                                    NetworkImage(
+                                                                        url),
+                                                                radius: 40,
+                                                              ),
+                                                        Container(
+                                                          width: 16,
+                                                          height: 16,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                                  color: Colors
+                                                                      .green,
+                                                                  shape: BoxShape
+                                                                      .circle),
+                                                        ),
+                                                      ]),
+                                                )
+                                              : InkWell(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              Ppage(
+                                                                  docData:
+                                                                      docData),
+                                                        ));
+                                                  },
+                                                  child: url == null
+                                                      ? CircleAvatar(
+                                                          radius: 40,
+                                                        )
+                                                      : CircleAvatar(
+                                                          backgroundImage:
+                                                              NetworkImage(url),
+                                                          radius: 40,
+                                                        ),
                                                 ),
                                           Text(
                                             name.capitalize(),

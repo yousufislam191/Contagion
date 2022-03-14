@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lu_ahatting_application/messages/chatPage3.dart';
 import 'package:lu_ahatting_application/models/user.dart';
 import 'package:lu_ahatting_application/widgets/chatHomePage.dart';
 import 'package:lu_ahatting_application/messages/chatHomePageChat.dart';
@@ -20,15 +21,16 @@ class _headHomePageState extends State<headHomePage> {
   @override
   Widget build(BuildContext context) {
     UserModel getData = new UserModel.fromMap(currentUserValue);
+    String name = getData.name.toString();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Lu Chatting Application',
       home: SafeArea(
         child: homePage(
           length: 4,
-          backgroundColor: Color(0xFF7144F0),
-          backgroundImage: AssetImage("assets/images/profileImg.jpg"),
-          profileText: getData.name.toString(),
+          backgroundColor: Color(0xFFB198F3),
+          backgroundImage: NetworkImage(getData.url.toString()),
+          profileText: name.capitalize(),
           controller: searchEditingController,
           searchbarCursorColor: Color(0xFF7144F0),
           searchbarIconColor: Color(0xFF7144F0),

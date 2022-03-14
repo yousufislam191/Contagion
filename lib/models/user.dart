@@ -18,7 +18,7 @@ class UserModel {
   bool? cr;
   var url;
   var msg;
-  String? type;
+  var type;
   Timestamp? time;
 
   UserModel({
@@ -111,7 +111,8 @@ class UserModel {
         batch = snapshot['batch'],
         section = snapshot['section'],
         about = snapshot['about'],
-        cr = snapshot['cr'];
+        cr = snapshot['cr'],
+        url = snapshot['url'];
 }
 
 class getListData {

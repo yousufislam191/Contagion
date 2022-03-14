@@ -92,10 +92,15 @@ class chatList extends StatelessWidget {
                                                     Ppage(docData: docData),
                                               ));
                                         },
-                                        child: CircleAvatar(
-                                          backgroundImage: NetworkImage(url),
-                                          radius: 30,
-                                        ),
+                                        child: url == null
+                                            ? CircleAvatar(
+                                                radius: 30,
+                                              )
+                                            : CircleAvatar(
+                                                backgroundImage:
+                                                    NetworkImage(url),
+                                                radius: 30,
+                                              ),
                                       ),
                                       SizedBox(
                                         width: 10,
