@@ -12,7 +12,7 @@ class Editdropdown_button extends StatelessWidget {
       required this.value,
       required this.onChanged,
       required this.itemtyType,
-      required this.validator})
+      this.validator})
       : super(key: key);
 
   @override
