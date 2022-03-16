@@ -118,6 +118,7 @@ class _EditProfileState extends State<EditProfile> {
           ),
         ),
         SingleChildScrollView(
+          scrollDirection: Axis.vertical,
           child: Form(
             key: _formkey,
             child: Column(
@@ -154,8 +155,7 @@ class _EditProfileState extends State<EditProfile> {
                 Editdropdown_button(
                   hint_text: 'Batch',
                   value: deptselectedType,
-                  validator: (value) =>
-                      value == null ? 'Please select your batch' : null,
+                  // validator: (value) => value == null ? 'Please select your batch' : null,
                   onChanged: (value) {
                     //print('$value'); //when I clicked then it print that value
                     setState(() {
@@ -172,8 +172,7 @@ class _EditProfileState extends State<EditProfile> {
                 Editdropdown_button(
                   hint_text: 'Section',
                   value: selectedType,
-                  validator: (value) =>
-                      value == null ? 'Please select your section' : null,
+                  // validator: (value) =>value == null ? 'Please select your section' : null,
                   onChanged: (value) {
                     setState(() {
                       selectedType = value;

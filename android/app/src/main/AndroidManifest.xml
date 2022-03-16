@@ -85,7 +85,7 @@
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
 
    <application
-        android:label="lu_ahatting_application"
+        android:label="Contagion"
         android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher">
         <activity
