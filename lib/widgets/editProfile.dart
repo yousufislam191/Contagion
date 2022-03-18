@@ -309,7 +309,7 @@ class _EditProfileState extends State<EditProfile> {
 
   Future uploadImageToFirebase(XFile image1) async {
     final ref = FirebaseStorage.instance.ref().child('uploads/$name');
-    image = File(image1!.path);
+    image = File(image1.path);
     final uploadTask = ref.putFile(image!);
     final taskSnapshot = await uploadTask.whenComplete(() {});
     url = await taskSnapshot.ref.getDownloadURL();
