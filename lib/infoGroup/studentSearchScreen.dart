@@ -160,10 +160,14 @@ class _studentSearchScreenState extends State<studentSearchScreen> {
                       },
                       title: Row(
                         children: [
-                          CircleAvatar(
-                            backgroundImage: NetworkImage(url),
-                            radius: 30,
-                          ),
+                          url == null
+                              ? CircleAvatar(
+                                  radius: 30,
+                                )
+                              : CircleAvatar(
+                                  backgroundImage: NetworkImage(url),
+                                  radius: 30,
+                                ),
                           SizedBox(
                             width: 10,
                           ),
