@@ -30,15 +30,15 @@ class developer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 20.0),
+                  padding: EdgeInsets.symmetric(vertical: 10.0),
                   child: Column(
                     children: [
                       CircleAvatar(
-                        radius: 70,
+                        radius: 60,
                         backgroundImage:
                             AssetImage("assets/developerImages/yousuf1.jpg"),
                       ),
-                      SizedBox(height: 15),
+                      SizedBox(height: 10),
                       Text(
                         'Md. Yousuf Islam',
                         style: TextStyle(
@@ -66,16 +66,53 @@ class developer extends StatelessWidget {
                 ),
                 Divider(thickness: 1.5),
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 20.0),
-                  height: height * 0.3,
+                  padding: EdgeInsets.symmetric(vertical: 10.0),
+                  // height: height * 0.4,
                   child: Column(
                     children: [
                       CircleAvatar(
-                        radius: 70,
+                        radius: 60,
+                        backgroundImage:
+                            AssetImage("assets/developerImages/Naima.jpeg"),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Naima Akther',
+                        style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'JosefinSans'),
+                      ),
+                      Text(
+                        '50\u1d57\u02b0 Batch',
+                        style:
+                            TextStyle(fontSize: 16, fontFamily: 'JosefinSans'),
+                      ),
+                      Text(
+                        'Computer Science and Engineering',
+                        style:
+                            TextStyle(fontSize: 16, fontFamily: 'JosefinSans'),
+                      ),
+                      Text(
+                        'Leading University',
+                        style:
+                            TextStyle(fontSize: 16, fontFamily: 'JosefinSans'),
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(thickness: 1.5),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 10.0),
+                  // height: height * 0.3,
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 60,
                       ),
                       SizedBox(height: 15),
                       Text(
-                        'Naima Akther',
+                        'Anik Roy',
                         style: TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.bold,
