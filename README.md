@@ -1,4 +1,4 @@
-# lu_ahatting_application
+# Contagion
 
 A new Flutter project.
 
