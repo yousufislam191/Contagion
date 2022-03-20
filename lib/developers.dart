@@ -101,44 +101,8 @@ class developer extends StatelessWidget {
                     ],
                   ),
                 ),
-                Divider(thickness: 1.5),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 10.0),
-                  // height: height * 0.3,
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 60,
-                      ),
-                      SizedBox(height: 15),
-                      Text(
-                        'Anik Roy',
-                        style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'JosefinSans'),
-                      ),
-                      Text(
-                        '50\u1d57\u02b0 Batch',
-                        style:
-                            TextStyle(fontSize: 16, fontFamily: 'JosefinSans'),
-                      ),
-                      Text(
-                        'Computer Science and Engineering',
-                        style:
-                            TextStyle(fontSize: 16, fontFamily: 'JosefinSans'),
-                      ),
-                      Text(
-                        'Leading University',
-                        style:
-                            TextStyle(fontSize: 16, fontFamily: 'JosefinSans'),
-                      ),
-                    ],
-                  ),
-                ),
               ],
             ),
-            // Navigator.pop(context),
           ),
         ),
       ),
