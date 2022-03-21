@@ -1,6 +1,6 @@
 # **Contagion**
 
-## **This is a Android Chatting Application.**
+## **This is an Android Chatting Application.**
 ### It has been developed mainly focusing on the academic activities of the Leading University teachers and students.<br/><br/>
 
 ## Purpose of this App
