@@ -14,7 +14,7 @@
 - To report students without their identity in department head sir. <br/><br/>
 
 ## Features of this App
-- Every field of Login & Registration are validated.
+- Every field of Login & Registration is validated.
 - Users will not be able to complete their registration without LU email.
 - While users stay logged in to the app they will be shown online whenever they open the app.
 - Users will be able to do real-time messaging with each other.
