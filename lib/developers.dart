@@ -34,9 +34,9 @@ class developer extends StatelessWidget {
                   child: Column(
                     children: [
                       CircleAvatar(
-                        radius: 60,
+                        radius: 100,
                         backgroundImage:
-                            AssetImage("assets/developerImages/yousuf1.jpg"),
+                            AssetImage("assets/developerImages/Yousuf.jpg"),
                       ),
                       SizedBox(height: 10),
                       Text(
@@ -71,7 +71,7 @@ class developer extends StatelessWidget {
                   child: Column(
                     children: [
                       CircleAvatar(
-                        radius: 60,
+                        radius: 100,
                         backgroundImage:
                             AssetImage("assets/developerImages/Naima.jpeg"),
                       ),
